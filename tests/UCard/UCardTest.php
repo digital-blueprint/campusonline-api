@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DBP\CampusonlineApi\Tests\UCard;
+namespace Dbp\CampusonlineApi\Tests\UCard;
 
 use Dbp\CampusonlineApi\UCard\UCard;
 use Dbp\CampusonlineApi\UCard\UCardAPI;
