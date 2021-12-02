@@ -12,8 +12,6 @@ use Dbp\CampusonlineApi\UCard\UCardType;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use Monolog\Handler\NullHandler;
-use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 
 class UCardTest extends TestCase
@@ -25,7 +23,6 @@ class UCardTest extends TestCase
 
     protected function setUp(): void
     {
-        $nullLogger = new Logger('dummy', [new NullHandler()]);
         $this->api = new UCardAPI();
         $this->api->setBaseUrl('http://localhost');
         $this->api->setToken('sometoken');
