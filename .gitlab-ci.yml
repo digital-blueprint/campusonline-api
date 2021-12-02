@@ -1,0 +1,51 @@
+image: registry.gitlab.tugraz.at/dbp/relay/dbp-relay-core-bundle/main:v1
+
+before_script:
+  - 'git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.tugraz.at/".insteadOf "git@gitlab.tugraz.at:"'
+
+variables:
+  COMPOSER_CACHE_DIR: "$CI_PROJECT_DIR/_composer_cache"
+
+cache:
+  key: ${CI_PROJECT_PATH}
+  paths:
+    - _composer_cache
+
+stages:
+  - test
+
+.test_defaults: &test_defaults
+  script:
+    - sudo update-alternatives --set php "/usr/bin/${PHP}"
+    - composer install
+    - composer test
+
+test-php7.3:
+  stage: test
+  variables:
+    PHP: "php7.3"
+  <<: *test_defaults
+
+test-php7.4:
+  stage: test
+  variables:
+    PHP: "php7.4"
+  <<: *test_defaults
+
+test-php8.0:
+  stage: test
+  variables:
+    PHP: "php8.0"
+  <<: *test_defaults
+
+linting:
+  stage: test
+  allow_failure: true
+  script:
+    - sudo update-alternatives --set php /usr/bin/php7.4
+    - composer install
+    - result=0
+    - composer run cs || result=1
+    - composer run phpstan || result=1
+    - composer run psalm || result=1
+    - exit $result
