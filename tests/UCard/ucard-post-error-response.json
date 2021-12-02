@@ -1,0 +1,20 @@
+{
+    "type": "resources",
+    "link": [],
+    "resource": [
+        {
+            "link": [],
+            "content": {
+                "type": "model-core.lib.codata.error.coErrorDto",
+                "coErrorDto": {
+                    "reference": "593564178",
+                    "message": "Not allowed for given identity and card type.",
+                    "requestUrl": null,
+                    "httpCode": "422",
+                    "errorType": "Error",
+                    "imageUrl": "https://qline.tugraz.at/qtug/img/msg_error.gif"
+                }
+            }
+        }
+    ]
+}

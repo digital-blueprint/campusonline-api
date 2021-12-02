@@ -1,0 +1,12 @@
+{
+    "type": "resources",
+    "link": [
+        {
+            "rel": "location",
+            "summary": "HTTP-Status 201, Location Header",
+            "href": "https://qline.tugraz.at/QSYSTEM_TUG/pl/rest/brm.pm.extension.ucardfoto/content/54321?$ctx=lang=en",
+            "type": "model-brm.brm.pm.extension.ucardfoto.plsqlCardPicture"
+        }
+    ],
+    "resource": []
+}

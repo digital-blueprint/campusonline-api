@@ -1,0 +1,71 @@
+{
+    "type": "resources",
+    "link": [
+        {
+            "rel": "create",
+            "summary": "create new entry. HTTP-method POST",
+            "href": "https://qline.tugraz.at/QSYSTEM_TUG/pl/rest/brm.pm.extension.ucardfoto?$ctx=lang=en",
+            "type": "model-brm.brm.pm.extension.ucardfoto.plsqlCardPictureDto"
+        }
+    ],
+    "resource": [
+        {
+            "link": [
+                {
+                    "rel": "self",
+                    "summary": "GET this picture meta information.",
+                    "href": "https://qline.tugraz.at/QSYSTEM_TUG/pl/rest/brm.pm.extension.ucardfoto/STA-1234567890?$ctx=lang=en",
+                    "type": "model-brm.brm.pm.extension.ucardfoto.plsqlCardPictureDto"
+                },
+                {
+                    "rel": "contents",
+                    "summary": "GET binary content of picture.",
+                    "href": "https://qline.tugraz.at/QSYSTEM_TUG/pl/rest/brm.pm.extension.ucardfoto/content/54321?$ctx=lang=en",
+                    "type": "model-brm.brm.pm.extension.ucardfoto.plsqlCardPicture"
+                }
+            ],
+            "content": {
+                "type": "model-brm.brm.pm.extension.ucardfoto.plsqlCardPictureDto",
+                "plsqlCardPictureDto": {
+                    "CARD_TYPE": "STA",
+                    "IDENT_NR_OBFUSCATED": "1234567890",
+                    "CONTENT_ID": 54321,
+                    "IS_UPDATABLE": "false",
+                    "CONTENT_SIZE": 17561
+                }
+            }
+        },
+        {
+            "link": [
+                {
+                    "rel": "self",
+                    "summary": "GET this picture meta information.",
+                    "href": "https://qline.tugraz.at/QSYSTEM_TUG/pl/rest/brm.pm.extension.ucardfoto/BA-1234567890?$ctx=lang=en",
+                    "type": "model-brm.brm.pm.extension.ucardfoto.plsqlCardPictureDto"
+                },
+                {
+                    "rel": "contents",
+                    "summary": "GET binary content of picture.",
+                    "href": "https://qline.tugraz.at/QSYSTEM_TUG/pl/rest/brm.pm.extension.ucardfoto/content/54321?$ctx=lang=en",
+                    "type": "model-brm.brm.pm.extension.ucardfoto.plsqlCardPicture"
+                },
+                {
+                    "rel": "create",
+                    "summary": "POST (create or update) binary content of picture. POST as multipart/form-data",
+                    "href": "https://qline.tugraz.at/QSYSTEM_TUG/pl/rest/brm.pm.extension.ucardfoto/content/54321?$ctx=lang=en",
+                    "type": "model-brm.brm.pm.extension.ucardfoto.plsqlCardPicture"
+                }
+            ],
+            "content": {
+                "type": "model-brm.brm.pm.extension.ucardfoto.plsqlCardPictureDto",
+                "plsqlCardPictureDto": {
+                    "CARD_TYPE": "BA",
+                    "IDENT_NR_OBFUSCATED": "1234567890",
+                    "CONTENT_ID": 54321,
+                    "IS_UPDATABLE": "true",
+                    "CONTENT_SIZE": 6269
+                }
+            }
+        }
+    ]
+}
