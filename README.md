@@ -1,5 +1,8 @@
 # CAMPUSonline API Client
 
+The goal of this package is to provide a PHP API for the various web services
+provided by [CAMPUSonline](https://www.campusonline.tugraz.at).
+
 ```php
 <?php
 
