@@ -30,15 +30,15 @@ class UCardApi implements LoggerAwareInterface
     /**
      * @return UCard[]
      */
-    public function getCardsForIdent(string $ident, ?string $cardType = null): array
+    public function getCardsForIdentIdObfuscated(string $identIdObfuscated, ?string $cardType = null): array
     {
         $connection = $this->connection;
 
         // In theory we could fetch all cards, but it seems to be limited to 500, so don't expose
         // this functionality for now
-        $ident = Tools::validateFilterValue($ident);
+        $identIdObfuscated = Tools::validateFilterValue($identIdObfuscated);
         $filters = [];
-        $filters[] = 'IDENT_NR_OBFUSCATED-eq='.$ident;
+        $filters[] = 'IDENT_NR_OBFUSCATED-eq='.$identIdObfuscated;
         if ($cardType !== null) {
             $cardType = Tools::validateFilterValue($cardType);
             $filters[] = 'CARD_TYPE-eq='.$cardType;
@@ -110,11 +110,11 @@ class UCardApi implements LoggerAwareInterface
         foreach ($json['resource'] as $res) {
             $pic = $res['content']['plsqlCardPictureDto'];
             $cardType = $pic['CARD_TYPE'];
-            $ident = $pic['IDENT_NR_OBFUSCATED'];
+            $identIdObfuscated = $pic['IDENT_NR_OBFUSCATED'];
             $contentId = (string) $pic['CONTENT_ID'];
             $isUpdatable = $pic['IS_UPDATABLE'] === 'true';
             $contentSize = $pic['CONTENT_SIZE'];
-            $cards[] = new UCard($ident, $cardType, $contentId, $contentSize, $isUpdatable);
+            $cards[] = new UCard($identIdObfuscated, $cardType, $contentId, $contentSize, $isUpdatable);
         }
 
         return $cards;
@@ -146,7 +146,7 @@ class UCardApi implements LoggerAwareInterface
     /**
      * @throws ApiException
      */
-    public function createCardForIdent(string $ident, string $cardType): void
+    public function createCardForIdentIdObfuscated(string $identIdObfuscated, string $cardType): void
     {
         $connection = $this->connection;
         $dataService = $connection->getDataServiceId(self::DATA_SERVICE);
@@ -161,7 +161,7 @@ class UCardApi implements LoggerAwareInterface
         try {
             $response = $client->post($uri, [
                 'form_params' => [
-                    'IDENT_NR_OBFUSCATED' => $ident,
+                    'IDENT_NR_OBFUSCATED' => $identIdObfuscated,
                     'CARD_TYPE' => $cardType,
                 ],
             ]);
