@@ -1,0 +1,31 @@
+{
+    "type": "resources",
+    "link": [],
+    "resource": [
+        {
+            "link": [],
+            "content": {
+                "type": "model-slc.slc.if_mob.plsqlStudierendendatenDto",
+                "plsqlStudierendendatenDto": {
+                    "NR_OBFUSCATED": "44D9DBB60B6C2C24",
+                    "IDENT_NR": "-12345",
+                    "ST_PERSON_NR": "12345",
+                    "VORNAME": "Max",
+                    "NACHNAME": "Mustermann",
+                    "MATRIKELNUMMER": "02941631",
+                    "GESCHLECHT": "M",
+                    "GEBURTSDATUM": "24.12.1971 00:00:00",
+                    "STAATSANGEHOERIGKEIT_1": "168",
+                    "STAATSANGEHOERIGKEIT_2": null,
+                    "EMAIL_ADRESSE_1": "max@example.com",
+                    "EMAIL_ADRESSE_2": "max@example.com",
+                    "HOERERSTATUS_KB": "E",
+                    "AKAD_GRAD_VOR": "Dipl.-Ing.",
+                    "AKADGRAD_NACH": "BSc",
+                    "VERSTORBEN_FLAG": "N",
+                    "VERSICHERUNGSNUMMER": "1234241271"
+                }
+            }
+        }
+    ]
+}

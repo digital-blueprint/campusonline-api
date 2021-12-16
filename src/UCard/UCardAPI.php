@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\UCard;
 
-use Dbp\CampusonlineApi\Tools;
+use Dbp\CampusonlineApi\API\Tools;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
@@ -243,20 +243,9 @@ class UCardAPI implements LoggerAwareInterface
 
     public function _getResponseError(RequestException $e): UCardException
     {
-        $response = $e->getResponse();
-        if ($response === null) {
-            return new UCardException('Unknown error');
-        }
-        $data = (string) $e->getResponse()->getBody();
-        $json = Tools::decodeJSON($data, true);
-        if ($json['type'] ?? '' === 'resources') {
-            $coErrorDto = $json['resource'][0]['content']['coErrorDto'];
-            $message = $coErrorDto['errorType'].'['.$coErrorDto['httpCode'].']: '.$coErrorDto['message'];
+        $error = Tools::createResponseError($e);
 
-            return new UCardException($message);
-        } else {
-            return new UCardException($json['type']);
-        }
+        return new UCardException($error->getMessage());
     }
 
     /**
