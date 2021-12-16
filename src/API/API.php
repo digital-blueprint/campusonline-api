@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\API;
 
 use Dbp\CampusonlineApi\Student\StudentAPI;
+use Dbp\CampusonlineApi\UCard\UCardAPI;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 
@@ -22,14 +23,9 @@ class API implements LoggerAwareInterface
         $this->connection->setLogger($logger);
     }
 
-    public function setClientHandler(?object $handler): void
+    public function getConnection(): Connection
     {
-        $this->connection->setClientHandler($handler);
-    }
-
-    public function setToken(string $token): void
-    {
-        $this->connection->setToken($token);
+        return $this->connection;
     }
 
     public function addDataServiceOverride(string $dataServiceId, string $overrideId): void
@@ -37,8 +33,13 @@ class API implements LoggerAwareInterface
         $this->connection->addDataServiceOverride($dataServiceId, $overrideId);
     }
 
-    public function getStudent(): StudentApi
+    public function Student(): StudentApi
     {
         return new StudentAPI($this->connection);
+    }
+
+    public function UCard(): UCardAPI
+    {
+        return new UCardAPI($this->connection);
     }
 }

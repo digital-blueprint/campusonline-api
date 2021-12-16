@@ -17,14 +17,14 @@ class StudentTest extends TestCase
     protected function setUp(): void
     {
         $this->api = new API('http://localhost', 'nope', 'nope');
-        $this->api->setToken('foo');
+        $this->api->getConnection()->setToken('foo');
         $this->mockResponses([]);
     }
 
     private function mockResponses(array $responses)
     {
         $stack = HandlerStack::create(new MockHandler($responses));
-        $this->api->setClientHandler($stack);
+        $this->api->getConnection()->setClientHandler($stack);
     }
 
     public function testGetForIdent()
@@ -33,7 +33,7 @@ class StudentTest extends TestCase
         $this->mockResponses([
             new Response(200, ['Content-Type' => 'application/json'], $GET_RESPONSE),
         ]);
-        $student = $this->api->getStudent();
+        $student = $this->api->Student();
         $list = $student->getStudentDataByPersonId('12345');
         $this->assertCount(1, $list);
         $data = $list[0];
