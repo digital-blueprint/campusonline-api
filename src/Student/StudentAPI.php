@@ -34,6 +34,7 @@ class StudentAPI implements LoggerAwareInterface
 
         $personId = Tools::validateFilterValue($personId);
         $service = $connection->getDataServiceId(self::DATA_SERVICE);
+        $filters = [];
         $filters[] = 'ST_PERSON_NR-eq='.$personId;
         $uriTemplate = new UriTemplate('pl/rest/{service}/{?%24filter,%24format,%24ctx,%24top}');
         $uri = (string) $uriTemplate->expand([

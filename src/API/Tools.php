@@ -53,9 +53,9 @@ class Tools
         if ($response === null) {
             return new APIException('Unknown error');
         }
-        $data = (string) $e->getResponse()->getBody();
+        $data = (string) $response->getBody();
         $json = Tools::decodeJSON($data, true);
-        if ($json['type'] ?? '' === 'resources') {
+        if (($json['type'] ?? '') === 'resources') {
             $coErrorDto = $json['resource'][0]['content']['coErrorDto'];
             $message = $coErrorDto['errorType'].'['.$coErrorDto['httpCode'].']: '.$coErrorDto['message'];
 

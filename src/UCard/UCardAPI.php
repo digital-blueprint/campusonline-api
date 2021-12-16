@@ -37,6 +37,7 @@ class UCardAPI implements LoggerAwareInterface
         // In theory we could fetch all cards, but it seems to be limited to 500, so don't expose
         // this functionality for now
         $ident = Tools::validateFilterValue($ident);
+        $filters = [];
         $filters[] = 'IDENT_NR_OBFUSCATED-eq='.$ident;
         if ($cardType !== null) {
             $cardType = Tools::validateFilterValue($cardType);
