@@ -7,5 +7,5 @@ use Dbp\CampusonlineApi\Rest\Api;
 
 $api = new Api('https://qline.example.at/online/', 'client_id', 'client_secret');
 $ucard = $api->UCard();
-$ucard->getCardsForIdent('1234567890');
+$ucard->getCardsForIdentIdObfuscated('1234567890');
 ```
