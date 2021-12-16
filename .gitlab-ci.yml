@@ -38,6 +38,12 @@ test-php8.0:
     PHP: "php8.0"
   <<: *test_defaults
 
+test-php8.1:
+  stage: test
+  variables:
+    PHP: "php8.1"
+  <<: *test_defaults
+
 linting:
   stage: test
   allow_failure: true
