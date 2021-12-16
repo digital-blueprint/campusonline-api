@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Dbp\CampusonlineApi\Tests\UCard;
+namespace Dbp\CampusonlineApi\Tests\Rest\UCard;
 
-use Dbp\CampusonlineApi\API\API;
-use Dbp\CampusonlineApi\API\APIException;
-use Dbp\CampusonlineApi\UCard\UCard;
-use Dbp\CampusonlineApi\UCard\UCardPicture;
-use Dbp\CampusonlineApi\UCard\UCardType;
+use Dbp\CampusonlineApi\Rest\Api;
+use Dbp\CampusonlineApi\Rest\ApiException;
+use Dbp\CampusonlineApi\Rest\UCard\UCard;
+use Dbp\CampusonlineApi\Rest\UCard\UCardPicture;
+use Dbp\CampusonlineApi\Rest\UCard\UCardType;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -23,7 +23,7 @@ class UCardTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->api = new API('http://localhost', 'nope', 'nope');
+        $this->api = new Api('http://localhost', 'nope', 'nope');
         $this->api->getConnection()->setToken('sometoken');
         $this->mockResponses([]);
     }
@@ -41,7 +41,7 @@ class UCardTest extends TestCase
         $this->mockResponses([
             new Response(403, ['Content-Type' => 'application/json'], $NO_AUTH_RESPONSE),
         ]);
-        $this->expectException(APIException::class);
+        $this->expectException(ApiException::class);
         $this->api->UCard()->getCardsForIdent(self::IDENT);
     }
 
@@ -87,7 +87,7 @@ class UCardTest extends TestCase
             new Response(422, ['Content-Type' => 'application/json'], $UCARD_POST_RESPONSE),
         ]);
 
-        $this->expectException(APIException::class);
+        $this->expectException(ApiException::class);
         $this->expectExceptionMessageMatches('/Not allowed for given identity and card type/');
         $this->api->UCard()->createCardForIdent(self::IDENT, UCardType::STA);
     }
@@ -99,7 +99,7 @@ class UCardTest extends TestCase
             new Response(422, ['Content-Type' => 'application/json'], $UCARD_POST_RESPONSE),
         ]);
 
-        $this->expectException(APIException::class);
+        $this->expectException(ApiException::class);
         $this->expectExceptionMessageMatches('/already exists/');
         $this->api->UCard()->createCardForIdent(self::IDENT, UCardType::STA);
     }
@@ -137,7 +137,7 @@ class UCardTest extends TestCase
         ]);
         $card = new UCard(self::IDENT, UCardType::STA, self::CONTENT_ID, 0, false);
 
-        $this->expectException(APIException::class);
+        $this->expectException(ApiException::class);
         $this->expectExceptionMessageMatches('/Update of photo is not allowed/');
         $this->api->UCard()->setCardPicture($card, 'foobar');
     }

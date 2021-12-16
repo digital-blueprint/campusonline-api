@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Dbp\CampusonlineApi\Student;
+namespace Dbp\CampusonlineApi\Rest\Student;
 
-use Dbp\CampusonlineApi\API\Connection;
-use Dbp\CampusonlineApi\API\Tools;
+use Dbp\CampusonlineApi\Rest\Connection;
+use Dbp\CampusonlineApi\Rest\Tools;
 use GuzzleHttp\Exception\RequestException;
 use League\Uri\UriTemplate;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
-class StudentAPI implements LoggerAwareInterface
+class StudentApi implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 

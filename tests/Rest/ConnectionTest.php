@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Dbp\CampusonlineApi\Tests\API;
+namespace Dbp\CampusonlineApi\Tests\Rest;
 
-use Dbp\CampusonlineApi\API\APIException;
-use Dbp\CampusonlineApi\API\Connection;
+use Dbp\CampusonlineApi\Rest\ApiException;
+use Dbp\CampusonlineApi\Rest\Connection;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -45,7 +45,7 @@ class ConnectionTest extends TestCase
             new Response(401, ['Content-Type' => 'application/json'],
                 '{"error":"invalid_client", "error_description":"Der Client ist nicht autorisiert.", "error_uri":""}'),
         ]);
-        $this->expectException(APIException::class);
+        $this->expectException(ApiException::class);
         $this->conn->getClient();
     }
 }

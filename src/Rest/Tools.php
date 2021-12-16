@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dbp\CampusonlineApi\API;
+namespace Dbp\CampusonlineApi\Rest;
 
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\MessageFormatter;
@@ -47,11 +47,11 @@ class Tools
         return json_decode($json, $assoc, 512, JSON_THROW_ON_ERROR);
     }
 
-    public static function createResponseError(RequestException $e): APIException
+    public static function createResponseError(RequestException $e): ApiException
     {
         $response = $e->getResponse();
         if ($response === null) {
-            return new APIException('Unknown error');
+            return new ApiException('Unknown error');
         }
         $data = (string) $response->getBody();
         $json = Tools::decodeJSON($data, true);
@@ -59,9 +59,9 @@ class Tools
             $coErrorDto = $json['resource'][0]['content']['coErrorDto'];
             $message = $coErrorDto['errorType'].'['.$coErrorDto['httpCode'].']: '.$coErrorDto['message'];
 
-            return new APIException($message);
+            return new ApiException($message);
         } else {
-            return new APIException($json['type']);
+            return new ApiException($json['type']);
         }
     }
 }

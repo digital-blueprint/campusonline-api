@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Dbp\CampusonlineApi\API;
+namespace Dbp\CampusonlineApi\Rest;
 
-use Dbp\CampusonlineApi\Student\StudentAPI;
-use Dbp\CampusonlineApi\UCard\UCardAPI;
+use Dbp\CampusonlineApi\Rest\Student\StudentApi;
+use Dbp\CampusonlineApi\Rest\UCard\UCardApi;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 
-class API implements LoggerAwareInterface
+class Api implements LoggerAwareInterface
 {
     private $connection;
 
@@ -35,11 +35,11 @@ class API implements LoggerAwareInterface
 
     public function Student(): StudentApi
     {
-        return new StudentAPI($this->connection);
+        return new StudentApi($this->connection);
     }
 
-    public function UCard(): UCardAPI
+    public function UCard(): UCardApi
     {
-        return new UCardAPI($this->connection);
+        return new UCardApi($this->connection);
     }
 }

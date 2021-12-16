@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dbp\CampusonlineApi\UCard;
+namespace Dbp\CampusonlineApi\Rest\UCard;
 
 class UCard
 {

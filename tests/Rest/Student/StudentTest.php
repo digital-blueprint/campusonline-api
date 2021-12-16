@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Dbp\CampusonlineApi\Tests\Student;
+namespace Dbp\CampusonlineApi\Tests\Rest\Student;
 
-use Dbp\CampusonlineApi\API\API;
+use Dbp\CampusonlineApi\Rest\Api;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -16,7 +16,7 @@ class StudentTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->api = new API('http://localhost', 'nope', 'nope');
+        $this->api = new Api('http://localhost', 'nope', 'nope');
         $this->api->getConnection()->setToken('foo');
         $this->mockResponses([]);
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dbp\CampusonlineApi\Student;
+namespace Dbp\CampusonlineApi\Rest\Student;
 
 class StudentData
 {

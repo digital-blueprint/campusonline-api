@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dbp\CampusonlineApi\API;
+namespace Dbp\CampusonlineApi\Rest;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -107,7 +107,7 @@ class Connection implements LoggerAwareInterface
                 ],
             ]);
         } catch (RequestException $e) {
-            throw new APIException($e->getMessage());
+            throw new ApiException($e->getMessage());
         }
         $data = $response->getBody()->getContents();
 

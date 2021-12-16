@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Dbp\CampusonlineApi\UCard;
+namespace Dbp\CampusonlineApi\Rest\UCard;
 
-use Dbp\CampusonlineApi\API\APIException;
-use Dbp\CampusonlineApi\API\Connection;
-use Dbp\CampusonlineApi\API\Tools;
+use Dbp\CampusonlineApi\Rest\ApiException;
+use Dbp\CampusonlineApi\Rest\Connection;
+use Dbp\CampusonlineApi\Rest\Tools;
 use GuzzleHttp\Exception\RequestException;
 use League\Uri\Uri;
 use League\Uri\UriTemplate;
@@ -14,7 +14,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
-class UCardAPI implements LoggerAwareInterface
+class UCardApi implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
@@ -65,7 +65,7 @@ class UCardAPI implements LoggerAwareInterface
     }
 
     /**
-     * @throws APIException
+     * @throws ApiException
      */
     public function getCardPicture(UCard $card): UCardPicture
     {
@@ -90,16 +90,16 @@ class UCardAPI implements LoggerAwareInterface
 
         // just to be sure
         if ($pic->id !== $card->contentId) {
-            throw new APIException("Content ID of response didn't match");
+            throw new ApiException("Content ID of response didn't match");
         }
 
         return $pic;
     }
 
     /**
-     * @throws APIException
-     *
      * @return UCard[]
+     *
+     *@throws ApiException
      */
     public function parseGetResponse(ResponseInterface $response): array
     {
@@ -129,22 +129,22 @@ class UCardAPI implements LoggerAwareInterface
         $id = (string) $pic['ID'];
         $uri = Uri::createFromString($pic['CONTENT']);
         if ($uri->getScheme() !== 'data') {
-            throw new APIException('invalid content scheme');
+            throw new ApiException('invalid content scheme');
         }
         $parts = explode(',', $uri->getPath(), 2);
         if (count($parts) !== 2) {
-            throw new APIException('Invalid content');
+            throw new ApiException('Invalid content');
         }
         $content = base64_decode($parts[1], true);
         if ($content === false) {
-            throw new APIException('Invalid content');
+            throw new ApiException('Invalid content');
         }
 
         return new UCardPicture($id, $content);
     }
 
     /**
-     * @throws APIException
+     * @throws ApiException
      */
     public function createCardForIdent(string $ident, string $cardType): void
     {
@@ -174,7 +174,7 @@ class UCardAPI implements LoggerAwareInterface
     }
 
     /**
-     * @throws APIException
+     * @throws ApiException
      */
     public function setCardPicture(UCard $card, string $data): void
     {
