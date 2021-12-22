@@ -27,7 +27,7 @@ class StudentTest extends TestCase
         $this->api->getConnection()->setClientHandler($stack);
     }
 
-    public function testGetForIdent()
+    public function testGetForPersonId()
     {
         $GET_RESPONSE = file_get_contents(__DIR__.'/studentdata-response.json');
         $this->mockResponses([
@@ -35,6 +35,24 @@ class StudentTest extends TestCase
         ]);
         $student = $this->api->Student();
         $list = $student->getStudentDataByPersonId('12345');
+        $this->assertCount(1, $list);
+        $data = $list[0];
+
+        $this->assertSame('Max', $data->firstName);
+        $this->assertSame('Mustermann', $data->lastName);
+        $this->assertSame('-12345', $data->identId);
+        $this->assertSame('44D9DBB60B6C2C24', $data->identIdObfuscated);
+        $this->assertSame('12345', $data->personId);
+    }
+
+    public function testGetForIdentId()
+    {
+        $GET_RESPONSE = file_get_contents(__DIR__.'/studentdata-response.json');
+        $this->mockResponses([
+            new Response(200, ['Content-Type' => 'application/json'], $GET_RESPONSE),
+        ]);
+        $student = $this->api->Student();
+        $list = $student->getStudentDataByIdentId('-12345');
         $this->assertCount(1, $list);
         $data = $list[0];
 

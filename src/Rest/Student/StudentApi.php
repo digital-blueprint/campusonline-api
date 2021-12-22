@@ -20,6 +20,12 @@ class StudentApi implements LoggerAwareInterface
 
     private const DATA_SERVICE = 'slc.v0.studierendendaten.student_ucRest';
 
+    private const FIELD_PERSON_ID = 'ST_PERSON_NR';
+    private const FIELD_IDENT_ID = 'IDENT_NR';
+    private const FIELD_FIRST_NAME = 'VORNAME';
+    private const FIELD_LAST_NAME = 'NACHNAME';
+    private const FIELD_IDENT_ID_OBFUSCATED = 'NR_OBFUSCATED';
+
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
@@ -35,7 +41,37 @@ class StudentApi implements LoggerAwareInterface
         $personId = Tools::validateFilterValue($personId);
         $service = $connection->getDataServiceId(self::DATA_SERVICE);
         $filters = [];
-        $filters[] = 'ST_PERSON_NR-eq='.$personId;
+        $filters[] = self::FIELD_PERSON_ID.'-eq='.$personId;
+        $uriTemplate = new UriTemplate('pl/rest/{service}/{?%24filter,%24format,%24ctx,%24top}');
+        $uri = (string) $uriTemplate->expand([
+            'service' => $service,
+            '%24filter' => implode(';', $filters),
+            '%24format' => 'json',
+            '%24ctx' => 'lang=en',
+            '%24top' => '-1',
+        ]);
+
+        $client = $connection->getClient();
+        try {
+            $response = $client->get($uri);
+        } catch (RequestException $e) {
+            throw Tools::createResponseError($e);
+        }
+
+        return $this->parseStudentDataResponse($response);
+    }
+
+    /**
+     * @return StudentData[]
+     */
+    public function getStudentDataByIdentId(string $identId): array
+    {
+        $connection = $this->connection;
+
+        $identId = Tools::validateFilterValue($identId);
+        $service = $connection->getDataServiceId(self::DATA_SERVICE);
+        $filters = [];
+        $filters[] = self::FIELD_IDENT_ID.'-eq='.$identId;
         $uriTemplate = new UriTemplate('pl/rest/{service}/{?%24filter,%24format,%24ctx,%24top}');
         $uri = (string) $uriTemplate->expand([
             'service' => $service,
@@ -63,11 +99,11 @@ class StudentApi implements LoggerAwareInterface
         foreach ($json['resource'] as $res) {
             $raw = $res['content']['plsqlStudierendendatenDto'];
             $data = new StudentData();
-            $data->firstName = $raw['VORNAME'] ?? null;
-            $data->lastName = $raw['NACHNAME'] ?? null;
-            $data->identId = $raw['IDENT_NR'] ?? null;
-            $data->personId = $raw['ST_PERSON_NR'] ?? null;
-            $data->identIdObfuscated = $raw['NR_OBFUSCATED'] ?? null;
+            $data->firstName = $raw[self::FIELD_FIRST_NAME] ?? null;
+            $data->lastName = $raw[self::FIELD_LAST_NAME] ?? null;
+            $data->identId = $raw[self::FIELD_IDENT_ID] ?? null;
+            $data->personId = $raw[self::FIELD_PERSON_ID] ?? null;
+            $data->identIdObfuscated = $raw[self::FIELD_IDENT_ID_OBFUSCATED] ?? null;
             $dataList[] = $data;
         }
 
