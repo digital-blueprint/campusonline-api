@@ -4,19 +4,17 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\Tests\LegacyWebService\Room;
 
-use Dbp\CampusonlineApi\Rest\ApiException;
-use PHPUnit\Framework\TestCase;
 use Dbp\CampusonlineApi\LegacyWebService\Api;
+use Dbp\CampusonlineApi\Rest\ApiException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use Monolog\Handler\NullHandler;
-use Monolog\Logger;
+use PHPUnit\Framework\TestCase;
 
 class RoomApiTest extends TestCase
 {
     /**
-     * @var RoomProvider
+     * @var Api
      */
     private $api;
 

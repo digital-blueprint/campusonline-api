@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dbp\CampusonlineApi\LegacyWebService\Room;
 
 use Dbp\CampusonlineApi\LegacyWebService\Api;
@@ -27,23 +29,27 @@ class RoomApi
     public function getRoomById(string $identifier, array $options = []): ?RoomData
     {
         $rooms = $this->getRoomsInternal($identifier, $options);
+        assert(count($rooms) <= 1);
+
         return empty($rooms) ? null : $rooms[0];
     }
 
     /**
      * @return RoomData[]
+     *
      * @throws ApiException
      */
     public function getRooms(array $options = []): array
     {
-        return $this->getRoomsInternal(null, $options);
+        return $this->getRoomsInternal('', $options);
     }
 
     /**
      * @return RoomData[]
+     *
      * @throws ApiException
      */
-    private function getRoomsInternal(?string $roomId, array $options): array
+    private function getRoomsInternal(string $roomId, array $options): array
     {
         $parameters = [];
         $parameters[Api::LANGUAGE_PARAMETER_NAME] = $options[Api::LANGUAGE_PARAMETER_NAME] ?? Api::DEFAULT_LANGUAGE;
@@ -56,15 +62,17 @@ class RoomApi
 
     /**
      * @return RoomData[]
+     *
      * @throws ApiException
      */
-    private function parseRoomsDataResponse(string $responseBody, ?string $roomId): array
+    private function parseRoomsDataResponse(string $responseBody, string $roomId): array
     {
         $rooms = [];
+
         try {
             $xml = new SimpleXMLElement($responseBody);
         } catch (\Exception $e) {
-            throw new ApiException("response body is not in valid XML format");
+            throw new ApiException('response body is not in valid XML format');
         }
         $units = $xml->xpath('.//cor:resource');
 
@@ -73,10 +81,12 @@ class RoomApi
             $identifier = trim((string) ($unit->xpath('./cor:description/cor:attribute[@cor:attrID="roomID"]')[0] ?? ''));
             if ($identifier === '') {
                 continue;
-            } else if ($identifier === $roomId) {
+            } elseif ($roomId !== '') {
+                if ($identifier === $roomId) {
                     $wasRoomFound = true;
-            } else if (strlen($roomId) > 0) {
-                continue;
+                } else {
+                    continue;
+                }
             }
 
             $address = trim((string) ($unit->xpath('./cor:description/cor:attribute[@cor:attrID="address"]')[0] ?? ''));
@@ -96,13 +106,13 @@ class RoomApi
             $room->setName($name);
             $room->setAlternateName($alternateName);
 
-            $rooms[$identifier] = $room;
+            $rooms[] = $room;
 
             if ($wasRoomFound) {
                 break;
             }
         }
 
-        return array_values($rooms);
+        return $rooms;
     }
 }

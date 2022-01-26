@@ -7,16 +7,17 @@ namespace Dbp\CampusonlineApi\LegacyWebService;
 use Dbp\CampusonlineApi\Rest\ApiException;
 use Dbp\CampusonlineApi\Rest\Tools;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
 use Kevinrob\GuzzleCache\CacheMiddleware;
 use Kevinrob\GuzzleCache\Storage\Psr6CacheStorage;
 use Kevinrob\GuzzleCache\Strategy\GreedyCacheStrategy;
+use League\Uri\Contracts\UriException;
+use League\Uri\UriTemplate;
 use Psr\Cache\CacheItemPoolInterface;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use League\Uri\UriTemplate;
 
 class Connection implements LoggerAwareInterface
 {
@@ -53,16 +54,21 @@ class Connection implements LoggerAwareInterface
 
     /**
      * @param array $parameters Array of <param name> - <param value> pairs
+     *
      * @throws ApiException
      */
-    public function get(string $uri, array $parameters = []) : string
+    public function get(string $uri, array $parameters = []): string
     {
-        $uri = $this->makeUri($uri, $parameters);
+        try {
+            $uri = $this->makeUri($uri, $parameters);
+        } catch (UriException $e) {
+            throw new ApiException('invalid uri or parameters: '.$uri);
+        }
 
         $client = $this->getClient();
         try {
             $response = $client->get($uri);
-        } catch (RequestException $e) {
+        } catch (GuzzleException $e) {
             throw self::createApiException($e);
         }
 
@@ -82,7 +88,6 @@ class Connection implements LoggerAwareInterface
         }
 
         if ($this->cachePool !== null) {
-            assert($this->cachePool instanceof CacheItemPoolInterface);
             $cacheMiddleWare = new CacheMiddleware(
                 new GreedyCacheStrategy(
                     new Psr6CacheStorage($this->cachePool),
@@ -98,13 +103,13 @@ class Connection implements LoggerAwareInterface
             'handler' => $stack,
         ];
 
-        return new Client($client_options);;
+        return new Client($client_options);
     }
 
-    /*
-     * TODO: validate incoming uri and parameters
+    /**
+     * @throws UriException
      */
-    private function makeUri($uri, $parameters) : string
+    private function makeUri($uri, $parameters): string
     {
         $parameters[self::ACCESS_TOKEN_PARAMETER_NAME] = $this->accessToken;
 
@@ -121,12 +126,17 @@ class Connection implements LoggerAwareInterface
         return (string) $uriTemplate->expand($parameters);
     }
 
-    private static function createApiException(RequestException $e) : ApiException
+    private static function createApiException(GuzzleException $e): ApiException
     {
-        $response = $e->getResponse();
-        if ($response === null) {
-            return new ApiException('Unknown error');
+        if ($e instanceof RequestException) {
+            $response = $e->getResponse();
+            if ($response === null) {
+                return new ApiException('Unknown error');
+            }
+
+            return new ApiException($e->getMessage(), $response->getStatusCode());
+        } else {
+            return new ApiException($e->getMessage());
         }
-        return new ApiException($e->getMessage(), $response->getStatusCode());
     }
 }
