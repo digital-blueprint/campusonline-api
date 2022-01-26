@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Dbp\Relay\RoomsConnectorCampusonlineBundle\Tests\Service;
+namespace Dbp\CampusonlineApi\Tests\LegacyWebService\Room;
 
-use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
-use Dbp\Relay\CoreBundle\Exception\ApiError;
-use Dbp\Relay\RoomsConnectorCampusonlineBundle\Service\RoomProvider;
+use Dbp\CampusonlineApi\Rest\ApiException;
+use PHPUnit\Framework\TestCase;
+use Dbp\CampusonlineApi\LegacyWebService\Api;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use Monolog\Handler\NullHandler;
 use Monolog\Logger;
 
-class RoomProviderTest extends ApiTestCase
+class RoomApiTest extends TestCase
 {
     /**
      * @var RoomProvider
@@ -24,8 +24,7 @@ class RoomProviderTest extends ApiTestCase
     {
         parent::setUp();
 
-        $nullLogger = new Logger('dummy', [new NullHandler()]);
-        $this->api = new RoomProvider($nullLogger);
+        $this->api = new Api('http://localhost', 'token', '0');
         $this->mockResponses([]);
     }
 
@@ -41,7 +40,7 @@ class RoomProviderTest extends ApiTestCase
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/rooms_response_1.xml')),
         ]);
 
-        $rooms = $this->api->getRooms();
+        $rooms = $this->api->Room()->getRooms();
         $this->assertCount(2, $rooms);
         $room = $rooms[0];
         $this->assertSame('1234', $room->getIdentifier());
@@ -60,8 +59,8 @@ class RoomProviderTest extends ApiTestCase
             new Response(500, ['Content-Type' => 'text/xml;charset=utf-8'], ''),
         ]);
 
-        $this->expectException(ApiError::class);
-        $this->api->getRooms();
+        $this->expectException(ApiException::class);
+        $this->api->Room()->getRooms();
     }
 
     public function testGetRoomById()
@@ -70,7 +69,7 @@ class RoomProviderTest extends ApiTestCase
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/rooms_response_1.xml')),
         ]);
 
-        $room = $this->api->getRoomById('1235');
+        $room = $this->api->Room()->getRoomById('1235');
         $this->assertSame('1235', $room->getIdentifier());
         $this->assertSame('Testgasse 4, 1.Obergeschoß', $room->getAddress());
         $this->assertSame('Labor - EDV', $room->getDescription());
@@ -82,7 +81,7 @@ class RoomProviderTest extends ApiTestCase
         $this->mockResponses([
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/rooms_response_1.xml')),
         ]);
-        $room = $this->api->getRoomById('123');
+        $room = $this->api->Room()->getRoomById('123');
         $this->assertNull($room);
     }
 
@@ -92,7 +91,7 @@ class RoomProviderTest extends ApiTestCase
             new Response(500, ['Content-Type' => 'text/xml;charset=utf-8'], ''),
         ]);
 
-        $this->expectException(ApiError::class);
-        $this->api->getRoomById('123');
+        $this->expectException(ApiException::class);
+        $this->api->Room()->getRoomById('123');
     }
 }

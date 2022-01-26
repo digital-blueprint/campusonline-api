@@ -2,20 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Dbp\CampusonlineApi\Rest;
+namespace Dbp\CampusonlineApi\LegacyWebService;
 
-use Dbp\CampusonlineApi\Rest\Student\StudentApi;
-use Dbp\CampusonlineApi\Rest\UCard\UCardApi;
+use Dbp\CampusonlineApi\LegacyWebService\Room\RoomApi;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 
 class Api implements LoggerAwareInterface
 {
-    private $connection;
+    public const LANGUAGE_PARAMETER_NAME = 'lang';
+    public const LANGUAGE_EN = 'en';
+    public const DEFAULT_LANGUAGE = self::LANGUAGE_EN;
 
-    public function __construct($baseUrl, $clientId, $clientSecret)
+    private $connection;
+    private $rootOrgUnitId;
+
+    public function __construct($baseUrl, $accessToken, $rootOrgUnitId = 0)
     {
-        $this->connection = new Connection($baseUrl, $clientId, $clientSecret);
+        $this->connection = new Connection($baseUrl, $accessToken);
+        $this->rootOrgUnitId = $rootOrgUnitId;
     }
 
     public function setLogger(LoggerInterface $logger): void
@@ -23,23 +29,18 @@ class Api implements LoggerAwareInterface
         $this->connection->setLogger($logger);
     }
 
-    public function getConnection(): Connection
+    public function setCache(?CacheItemPoolInterface $cachePool, int $ttl)
     {
-        return $this->connection;
+        $this->connection->setCache($cachePool, $ttl);
     }
 
-    public function addDataServiceOverride(string $dataServiceId, string $overrideId): void
+    public function setClientHandler(?object $handler)
     {
-        $this->connection->addDataServiceOverride($dataServiceId, $overrideId);
+        $this->connection->setClientHandler($handler);
     }
 
-    public function Student(): StudentApi
+    public function Room(): RoomApi
     {
-        return new StudentApi($this->connection);
-    }
-
-    public function UCard(): UCardApi
-    {
-        return new UCardApi($this->connection);
+        return new RoomApi($this->connection, $this->rootOrgUnitId);
     }
 }

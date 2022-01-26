@@ -2,116 +2,131 @@
 
 declare(strict_types=1);
 
-namespace Dbp\CampusonlineApi\Rest;
+namespace Dbp\CampusonlineApi\LegacyWebService;
 
+use Dbp\CampusonlineApi\Rest\ApiException;
+use Dbp\CampusonlineApi\Rest\Tools;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\HandlerStack;
+use Kevinrob\GuzzleCache\CacheMiddleware;
+use Kevinrob\GuzzleCache\Storage\Psr6CacheStorage;
+use Kevinrob\GuzzleCache\Strategy\GreedyCacheStrategy;
+use Psr\Cache\CacheItemPoolInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
+use League\Uri\UriTemplate;
 
 class Connection implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
+    private const ACCESS_TOKEN_PARAMETER_NAME = 'token';
+
+    private $cachePool;
+    private $cacheTTL;
     private $baseUrl;
-    private $clientId;
-    private $clientSecret;
+    private $accessToken;
     private $clientHandler;
 
-    private $token;
-    private $dataServices;
-
-    public function __construct(string $baseUrl, string $clientId, string $clientSecret)
+    public function __construct(string $baseUrl, string $accessToken)
     {
+        $this->clientHandler = null;
+        $this->logger = null;
         $this->baseUrl = $baseUrl;
-        $this->clientId = $clientId;
-        $this->clientSecret = $clientSecret;
-        $this->dataServices = [];
+        $this->accessToken = $accessToken;
+        $this->cachePool = null;
+        $this->cacheTTL = 0;
     }
 
-    public function addDataServiceOverride(string $dataServiceId, string $overrideId): void
+    public function setCache(?CacheItemPoolInterface $cachePool, int $ttl)
     {
-        $this->dataServices[$dataServiceId] = $overrideId;
+        $this->cachePool = $cachePool;
+        $this->cacheTTL = $ttl;
     }
 
-    public function getDataServiceId(string $id): string
-    {
-        return $this->dataServices[$id] ?? $id;
-    }
-
-    public function setClientHandler(?object $handler): void
+    public function setClientHandler(?object $handler)
     {
         $this->clientHandler = $handler;
     }
 
-    public function setToken(string $token): void
+    /**
+     * @param array $parameters Array of <param name> - <param value> pairs
+     * @throws ApiException
+     */
+    public function get(string $uri, array $parameters = []) : string
     {
-        $this->token = $token;
+        $uri = $this->makeUri($uri, $parameters);
+
+        $client = $this->getClient();
+        try {
+            $response = $client->get($uri);
+        } catch (RequestException $e) {
+            throw self::createApiException($e);
+        }
+
+        return (string) $response->getBody();
     }
 
-    public function getClient(): Client
+    private function getClient(): Client
     {
-        $token = $this->getToken();
-
-        $stack = HandlerStack::create($this->clientHandler);
         $base_uri = $this->baseUrl;
         if (substr($base_uri, -1) !== '/') {
             $base_uri .= '/';
         }
 
+        $stack = HandlerStack::create($this->clientHandler);
+        if ($this->logger !== null) {
+            $stack->push(Tools::createLoggerMiddleware($this->logger));
+        }
+
+        if ($this->cachePool !== null) {
+            assert($this->cachePool instanceof CacheItemPoolInterface);
+            $cacheMiddleWare = new CacheMiddleware(
+                new GreedyCacheStrategy(
+                    new Psr6CacheStorage($this->cachePool),
+                    $this->cacheTTL
+                )
+            );
+            $cacheMiddleWare->setHttpMethods(['GET' => true, 'HEAD' => true]);
+            $stack->push($cacheMiddleWare);
+        }
+
         $client_options = [
             'base_uri' => $base_uri,
             'handler' => $stack,
-            'headers' => [
-                'Authorization' => 'Bearer '.$token,
-                'Accept' => 'application/json',
-            ],
         ];
 
-        if ($this->logger !== null) {
-            $stack->push(Tools::createLoggerMiddleware($this->logger));
-        }
-
-        $client = new Client($client_options);
-
-        return $client;
+        return new Client($client_options);;
     }
 
-    private function getToken(): string
+    /*
+     * TODO: validate incoming uri and parameters
+     */
+    private function makeUri($uri, $parameters) : string
     {
-        if ($this->token === null) {
-            $this->refreshToken();
+        $parameters[self::ACCESS_TOKEN_PARAMETER_NAME] = $this->accessToken;
+
+        $uri = $uri.'?';
+        foreach ($parameters as $param_key => $param_value) {
+            if ($param_key !== array_key_first($parameters)) {
+                $uri .= '&';
+            }
+            $uri .= $param_key.'={'.$param_key.'}';
         }
 
-        return $this->token;
+        $uriTemplate = new UriTemplate($uri);
+
+        return (string) $uriTemplate->expand($parameters);
     }
 
-    private function refreshToken(): void
+    private static function createApiException(RequestException $e) : ApiException
     {
-        $stack = HandlerStack::create($this->clientHandler);
-        $client_options = [
-            'handler' => $stack,
-        ];
-        if ($this->logger !== null) {
-            $stack->push(Tools::createLoggerMiddleware($this->logger));
+        $response = $e->getResponse();
+        if ($response === null) {
+            return new ApiException('Unknown error');
         }
-        $client = new Client($client_options);
-
-        try {
-            $response = $client->post($this->baseUrl.'/wbOAuth2.token', [
-                'form_params' => [
-                    'client_id' => $this->clientId,
-                    'client_secret' => $this->clientSecret,
-                    'grant_type' => 'client_credentials',
-                ],
-            ]);
-        } catch (RequestException $e) {
-            throw new ApiException($e->getMessage());
-        }
-        $data = $response->getBody()->getContents();
-
-        $token = Tools::decodeJSON($data, true);
-        $this->token = $token['access_token'];
+        return new ApiException($e->getMessage(), $response->getStatusCode());
     }
 }
