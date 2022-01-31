@@ -11,7 +11,6 @@ use SimpleXMLElement;
 
 class RoomApi
 {
-    private const ROOT_ORG_UNIT_PARAMETER_NAME = 'orgUnitID';
     private const URI = 'ws/webservice_v1.0/rdm/rooms/xml';
 
     private $connection;
@@ -45,6 +44,8 @@ class RoomApi
     }
 
     /**
+     * Currently all rooms are requested and cached. Requested rooms are then fetched from the XML response.
+     *
      * @return RoomData[]
      *
      * @throws ApiException
@@ -52,12 +53,11 @@ class RoomApi
     private function getRoomsInternal(string $roomId, array $options): array
     {
         $parameters = [];
-        $parameters[Api::LANGUAGE_PARAMETER_NAME] = $options[Api::LANGUAGE_PARAMETER_NAME] ?? Api::DEFAULT_LANGUAGE;
-        $parameters[self::ROOT_ORG_UNIT_PARAMETER_NAME] = $this->rootOrgUnitId;
+        $parameters[Api::ORG_UNIT_ID_PARAMETER_NAME] = $this->rootOrgUnitId;
 
-        $responseBody = $this->connection->get(self::URI, $parameters);
+        $responseBody = $this->connection->get(self::URI, $options[Api::LANGUAGE_PARAMETER_NAME] ?? '', $parameters);
 
-        return $this->parseRoomsDataResponse($responseBody, $roomId);
+        return $this->parseResponse($responseBody, $roomId);
     }
 
     /**
@@ -65,7 +65,7 @@ class RoomApi
      *
      * @throws ApiException
      */
-    private function parseRoomsDataResponse(string $responseBody, string $roomId): array
+    private function parseResponse(string $responseBody, string $requestedId): array
     {
         $rooms = [];
 
@@ -74,33 +74,36 @@ class RoomApi
         } catch (\Exception $e) {
             throw new ApiException('response body is not in valid XML format');
         }
-        $units = $xml->xpath('.//cor:resource');
+        $nodes = $xml->xpath('.//cor:resource');
 
-        foreach ($units as $unit) {
-            $wasRoomFound = false;
-            $identifier = trim((string) ($unit->xpath('./cor:description/cor:attribute[@cor:attrID="roomID"]')[0] ?? ''));
+        foreach ($nodes as $node) {
+            $identifier = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="roomID"]')[0] ?? ''));
             if ($identifier === '') {
                 continue;
-            } elseif ($roomId !== '') {
-                if ($identifier === $roomId) {
-                    $wasRoomFound = true;
+            }
+
+            $wasIdFound = false;
+            if ($requestedId !== '') {
+                if ($identifier === $requestedId) {
+                    $wasIdFound = true;
                 } else {
                     continue;
                 }
             }
 
-            $address = trim((string) ($unit->xpath('./cor:description/cor:attribute[@cor:attrID="address"]')[0] ?? ''));
-            $url = trim((string) ($unit->xpath('./cor:description/cor:attribute[@cor:attrID="address"]/@cor:attrAltUrl')[0] ?? ''));
-            $floorSize = trim((string) ($unit->xpath('./cor:description/cor:attribute[@cor:attrID="area"]')[0] ?? ''));
-            $description = trim((string) ($unit->xpath('./cor:description/cor:attribute[@cor:attrID="purpose"]')[0] ?? ''));
-            $permittedUsage = trim((string) ($unit->xpath('./cor:description/cor:attribute[@cor:attrID="purposeID"]')[0] ?? ''));
-            $name = trim((string) ($unit->xpath('./cor:description/cor:attribute[@cor:attrID="additionalInformation"]')[0] ?? ''));
-            $alternateName = trim((string) ($unit->xpath('./cor:description/cor:attribute[@cor:attrID="roomCode"]')[0] ?? ''));
+            $address = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="address"]')[0] ?? ''));
+            $url = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="address"]/@cor:attrAltUrl')[0] ?? ''));
+            $floorSize = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="area"]')[0] ?? ''));
+            $description = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="purpose"]')[0] ?? ''));
+            $permittedUsage = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="purposeID"]')[0] ?? ''));
+            $name = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="additionalInformation"]')[0] ?? ''));
+            $alternateName = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="roomCode"]')[0] ?? ''));
+
             $room = new RoomData();
             $room->setIdentifier($identifier);
             $room->setAddress($address);
             $room->setUrl($url);
-            $room->setFloorSize($floorSize);
+            $room->setFloorSize(floatval($floorSize));
             $room->setDescription($description);
             $room->setPermittedUsage($permittedUsage);
             $room->setName($name);
@@ -108,7 +111,7 @@ class RoomApi
 
             $rooms[] = $room;
 
-            if ($wasRoomFound) {
+            if ($wasIdFound) {
                 break;
             }
         }

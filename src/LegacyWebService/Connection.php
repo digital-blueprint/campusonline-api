@@ -24,6 +24,10 @@ class Connection implements LoggerAwareInterface
     use LoggerAwareTrait;
 
     private const ACCESS_TOKEN_PARAMETER_NAME = 'token';
+    private const LANGUAGE_PARAMETER_NAME = 'language';
+    private const LANGUAGE_EN = 'en';
+    private const LANGUAGE_DE = 'de';
+    private const DEFAULT_LANGUAGE = self::LANGUAGE_EN;
 
     private $cachePool;
     private $cacheTTL;
@@ -57,10 +61,10 @@ class Connection implements LoggerAwareInterface
      *
      * @throws ApiException
      */
-    public function get(string $uri, array $parameters = []): string
+    public function get(string $uri, string $lang = '', array $parameters = []): string
     {
         try {
-            $uri = $this->makeUri($uri, $parameters);
+            $uri = $this->makeUri($uri, $lang, $parameters);
         } catch (UriException $e) {
             throw new ApiException('invalid uri or parameters: '.$uri);
         }
@@ -106,12 +110,25 @@ class Connection implements LoggerAwareInterface
         return new Client($client_options);
     }
 
+    private static function getLanguageParameter(string $language): string
+    {
+        switch ($language) {
+            case self::LANGUAGE_EN:
+                return self::LANGUAGE_EN;
+            case self::LANGUAGE_DE:
+                return self::LANGUAGE_DE;
+            default:
+                return self::DEFAULT_LANGUAGE;
+        }
+    }
+
     /**
      * @throws UriException
      */
-    private function makeUri($uri, $parameters): string
+    private function makeUri(string $uri, string $lang, array $parameters): string
     {
         $parameters[self::ACCESS_TOKEN_PARAMETER_NAME] = $this->accessToken;
+        $parameters[self::LANGUAGE_PARAMETER_NAME] = self::getLanguageParameter($lang);
 
         $uri = $uri.'?';
         foreach ($parameters as $param_key => $param_value) {
@@ -126,6 +143,12 @@ class Connection implements LoggerAwareInterface
         return (string) $uriTemplate->expand($parameters);
     }
 
+    private static function hideToken(string $message): string
+    {
+        // hide token parameters
+        return preg_replace('/([&?]token=)[\w\d-]+/i', '${1}hidden', $message);
+    }
+
     private static function createApiException(GuzzleException $e): ApiException
     {
         if ($e instanceof RequestException) {
@@ -133,10 +156,11 @@ class Connection implements LoggerAwareInterface
             if ($response === null) {
                 return new ApiException('Unknown error');
             }
-
-            return new ApiException($e->getMessage(), $response->getStatusCode());
+            // TODO: extract error message from XML response
+            // TODO: hide token in response
+            return new ApiException(self::hideToken($e->getMessage()), $response->getStatusCode());
         } else {
-            return new ApiException($e->getMessage());
+            return new ApiException(self::hideToken($e->getMessage()));
         }
     }
 }

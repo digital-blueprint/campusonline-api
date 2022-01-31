@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CDM xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://campusonline.at/xmlschema/cdm/CDMv2.01.xsd">
+    <properties>
+        <datasource>tugraz.at</datasource>
+        <datetime date="2021-02-10" time="13:56:30"/>
+    </properties>
+    <orgUnit>
+        <orgUnitID>2391</orgUnitID>
+        <orgUnitName>
+            <text>Institute of Physical and Theoretical Chemistry</text>
+        </orgUnitName>
+        <orgUnitCode>6350</orgUnitCode>
+        <orgUnitKind>
+            <subBlock userDefined="codeDesignation">INSTITUT</subBlock>
+            <subBlock userDefined="name">Institute</subBlock>
+        </orgUnitKind>
+        <orgUnitDescription><![CDATA[* Investigations of fast chemical reactions, ...
+]]></orgUnitDescription>
+        <contacts>
+            <contactData>
+                <contactName>
+                    <text>Institute of Physical and Theoretical Chemistry</text>
+                </contactName>
+                <adr>
+                    <street>Stremayrgasse  9/I</street>
+                    <locality>Graz</locality>
+                    <pcode>8010</pcode>
+                    <country>AT</country>
+                </adr>
+                <visitHour>
+                    <header><![CDATA[Mo.-Fr. 10-11 Uhr]]></header>
+                </visitHour>
+                <telephone teltype="office">+43 123 123-1234</telephone>
+                <fax>+43 123 123-1234</fax>
+                <email>not.a.real.person@tugraz.at</email>
+                <webLink>
+                    <href>http://www.ptc.tugraz.at/</href>
+                </webLink>
+                <infoBlock>
+                    <webLink userDefined="locationURL">
+                        <href>https://online.tugraz.at/tug_online/wblbs.map?pOwner=PTC&amp;pTitle=Lageplan&amp;pKmlListAddress=wbLBS.orgKmlList%3FpOrgNr%3D2391</href>
+                    </webLink>
+                </infoBlock>
+            </contactData>
+        </contacts>
+        <infoBlock>
+            <webLink userDefined="CAMPUSonlineURL">
+                <href>https://online.tugraz.at/tug_online/wborg.display?pOrgNr=2391</href>
+            </webLink>
+        </infoBlock>
+        <orgUnit>
+            <orgUnitID>18454</orgUnitID>
+            <orgUnitName>
+                <text>Working Group Spectroscopy and Electrochemistry</text>
+            </orgUnitName>
+            <orgUnitCode>6352</orgUnitCode>
+            <orgUnitKind>
+                <subBlock userDefined="codeDesignation">ARBEITSGRUPPE</subBlock>
+                <subBlock userDefined="name">Working Group</subBlock>
+            </orgUnitKind>
+            <contacts/>
+            <infoBlock>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wborg.display?pOrgNr=18454</href>
+                </webLink>
+            </infoBlock>
+        </orgUnit>
+        <orgUnit>
+            <orgUnitID>18452</orgUnitID>
+            <orgUnitName>
+                <text>Working Group Structure Science</text>
+            </orgUnitName>
+            <orgUnitCode>6351</orgUnitCode>
+            <orgUnitKind>
+                <subBlock userDefined="codeDesignation">ARBEITSGRUPPE</subBlock>
+                <subBlock userDefined="name">Working Group</subBlock>
+            </orgUnitKind>
+            <contacts/>
+            <infoBlock>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wborg.display?pOrgNr=18452</href>
+                </webLink>
+            </infoBlock>
+        </orgUnit>
+    </orgUnit>
+</CDM>
+<!--  Metadata Generated On: Wed Feb 10 13:56:30 CET 2021  Time Taken: 32 msecs -->

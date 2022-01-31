@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\LegacyWebService;
 
+use Dbp\CampusonlineApi\LegacyWebService\Course\CourseApi;
+use Dbp\CampusonlineApi\LegacyWebService\Organization\OrganizationUnitApi;
 use Dbp\CampusonlineApi\LegacyWebService\Room\RoomApi;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -11,17 +13,27 @@ use Psr\Log\LoggerInterface;
 
 class Api implements LoggerAwareInterface
 {
+    public const ORG_UNIT_ID_PARAMETER_NAME = 'orgUnitID';
     public const LANGUAGE_PARAMETER_NAME = 'lang';
-    public const LANGUAGE_EN = 'en';
-    public const DEFAULT_LANGUAGE = self::LANGUAGE_EN;
 
     private $connection;
     private $rootOrgUnitId;
 
-    public function __construct($baseUrl, $accessToken, $rootOrgUnitId = 0)
+    public function __construct($baseUrl, $accessToken, $rootOrgUnitId = 0,
+                                $logger = null, $cache = null, $cacheTTL = 0, $clientHandler = null)
     {
-        $this->connection = new Connection($baseUrl, $accessToken);
         $this->rootOrgUnitId = $rootOrgUnitId;
+        $this->connection = new Connection($baseUrl, $accessToken);
+
+        if ($logger !== null) {
+            $this->connection->setLogger($logger);
+        }
+        if ($cache !== null) {
+            $this->connection->setCache($cache, $cacheTTL);
+        }
+        if ($clientHandler !== null) {
+            $this->connection->setClientHandler($clientHandler);
+        }
     }
 
     public function setLogger(LoggerInterface $logger): void
@@ -42,5 +54,15 @@ class Api implements LoggerAwareInterface
     public function Room(): RoomApi
     {
         return new RoomApi($this->connection, $this->rootOrgUnitId);
+    }
+
+    public function OrganizationUnit(): OrganizationUnitApi
+    {
+        return new OrganizationUnitApi($this->connection, $this->rootOrgUnitId);
+    }
+
+    public function Course(): CourseApi
+    {
+        return new CourseApi($this->connection);
     }
 }

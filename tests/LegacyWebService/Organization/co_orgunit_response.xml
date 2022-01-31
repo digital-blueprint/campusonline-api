@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CDM xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://campusonline.at/xmlschema/cdm/CDMv2.01.xsd">
+    <properties>
+        <datasource>tugraz.at</datasource>
+        <datetime date="2021-02-10" time="12:41:04"/>
+    </properties>
+    <orgUnit>
+        <orgUnitID>2322</orgUnitID>
+        <orgUnitName>
+            <text>Institute of Fundamentals and Theory in Electrical  Engineering</text>
+        </orgUnitName>
+        <orgUnitCode>4370</orgUnitCode>
+        <orgUnitKind>
+            <subBlock userDefined="codeDesignation">INSTITUT</subBlock>
+            <subBlock userDefined="name">Institute</subBlock>
+        </orgUnitKind>
+        <orgUnitDescription><![CDATA[The present Institute of Fundamentals...]]></orgUnitDescription>
+        <contacts>
+            <contactData>
+                <contactName>
+                    <text>Institute of Fundamentals and Theory in Electrical  Engineering</text>
+                </contactName>
+                <adr>
+                    <street>Inffeldgasse 18/I</street>
+                    <locality>Graz</locality>
+                    <pcode>8010</pcode>
+                    <country>AT</country>
+                </adr>
+                <visitHour>
+                    <header><![CDATA[Mo bis Fr 8:00 bis 10:00 Uhr und nach Vereinbarung]]></header>
+                </visitHour>
+                <telephone teltype="office">+43 316 123-1234</telephone>
+                <fax>+43 123 123-1234</fax>
+                <email>not.a.real.person@tugraz.at</email>
+                <webLink>
+                    <href>http://www.igte.TUGraz.at</href>
+                </webLink>
+                <infoBlock>
+                    <webLink userDefined="locationURL">
+                        <href>https://online.tugraz.at/tug_online/wblbs.map?pOwner=IGTE&amp;pTitle=Lageplan&amp;pKmlListAddress=wbLBS.orgKmlList%3FpOrgNr%3D2322</href>
+                    </webLink>
+                    <subBlock userDefined="additionalInformation">
+                        <subBlock userDefined="Bibliotheksinfo">nach Vereinbarung, Tel.: 7251</subBlock>
+                    </subBlock>
+                </infoBlock>
+            </contactData>
+        </contacts>
+        <infoBlock>
+            <webLink userDefined="CAMPUSonlineURL">
+                <href>https://online.tugraz.at/tug_online/wborg.display?pOrgNr=2322</href>
+            </webLink>
+        </infoBlock>
+    </orgUnit>
+</CDM>

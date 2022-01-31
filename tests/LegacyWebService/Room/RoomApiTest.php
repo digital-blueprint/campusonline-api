@@ -46,7 +46,7 @@ class RoomApiTest extends TestCase
         $this->assertSame('IEEG123', $room->getAlternateName());
         $this->assertSame('29', $room->getPermittedUsage());
         $this->assertSame('Labor', $room->getDescription());
-        $this->assertSame('42.42', $room->getFloorSize());
+        $this->assertSame(42.42, $room->getFloorSize());
         $this->assertSame('https://online.tugraz.at/tug_online/ris.einzelraum?raumkey=1234', $room->getUrl());
         $this->assertSame('Unit Test Projekt', $room->getName());
     }
@@ -59,6 +59,16 @@ class RoomApiTest extends TestCase
 
         $this->expectException(ApiException::class);
         $this->api->Room()->getRooms();
+    }
+
+    public function testGetRoomsInvalidXML()
+    {
+        $this->mockResponses([
+            new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/rooms_response_invalid.xml')),
+        ]);
+
+        $this->expectException(ApiException::class);
+        $this->api->Room()->getRoomById('1235');
     }
 
     public function testGetRoomById()

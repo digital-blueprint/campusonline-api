@@ -26,9 +26,8 @@ class RoomData
      */
     private $url;
 
-    // FIXME: schema.org/floorSize isn't a string
     /**
-     * @var string
+     * @var float
      */
     private $floorSize;
 
@@ -87,12 +86,12 @@ class RoomData
         $this->url = $url;
     }
 
-    public function getFloorSize(): string
+    public function getFloorSize(): float
     {
         return $this->floorSize;
     }
 
-    public function setFloorSize(string $floorSize): void
+    public function setFloorSize(float $floorSize): void
     {
         $this->floorSize = $floorSize;
     }

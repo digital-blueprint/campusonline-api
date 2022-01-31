@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cor:RDM xmlns:cor="http://rdm.campusonline.at/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://rdm.campusonline.at/ http://campusonline.at/xmlschema/rdm/RDMv1.0.xsd">
+    <cor:resource cor:id="room_1234" cor:typeID="room">
+        <cor:description>
+            <cor:attribute cor:attrID="roomID" cor:attrDataType="String">1234</cor:attribute>
+            <cor:attribute cor:attrID="address" cor:attrDataType="String" cor:attrAltUrl="https://online.tugraz.at/tug_online/ris.einzelraum?raumkey=1234">Teststraße 24, Erdgeschoß</cor:attribute>
+            <cor:attribute cor:attrID="purposeID" cor:attrDataType="String">29</cor:attribute>
+            <cor:attribute cor:attrID="purpose" cor:attrDataType="String">Labor</cor:attribute>
+            <cor:attribute cor:attrID="area" cor:attrDataType="float">42.42</cor:attribute>
+            <cor:attribute cor:attrID="roomCode" cor:attrDataType="String">IEEG123</cor:attribute>
+            <cor:attribute cor:attrID="additionalInformation" cor:attrDataType="String">Unit Test Projekt</cor:attribute>
+            <cor:resourceGroup cor:typeID="orgUnitUserList">
+                <cor:description>
+                    <cor:resource cor:typeID="orgUnitUser">
+                        <cor:description>
+                            <cor:attribute cor:attrID="orgUnitID" cor:attrDataType="String">4321</cor:attribute>
+                            <cor:attribute cor:attrID="orgUnitName" cor:attrDataType="String">Institut für Unit Tests</cor:attribute>
+                            <cor:attribute cor:attrID="areaPercentage" cor:attrDataType="int">300</cor:attribute>
+                            <cor:attribute cor:attrID="areaPart" cor:attrDataType="float">42.24</cor:attribute>
+                            <cor:attribute cor:attrID="principalOccupantID" cor:attrDataType="String">J</cor:attribute>
+                        </cor:description>
+                    </cor:resource>
+                </cor:description>
+            </cor:resourceGroup>
+        </cor:description>
+    </cor:resource>
+    <cor:resource cor:id="room_1235" cor:typeID="room">
+        <cor:description>
+            <cor:attribute cor:attrID="roomID" cor:attrDataType="String">1235</cor:attribute>
+            <cor:attribute cor:attrID="address" cor:attrDataType="String" cor:attrAltUrl="https://online.tugraz.at/tug_online/ris.einzelraum?raumkey=1235">Testgasse 4, 1.Obergeschoß</cor:attribute>
+            <cor:attribute cor:attrID="purposeID" cor:attrDataType="String">14</cor:attribute>
+            <cor:attribute cor:attrID="purpose" cor:attrDataType="String">Labor - EDV</cor:attribute>
+            <cor:attribute cor:attrID="area" cor:attrDataType="float">51.59</cor:attribute>
+            <cor:attribute cor:attrID="roomCode" cor:attrDataType="String">IE01234</cor:attribute>
+            <cor:attribute cor:attrID="additionalInformation" cor:attrDataType="String">TECHN. TEST NORD</cor:attribute>
+            <cor:attribute cor:attrID="contactPerson" cor:attrDataType="String" cor:attrAltUrl="https://online.tugraz.at/tug_online/visitenkarte.show_vcard?pPersonenGruppe=3&amp;pPersonenId=FOOBAR">Max Mustermann</cor:attribute>
+            <cor:resourceGroup cor:typeID="orgUnitUserList">
+                <cor:description>
+                    <cor:resource cor:typeID="orgUnitUser">
+                        <cor:description>
+                            <cor:attribute cor:attrID="orgUnitID" cor:attrDataType="String">2345</cor:attribute>
+                            <cor:attribute cor:attrID="orgUnitName" cor:attrDataType="String">Institut für Unit Tests</cor:attribute>
+                            <cor:attribute cor:attrID="areaPercentage" cor:attrDataType="int">200</cor:attribute>
+                            <cor:attribute cor:attrID="areaPart" cor:attrDataType="float">24.24</cor:attribute>
+                            <cor:attribute cor:attrID="principalOccupantID" cor:attrDataType="String">J</cor:attribute>
+                        </cor:description>
+                    </cor:resource>
+                </cor:description>
+            </cor:resourceGroup>
+        </cor:description>
+    </cor:resource>
