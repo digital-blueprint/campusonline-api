@@ -11,6 +11,8 @@ use SimpleXMLElement;
 
 class OrganizationUnitApi
 {
+    public const ORG_UNIT_ID_PARAMETER_NAME = 'orgUnitID';
+
     private const URI = 'ws/webservice_v1.0/cdm/organization/xml';
 
     private $connection;
@@ -53,7 +55,7 @@ class OrganizationUnitApi
     private function getOrganizationUnitsInternal(string $identifier, array $options): array
     {
         $parameters = [];
-        $parameters[Api::ORG_UNIT_ID_PARAMETER_NAME] = $identifier !== '' ? $identifier : $this->rootOrgUnitId;
+        $parameters[self::ORG_UNIT_ID_PARAMETER_NAME] = $identifier !== '' ? $identifier : $this->rootOrgUnitId;
 
         $responseBody = $this->connection->get(self::URI, $options[Api::LANGUAGE_PARAMETER_NAME] ?? '', $parameters);
 

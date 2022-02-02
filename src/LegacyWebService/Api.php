@@ -13,7 +13,6 @@ use Psr\Log\LoggerInterface;
 
 class Api implements LoggerAwareInterface
 {
-    public const ORG_UNIT_ID_PARAMETER_NAME = 'orgUnitID';
     public const LANGUAGE_PARAMETER_NAME = 'lang';
 
     private $connection;
@@ -63,6 +62,6 @@ class Api implements LoggerAwareInterface
 
     public function Course(): CourseApi
     {
-        return new CourseApi($this->connection);
+        return new CourseApi($this->connection, $this->rootOrgUnitId);
     }
 }

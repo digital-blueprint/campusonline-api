@@ -6,6 +6,7 @@ namespace Dbp\CampusonlineApi\LegacyWebService\Room;
 
 use Dbp\CampusonlineApi\LegacyWebService\Api;
 use Dbp\CampusonlineApi\LegacyWebService\Connection;
+use Dbp\CampusonlineApi\LegacyWebService\Organization\OrganizationUnitApi;
 use Dbp\CampusonlineApi\Rest\ApiException;
 use SimpleXMLElement;
 
@@ -53,7 +54,7 @@ class RoomApi
     private function getRoomsInternal(string $roomId, array $options): array
     {
         $parameters = [];
-        $parameters[Api::ORG_UNIT_ID_PARAMETER_NAME] = $this->rootOrgUnitId;
+        $parameters[OrganizationUnitApi::ORG_UNIT_ID_PARAMETER_NAME] = $this->rootOrgUnitId;
 
         $responseBody = $this->connection->get(self::URI, $options[Api::LANGUAGE_PARAMETER_NAME] ?? '', $parameters);
 

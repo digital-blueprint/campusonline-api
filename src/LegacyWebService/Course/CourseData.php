@@ -21,7 +21,7 @@ class CourseData
     /**
      * @var string
      */
-    private $learningResourceType;
+    private $type;
 
     /**
      * @var string
@@ -31,12 +31,12 @@ class CourseData
     /**
      * @var string
      */
-    private $educationalLevel;
+    private $code;
 
     /**
      * @var string
      */
-    private $courseCode;
+    private $teachingTerm;
 
     /**
      * @var string
@@ -46,96 +46,16 @@ class CourseData
     /**
      * @var string
      */
-    private $citation;
-
-    /**
-     * @var string
-     */
     private $numberOfCredits;
-
-    /**
-     * @var string
-     */
-    private $occupationalCredentialAwarded;
-
-    /**
-     * @var string
-     */
-    private $availableLanguage;
-
-    /**
-     * @var string
-     */
-    private $url;
 
     /**
      * @var PersonData[]
      */
-    private $maintainer;
+    private $contacts;
 
     public function getIdentifier(): string
     {
         return $this->identifier;
-    }
-
-    public function getLanguage(): string
-    {
-        return $this->language;
-    }
-
-    public function getEducationalLevel(): string
-    {
-        return $this->educationalLevel;
-    }
-
-    public function getCourseCode(): string
-    {
-        return $this->courseCode;
-    }
-
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    public function getCitation(): string
-    {
-        return $this->citation;
-    }
-
-    public function getNumberOfCredits(): string
-    {
-        return $this->numberOfCredits;
-    }
-
-    public function getOccupationalCredentialAwarded(): string
-    {
-        return $this->occupationalCredentialAwarded;
-    }
-
-    public function getAvailableLanguage(): string
-    {
-        return $this->availableLanguage;
-    }
-
-    public function getUrl(): string
-    {
-        return $this->url;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getMaintainer(): array
-    {
-        return $this->maintainer;
-    }
-
-    public function getLearningResourceType(): ?string
-    {
-        return $this->learningResourceType;
     }
 
     public function setIdentifier(string $identifier): void
@@ -143,49 +63,9 @@ class CourseData
         $this->identifier = $identifier;
     }
 
-    public function setLanguage(string $language): void
+    public function getName(): string
     {
-        $this->language = $language;
-    }
-
-    public function setEducationalLevel(string $educationalLevel): void
-    {
-        $this->educationalLevel = $educationalLevel;
-    }
-
-    public function setCourseCode(string $courseCode): void
-    {
-        $this->courseCode = $courseCode;
-    }
-
-    public function setDescription(string $description): void
-    {
-        $this->description = $description;
-    }
-
-    public function setCitation(string $citation): void
-    {
-        $this->citation = $citation;
-    }
-
-    public function setNumberOfCredits(string $numberOfCredits): void
-    {
-        $this->numberOfCredits = $numberOfCredits;
-    }
-
-    public function setOccupationalCredentialAwarded(string $occupationalCredentialAwarded): void
-    {
-        $this->occupationalCredentialAwarded = $occupationalCredentialAwarded;
-    }
-
-    public function setAvailableLanguage(string $availableLanguage): void
-    {
-        $this->availableLanguage = $availableLanguage;
-    }
-
-    public function setUrl(string $url): void
-    {
-        $this->url = $url;
+        return $this->name;
     }
 
     public function setName(string $name): void
@@ -193,13 +73,73 @@ class CourseData
         $this->name = $name;
     }
 
-    public function setMaintainer(array $maintainer): void
+    public function getLanguage(): string
     {
-        $this->maintainer = $maintainer;
+        return $this->language;
     }
 
-    public function setLearningResourceType(string $learningResourceType): void
+    public function setLanguage(string $language): void
     {
-        $this->learningResourceType = $learningResourceType;
+        $this->language = $language;
+    }
+
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+    public function setCode(string $courseCode): void
+    {
+        $this->code = $courseCode;
+    }
+
+    public function getTpe(): string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+    public function getTeachingTerm(): string
+    {
+        return $this->teachingTerm;
+    }
+
+    public function setTeachingTerm(string $teachingTerm): void
+    {
+        $this->teachingTerm = $teachingTerm;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    public function getNumberOfCredits(): string
+    {
+        return $this->numberOfCredits;
+    }
+
+    public function setNumberOfCredits(string $numberOfCredits): void
+    {
+        $this->numberOfCredits = $numberOfCredits;
+    }
+
+    public function getContacts(): array
+    {
+        return $this->contacts;
+    }
+
+    public function setContacts(array $contacts): void
+    {
+        $this->contacts = $contacts;
     }
 }
