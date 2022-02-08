@@ -32,19 +32,14 @@ class RoomData
     private $floorSize;
 
     /**
-     * @var string
+     * @var int
      */
-    private $description;
+    private $purposeID;
 
     /**
      * @var string
      */
-    private $permittedUsage;
-
-    /**
-     * @var string
-     */
-    private $alternateName;
+    private $roomCode;
 
     public function getIdentifier(): string
     {
@@ -96,33 +91,23 @@ class RoomData
         $this->floorSize = $floorSize;
     }
 
-    public function getDescription(): string
+    public function getPurposeID(): int
     {
-        return $this->description;
+        return $this->purposeID;
     }
 
-    public function setDescription(string $description): void
+    public function setPurposeID(int $permittedUsage): void
     {
-        $this->description = $description;
+        $this->purposeID = $permittedUsage;
     }
 
-    public function getPermittedUsage(): string
+    public function getRoomCode(): string
     {
-        return $this->permittedUsage;
+        return $this->roomCode;
     }
 
-    public function setPermittedUsage(string $permittedUsage): void
+    public function setRoomCode(string $alternateName): void
     {
-        $this->permittedUsage = $permittedUsage;
-    }
-
-    public function getAlternateName(): string
-    {
-        return $this->alternateName;
-    }
-
-    public function setAlternateName(string $alternateName): void
-    {
-        $this->alternateName = $alternateName;
+        $this->roomCode = $alternateName;
     }
 }

@@ -5,12 +5,16 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\LegacyWebService\Organization;
 
 use Dbp\CampusonlineApi\LegacyWebService\Api;
+use Dbp\CampusonlineApi\LegacyWebService\ApiException;
 use Dbp\CampusonlineApi\LegacyWebService\Connection;
-use Dbp\CampusonlineApi\Rest\ApiException;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use SimpleXMLElement;
 
-class OrganizationUnitApi
+class OrganizationUnitApi implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     public const ORG_UNIT_ID_PARAMETER_NAME = 'orgUnitID';
 
     private const URI = 'ws/webservice_v1.0/cdm/organization/xml';
@@ -25,12 +29,22 @@ class OrganizationUnitApi
     }
 
     /**
+     * CAUTION: Campusonline seems to return '401 Unauthorized' instead of '404 Not found' in case the given ID is not found.
+     *
      * @throws ApiException
      */
     public function getOrganizationUnitById(string $identifier, array $options = []): ?OrganizationUnitData
     {
-        $organizations = $this->getOrganizationUnitsInternal($identifier, $options);
-        assert(count($organizations) <= 1);
+        try {
+            $organizations = $this->getOrganizationUnitsInternal($identifier, $options);
+            assert(count($organizations) <= 1);
+        } catch (ApiException $e) {
+            if ($e->getCode() === Api::HTTP_STATUS_NOT_FOUND) {
+                return null;
+            } else {
+                throw $e;
+            }
+        }
 
         return empty($organizations) ? null : $organizations[0];
     }

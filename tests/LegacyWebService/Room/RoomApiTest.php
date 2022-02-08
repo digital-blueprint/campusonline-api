@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\Tests\LegacyWebService\Room;
 
 use Dbp\CampusonlineApi\LegacyWebService\Api;
-use Dbp\CampusonlineApi\Rest\ApiException;
+use Dbp\CampusonlineApi\LegacyWebService\ApiException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -42,13 +42,12 @@ class RoomApiTest extends TestCase
         $this->assertCount(2, $rooms);
         $room = $rooms[0];
         $this->assertSame('1234', $room->getIdentifier());
+        $this->assertSame('Unit Test Projekt', $room->getName());
         $this->assertSame('Teststraße 24, Erdgeschoß', $room->getAddress());
-        $this->assertSame('IEEG123', $room->getAlternateName());
-        $this->assertSame('29', $room->getPermittedUsage());
-        $this->assertSame('Labor', $room->getDescription());
+        $this->assertSame('IEEG123', $room->getRoomCode());
+        $this->assertSame(29, $room->getPurposeID());
         $this->assertSame(42.42, $room->getFloorSize());
         $this->assertSame('https://online.tugraz.at/tug_online/ris.einzelraum?raumkey=1234', $room->getUrl());
-        $this->assertSame('Unit Test Projekt', $room->getName());
     }
 
     public function testGetRooms500()
@@ -79,8 +78,11 @@ class RoomApiTest extends TestCase
 
         $room = $this->api->Room()->getRoomById('1235');
         $this->assertSame('1235', $room->getIdentifier());
+        $this->assertSame('TECHN. TEST NORD', $room->getName());
         $this->assertSame('Testgasse 4, 1.Obergeschoß', $room->getAddress());
-        $this->assertSame('Labor - EDV', $room->getDescription());
+        $this->assertSame('IE01234', $room->getRoomCode());
+        $this->assertSame(14, $room->getPurposeID());
+        $this->assertSame(51.59, $room->getFloorSize());
         $this->assertSame('https://online.tugraz.at/tug_online/ris.einzelraum?raumkey=1235', $room->getUrl());
     }
 

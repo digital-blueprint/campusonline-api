@@ -93,7 +93,7 @@ class CourseData
         $this->code = $courseCode;
     }
 
-    public function getTpe(): string
+    public function getType(): string
     {
         return $this->type;
     }

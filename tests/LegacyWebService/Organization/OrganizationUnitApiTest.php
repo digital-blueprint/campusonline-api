@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\Tests\LegacyWebService\Organization;
 
 use Dbp\CampusonlineApi\LegacyWebService\Api;
+use Dbp\CampusonlineApi\LegacyWebService\ApiException;
 use Dbp\CampusonlineApi\LegacyWebService\Organization\OrganizationUnitApi;
-use Dbp\CampusonlineApi\Rest\ApiException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CDM xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://campusonline.at/xmlschema/cdm/CDMv2.01.xsd" language="german">
+    <properties>
+        <datasource>tugraz.at</datasource>
+        <datetime date="2021-02-20" time="14:09:37"/>
+    </properties>
+    <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+        <courseID>240759</courseID>
+

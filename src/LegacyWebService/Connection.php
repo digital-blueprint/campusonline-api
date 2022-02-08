@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\LegacyWebService;
 
-use Dbp\CampusonlineApi\Rest\ApiException;
 use Dbp\CampusonlineApi\Rest\Tools;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -156,9 +155,8 @@ class Connection implements LoggerAwareInterface
             if ($response === null) {
                 return new ApiException('Unknown error');
             }
-            // TODO: extract error message from XML response
-            // TODO: hide token in response
-            return new ApiException(self::hideToken($e->getMessage()), $response->getStatusCode());
+
+            return new ApiException(self::hideToken($e->getMessage()), $e->getCode());
         } else {
             return new ApiException(self::hideToken($e->getMessage()));
         }

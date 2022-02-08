@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CDM xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://campusonline.at/xmlschema/cdm/CDMv2.01.xsd" language="german">
+    <properties>
+        <datasource>tugraz.at</datasource>
+        <datetime date="2021-02-20" time="14:09:37"/>
+    </properties>
+    <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+        <courseID>240759</courseID>
+        <courseName>
+            <text> Computational Intelligence</text>
+        </courseName>
+        <courseCode>442071</courseCode>
+        <courseDescription><![CDATA[Anwendungen der wichtigsten Methoden aus den Bereichen Maschinelles Lernen und Neuronale Netzwerke. Praxis-orientierte Probleme des Maschinellen Lernens im Allgemeinen und der einzelnen Ansätze im speziellen werden aufgezeigt und die entsprechende Lösungsansätze präsentiert.]]></courseDescription>
+        <level>
+            <webLink userDefined="CAMPUSonlineURL">
+                <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=240759</href>
+            </webLink>
+        </level>
+        <teachingTerm>Sommersemester 2021</teachingTerm>
+        <credits hoursPerWeek="1"/>
+        <learningObjectives><![CDATA[Nach erfolgreicher Absolvierung können die Studierenden die wichtigsten Methoden aus den Bereichen Maschinelles Lernen und Neuronale Netze sowie die dazugehörige Software auf praxis-orientierte Probleme anwenden.]]></learningObjectives>
+        <admissionInfo>
+            <admissionDescription userDefined="annotation">
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=240759&amp;corg=14323</href>
+                </webLink>
+            </admissionDescription>
+        </admissionInfo>
+        <formOfAssessment><![CDATA[Benotung der Hausübungen]]></formOfAssessment>
+        <instructionLanguage teachingLang="Englisch"/>
+        <syllabus>
+            <subBlock userDefined="furtherInformation">
+                <webLink>
+                    <href>https://www.spsc.tugraz.at/courses/computational-intelligence</href>
+                    <linkName>LV-Unterlagen</linkName>
+                </webLink>
+                <webLink>
+                    <href>https://tc.tugraz.at/main/course/view.php?id=642</href>
+                    <linkName>e-learning Kurs</linkName>
+                </webLink>
+            </subBlock>
+        </syllabus>
+        <exam>
+            <infoBlock>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/240759</href>
+                </webLink>
+            </infoBlock>
+        </exam>
+        <teachingActivity>
+            <teachingActivityID>UE</teachingActivityID>
+            <teachingActivityName>
+                <text>Übung</text>
+            </teachingActivityName>
+            <infoBlock>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=240759</href>
+                </webLink>
+            </infoBlock>
+        </teachingActivity>
+        <contacts>
+            <person>
+                <personID>DEADBEEF2</personID>
+                <name>
+                    <given>Elin</given>
+                    <family>Blackburn</family>
+                </name>
+                <role roleID="B">
+                    <text>BetreuerIn</text>
+                </role>
+                <role roleID="T">
+                    <text>TutorIn</text>
+                </role>
+                <contactData>
+                    <email>elin.blackburn@example.com</email>
+                </contactData>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/visitenkarte.show_vcard?pPersonenGruppe=3&amp;pPersonenId=DEADBEEF2</href>
+                    </webLink>
+                    <subBlock userDefined="teacherOfGroup">
+                        <subBlock>Gruppe 2</subBlock>
+                        <subBlock>Gruppe 1</subBlock>
+                    </subBlock>
+                </infoBlock>
+            </person>
+            <person>
+                <personID>DEADBEEF3</personID>
+                <name>
+                    <given>Hermione</given>
+                    <family>Meadows</family>
+                </name>
+                <role roleID="B">
+                    <text>BetreuerIn</text>
+                </role>
+                <role roleID="T">
+                    <text>TutorIn</text>
+                </role>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/visitenkarte.show_vcard?pPersonenGruppe=3&amp;pPersonenId=DEADBEEF3</href>
+                    </webLink>
+                    <subBlock userDefined="teacherOfGroup">
+                        <subBlock>Gruppe 2</subBlock>
+                        <subBlock>Gruppe 1</subBlock>
+                    </subBlock>
+                </infoBlock>
+            </person>
+            <person>
+                <personID>DEADBEEF4</personID>
+                <name>
+                    <given>Erika</given>
+                    <family>Davidson</family>
+                </name>
+                <role roleID="V">
+                    <text>Vortragende/r</text>
+                </role>
+                <contactData>
+                    <contactName>
+                        <text>Institut für Signalverarbeitung und Sprachkommunikation</text>
+                    </contactName>
+                    <adr>
+                        <extadr>Erdgeschoß</extadr>
+                        <street>Testgasse 12c</street>
+                        <locality>Graz</locality>
+                        <pcode>8010</pcode>
+                        <country>AT</country>
+                    </adr>
+                    <telephone teltype="office">+43 123 456 - 78910</telephone>
+                    <email>some.address@example.com</email>
+                    <webLink>
+                        <href>https://www.spsc.tugraz.at</href>
+                    </webLink>
+                </contactData>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/visitenkarte.show_vcard?pPersonenGruppe=3&amp;pPersonenId=DEADBEEF6</href>
+                    </webLink>
+                    <picture>
+                        <webLink userDefined="CAMPUSonlineURL">
+                            <href>https://online.tugraz.at/tug_online/visitenkarte.showImage?pPersonenGruppe=3&amp;pPersonenId=DEADBEEF6</href>
+                        </webLink>
+                    </picture>
+                    <subBlock userDefined="teacherOfGroup">
+                        <subBlock>Gruppe 2</subBlock>
+                        <subBlock>Gruppe 1</subBlock>
+                    </subBlock>
+                </infoBlock>
+            </person>
+            <person>
+                <personID>DEADBEEF</personID>
+                <name>
+                    <given>Matilda</given>
+                    <family>Beck</family>
+                </name>
+                <role roleID="B">
+                    <text>BetreuerIn</text>
+                </role>
+                <role roleID="T">
+                    <text>TutorIn</text>
+                </role>
+                <contactData>
+                    <email>matilda.beck@example.com</email>
+                </contactData>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/visitenkarte.show_vcard?pPersonenGruppe=3&amp;pPersonenId=DEADBEEF</href>
+                    </webLink>
+                    <subBlock userDefined="teacherOfGroup">
+                        <subBlock>Gruppe 2</subBlock>
+                        <subBlock>Gruppe 1</subBlock>
+                    </subBlock>
+                </infoBlock>
+            </person>
+        </contacts>
+        <infoBlock>
+            <subBlock userDefined="courseCategories">
+                <subBlock userDefined="Elektrotechnik-Toningenieur">Master Elektrotechnik-Toningenieur</subBlock>
+            </subBlock>
+        </infoBlock>
+    </course>
+</CDM>

@@ -5,24 +5,26 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\LegacyWebService\Course;
 
 use Dbp\CampusonlineApi\LegacyWebService\Api;
+use Dbp\CampusonlineApi\LegacyWebService\ApiException;
 use Dbp\CampusonlineApi\LegacyWebService\Connection;
 use Dbp\CampusonlineApi\LegacyWebService\Organization\OrganizationUnitApi;
 use Dbp\CampusonlineApi\LegacyWebService\Person\PersonData;
-use Dbp\CampusonlineApi\Rest\ApiException;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use SimpleXMLElement;
 
-class CourseApi
+class CourseApi implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     private const COURSE_BY_ID_URI = 'ws/webservice_v1.0/cdm/course/xml';
     private const COURSE_BY_ORGANIZATION_URI = 'ws/webservice_v1.0/cdm/organization/courses/xml';
-    private const STUDENTS_BY_COURSE_URI = 'ws/webservice_v1.0/cdm/course/students/xml';
-    private const EXAMS_BY_COURSE_URI = 'ws/webservice_v1.0/cdm/course/exams/xml';
     private const COURSE_ID_PARAMETER_NAME = 'courseId';
 
     private $connection;
     private $rootOrgUnitId;
 
-    public function __construct(Connection $connection, $rootOrgUnitId)
+    public function __construct(Connection $connection, string $rootOrgUnitId)
     {
         $this->connection = $connection;
         $this->rootOrgUnitId = $rootOrgUnitId;
@@ -40,8 +42,16 @@ class CourseApi
         $parameters = [];
         $parameters[self::COURSE_ID_PARAMETER_NAME] = $identifier;
 
-        $responseBody = $this->connection->get(
-            self::COURSE_BY_ID_URI, $options[Api::LANGUAGE_PARAMETER_NAME] ?? '', $parameters);
+        try {
+            $responseBody = $this->connection->get(
+                self::COURSE_BY_ID_URI, $options[Api::LANGUAGE_PARAMETER_NAME] ?? '', $parameters);
+        } catch (ApiException $e) {
+            if ($e->getCode() === Api::HTTP_STATUS_NOT_FOUND) {
+                return null;
+            } else {
+                throw $e;
+            }
+        }
 
         $courses = $this->parseCoursesResponse($responseBody, $identifier);
         assert(count($courses) <= 1);
@@ -56,45 +66,7 @@ class CourseApi
      */
     public function getCourses(array $options = []): array
     {
-        return $this->getCoursesByOrganization($this->rootOrgUnitId, $options);
-    }
-
-    /**
-     * @return PersonData[]
-     *
-     * @throws ApiException
-     */
-    public function getStudentsByCourse(string $identifier, array $options = []): array
-    {
-        if (strlen($identifier) === 0) {
-            return [];
-        }
-        $parameters = [];
-        $parameters[self::COURSE_ID_PARAMETER_NAME] = $identifier;
-
-        $responseBody = $this->connection->get(
-            self::STUDENTS_BY_COURSE_URI, $options[Api::LANGUAGE_PARAMETER_NAME] ?? '', $parameters);
-
-        return $this->parseStudentsResponse($responseBody);
-    }
-
-    /**
-     * @return int[]
-     *
-     * @throws ApiException
-     */
-    public function getExamsByCourse(string $identifier, array $options = []): array
-    {
-        if (strlen($identifier) === 0) {
-            return [];
-        }
-        $parameters = [];
-        $parameters[self::COURSE_ID_PARAMETER_NAME] = $identifier;
-
-        $responseBody = $this->connection->get(
-            self::EXAMS_BY_COURSE_URI, $options[Api::LANGUAGE_PARAMETER_NAME] ?? '', $parameters);
-
-        return [];
+        return $this->getCoursesByOrganizationInternal($this->rootOrgUnitId, $options);
     }
 
     /**
@@ -102,7 +74,17 @@ class CourseApi
      *
      * @throws ApiException
      */
-    private function getCoursesByOrganization(string $identifier, array $options): array
+    public function getCoursesByOrganization(string $identifier, array $options = []): array
+    {
+        return $this->getCoursesByOrganizationInternal($identifier, $options);
+    }
+
+    /**
+     * @return CourseData[]
+     *
+     * @throws ApiException
+     */
+    private function getCoursesByOrganizationInternal(string $identifier, array $options): array
     {
         if (strlen($identifier) === 0) {
             return [];
@@ -113,7 +95,7 @@ class CourseApi
         $responseBody = $this->connection->get(
             self::COURSE_BY_ORGANIZATION_URI, $options[Api::LANGUAGE_PARAMETER_NAME] ?? '', $parameters);
 
-        return $this->parseCoursesResponse($responseBody, $identifier);
+        return $this->parseCoursesResponse($responseBody, '');
     }
 
     /**
@@ -156,29 +138,6 @@ class CourseApi
         }
 
         return $courses;
-    }
-
-    /**
-     * @return PersonData[]
-     *
-     * @throws ApiException
-     */
-    private function parseStudentsResponse(string $responseBody): array
-    {
-        $students = [];
-
-        try {
-            $xml = new SimpleXMLElement($responseBody);
-        } catch (\Exception $e) {
-            throw new ApiException('response body is not in valid XML format');
-        }
-        $nodes = $xml->xpath('//person');
-
-        foreach ($nodes as $node) {
-            $students[] = $this->parsePersonFromXML($node);
-        }
-
-        return $students;
     }
 
     private function parseCourseFromXML(SimpleXMLElement $xml): CourseData

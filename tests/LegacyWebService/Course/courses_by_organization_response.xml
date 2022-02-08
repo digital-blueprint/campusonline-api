@@ -1,0 +1,3008 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CDM xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://campusonline.at/xmlschema/cdm/CDMv2.01.xsd">
+    <properties>
+        <datasource>tugraz.at</datasource>
+        <datetime date="2021-02-20" time="14:12:11"/>
+    </properties>
+    <orgUnit>
+        <orgUnitID>2337</orgUnitID>
+        <orgUnitName>
+            <text>Institut für Technische Informatik</text>
+        </orgUnitName>
+        <orgUnitCode>4480</orgUnitCode>
+        <orgUnitKind>
+            <subBlock userDefined="codeDesignation">INSTITUT</subBlock>
+            <subBlock userDefined="name">Institut</subBlock>
+        </orgUnitKind>
+        <orgUnitDescription><![CDATA[Das Institut für Technische Informatik bietet Forschung und Ausbildung im Bereich moderner vernetzter, eingebetteter Systeme mit Fokus auf deren Sofware, Hardware und Vernetzung. Diese Systeme sind integraler Bestandteil unserer Gesellschaft und finden sich in Autos, Fabriken, Kraftwerken, Gebäuden oder Wohnungen. Die Forschung am Institut leistet daher wesentliche Beiträge um die Zuverlässigkeit, Echtzeitfähigkeit, Sicherheit und Effizienz dieser Systeme zu erhöhen. In der Ausbildung liegen die Schwerpunkte neben den Grundlagen der Technischen Informatik auf eingebetteten Systemen, Echtzeitsystemen, verteilten Systemen, funktionaler Sicherheit und Pervasive Computing. Das Institut unterhält sehr enge Kooperationen mit der Industrie und internationalen Foschungseinrichtungen.
+
+
+]]></orgUnitDescription>
+        <contacts/>
+        <infoBlock>
+            <webLink userDefined="CAMPUSonlineURL">
+                <href>https://online.tugraz.at/tug_online/wborg.display?pOrgNr=2337</href>
+            </webLink>
+        </infoBlock>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>241333</courseID>
+            <courseName>
+                <text>Technische Informatik 1</text>
+            </courseName>
+            <courseCode>448001</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=241333</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="2"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[TUGonline]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=241333&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=241333</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/241333</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>VO</teachingActivityID>
+                <teachingActivityName>
+                    <text>Vorlesung</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=241333</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>7E3B42179C46D0EF</personID>
+                    <name>
+                        <given>Kay Uwe</given>
+                        <family>Römer</family>
+                    </name>
+                    <title>
+                        <text>Univ.-Prof. Dipl.-Inform. Dr.sc.ETH</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>244752</courseID>
+            <courseName>
+                <text>Seminar/Project Technical Informatics</text>
+            </courseName>
+            <courseCode>448081</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=244752</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="4"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[zu Beginn des Semesters über das TUG Online "Anmeldung zur Lehrveranstaltung"]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=244752&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=244752</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/244752</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>SP</teachingActivityID>
+                <teachingActivityName>
+                    <text>Seminar-Projekt</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=244752</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>B89689D798837CCF</personID>
+                    <name>
+                        <given>Marcel Carsten</given>
+                        <family>Baunach</family>
+                    </name>
+                    <title>
+                        <text>Univ.-Prof. Dipl.-Inf. Univ. Dr.rer.nat.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>E7ED292B68FD26A8</personID>
+                    <name>
+                        <given>Konrad</given>
+                        <family>Diwold</family>
+                    </name>
+                    <title>
+                        <text>Dr.rer.nat. BSc MSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>E5D3277309238092</personID>
+                    <name>
+                        <given>Georg</given>
+                        <family>Macher</family>
+                    </name>
+                    <title>
+                        <text>Dipl.-Ing. Dr.techn. BSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>8A63346F7A8EE464</personID>
+                    <name>
+                        <given>Carlo Alberto</given>
+                        <family>Boano</family>
+                    </name>
+                    <title>
+                        <text>Assoc.Prof. Dott. Dott. mag. Dr.techn. MSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>0345C8CC02B76DD4</personID>
+                    <name>
+                        <given>Eugen</given>
+                        <family>Brenner</family>
+                    </name>
+                    <title>
+                        <text>Ao.Univ.-Prof. Dipl.-Ing. Dr.techn.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>70463C81F9D6E57B</personID>
+                    <name>
+                        <given>Christian</given>
+                        <family>Steger</family>
+                    </name>
+                    <title>
+                        <text>Ass.Prof. Dipl.-Ing. Dr.techn.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>7E3B42179C46D0EF</personID>
+                    <name>
+                        <given>Kay Uwe</given>
+                        <family>Römer</family>
+                    </name>
+                    <title>
+                        <text>Univ.-Prof. Dipl.-Inform. Dr.sc.ETH</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>BC91EB43629EBA38</personID>
+                    <name>
+                        <given>Olga</given>
+                        <family>Saukh</family>
+                    </name>
+                    <title>
+                        <text>bak. Assoc.Prof. Dr.rer.nat. MSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>239099</courseID>
+            <courseName>
+                <text>Real-Time Operating Systems</text>
+            </courseName>
+            <courseCode>448026</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=239099</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="2"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation">
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=239099&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=239099</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/239099</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>VO</teachingActivityID>
+                <teachingActivityName>
+                    <text>Vorlesung</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=239099</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>B89689D798837CCF</personID>
+                    <name>
+                        <given>Marcel Carsten</given>
+                        <family>Baunach</family>
+                    </name>
+                    <title>
+                        <text>Univ.-Prof. Dipl.-Inf. Univ. Dr.rer.nat.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>240791</courseID>
+            <courseName>
+                <text>Architektur von Echtzeitbetriebssystemen</text>
+            </courseName>
+            <courseCode>448028</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=240791</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="2"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[Die Anmeldung erfolgt durch die Betreuer der Laborübung.]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=240791&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=240791</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/240791</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>PT</teachingActivityID>
+                <teachingActivityName>
+                    <text>Projekt</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=240791</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>B89689D798837CCF</personID>
+                    <name>
+                        <given>Marcel Carsten</given>
+                        <family>Baunach</family>
+                    </name>
+                    <title>
+                        <text>Univ.-Prof. Dipl.-Inf. Univ. Dr.rer.nat.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>239344</courseID>
+            <courseName>
+                <text>Sensor Networks</text>
+            </courseName>
+            <courseCode>448062</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=239344</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="2"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[Zu Beginn des Semesters über das TUG Online "Anmeldung zur Lehrveranstaltung";]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=239344&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=239344</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/239344</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>VU</teachingActivityID>
+                <teachingActivityName>
+                    <text>Vorlesung und Übung</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=239344</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>7E3B42179C46D0EF</personID>
+                    <name>
+                        <given>Kay Uwe</given>
+                        <family>Römer</family>
+                    </name>
+                    <title>
+                        <text>Univ.-Prof. Dipl.-Inform. Dr.sc.ETH</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>241067</courseID>
+            <courseName>
+                <text>Architektur verteilter Systeme</text>
+            </courseName>
+            <courseCode>448011</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=241067</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="1"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[Zu Beginn des Semesters über das TUG Online "Anmeldung zur Lehrveranstaltung", die Anmeldung zu den einzelnen Gruppen wir freigeschalten, sobald die Gesamtanzahl der Teilnehmer feststeht.]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=241067&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=241067</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/241067</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>UE</teachingActivityID>
+                <teachingActivityName>
+                    <text>Übung</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=241067</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>0345C8CC02B76DD4</personID>
+                    <name>
+                        <given>Eugen</given>
+                        <family>Brenner</family>
+                    </name>
+                    <title>
+                        <text>Ao.Univ.-Prof. Dipl.-Ing. Dr.techn.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>075A946FFC4E73F9</personID>
+                    <name>
+                        <given>Hannah</given>
+                        <family>Brunner</family>
+                    </name>
+                    <title>
+                        <text>Dipl.-Ing. BSc</text>
+                    </title>
+                    <role roleID="B">
+                        <text>BetreuerIn</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>70463C81F9D6E57B</personID>
+                    <name>
+                        <given>Christian</given>
+                        <family>Steger</family>
+                    </name>
+                    <title>
+                        <text>Ass.Prof. Dipl.-Ing. Dr.techn.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>A0FB8DE472E02F8A</personID>
+                    <name>
+                        <given>Michael</given>
+                        <family>Stocker</family>
+                    </name>
+                    <title>
+                        <text>Dipl.-Ing. BSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>3CD0289739DE88C4</personID>
+                    <name>
+                        <given>Bernhard</given>
+                        <family>Teuschl</family>
+                    </name>
+                    <role roleID="B">
+                        <text>BetreuerIn</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>23541AB1EBED2074</personID>
+                    <name>
+                        <given>Sebastian</given>
+                        <family>Juri</family>
+                    </name>
+                    <role roleID="B">
+                        <text>BetreuerIn</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>240643</courseID>
+            <courseName>
+                <text>Bachelorarbeit Informatik</text>
+            </courseName>
+            <courseCode>448092</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=240643</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="2"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[zu Beginn des Semesters über das TUG Online "Anmeldung zur Lehrveranstaltung"]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=240643&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=240643</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/240643</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>SP</teachingActivityID>
+                <teachingActivityName>
+                    <text>Seminar-Projekt</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=240643</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>70463C81F9D6E57B</personID>
+                    <name>
+                        <given>Christian</given>
+                        <family>Steger</family>
+                    </name>
+                    <title>
+                        <text>Ass.Prof. Dipl.-Ing. Dr.techn.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>0345C8CC02B76DD4</personID>
+                    <name>
+                        <given>Eugen</given>
+                        <family>Brenner</family>
+                    </name>
+                    <title>
+                        <text>Ao.Univ.-Prof. Dipl.-Ing. Dr.techn.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>B89689D798837CCF</personID>
+                    <name>
+                        <given>Marcel Carsten</given>
+                        <family>Baunach</family>
+                    </name>
+                    <title>
+                        <text>Univ.-Prof. Dipl.-Inf. Univ. Dr.rer.nat.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>240100</courseID>
+            <courseName>
+                <text>Smart Service Development</text>
+            </courseName>
+            <courseCode>448019</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=240100</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="1"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[zu Beginn des Semesters über das TUGRAZonline]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=240100&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=240100</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/240100</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>UE</teachingActivityID>
+                <teachingActivityName>
+                    <text>Übung</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=240100</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>46202607082021E3</personID>
+                    <name>
+                        <given>Josef</given>
+                        <family>Kröll</family>
+                    </name>
+                    <role roleID="B">
+                        <text>BetreuerIn</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>E7ED292B68FD26A8</personID>
+                    <name>
+                        <given>Konrad</given>
+                        <family>Diwold</family>
+                    </name>
+                    <title>
+                        <text>Dr.rer.nat. BSc MSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>238410</courseID>
+            <courseName>
+                <text>AK Embedded Systems</text>
+            </courseName>
+            <courseCode>448115</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=238410</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="2"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[zu Beginn des Semesters über das TUG Online "Anmeldung zur Lehrveranstaltung"]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=238410&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=238410</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/238410</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>PV</teachingActivityID>
+                <teachingActivityName>
+                    <text>Privatissimum</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=238410</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>0345C8CC02B76DD4</personID>
+                    <name>
+                        <given>Eugen</given>
+                        <family>Brenner</family>
+                    </name>
+                    <title>
+                        <text>Ao.Univ.-Prof. Dipl.-Ing. Dr.techn.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>238199</courseID>
+            <courseName>
+                <text>AK Cyber-Physical Systems</text>
+            </courseName>
+            <courseCode>448110</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=238199</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="2"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation">
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=238199&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=238199</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/238199</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>PV</teachingActivityID>
+                <teachingActivityName>
+                    <text>Privatissimum</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=238199</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>7E3B42179C46D0EF</personID>
+                    <name>
+                        <given>Kay Uwe</given>
+                        <family>Römer</family>
+                    </name>
+                    <title>
+                        <text>Univ.-Prof. Dipl.-Inform. Dr.sc.ETH</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>234661</courseID>
+            <courseName>
+                <text>Processor Architecture, Laboratory</text>
+            </courseName>
+            <courseCode>448025</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=234661</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="1"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation">
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=234661&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=234661</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/234661</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>LU</teachingActivityID>
+                <teachingActivityName>
+                    <text>Laborübung</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=234661</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>4E08C0509295B4E5</personID>
+                    <name>
+                        <given>Tobias Peter</given>
+                        <family>Scheipel</family>
+                    </name>
+                    <title>
+                        <text>Dipl.-Ing. BSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Gruppe 1</subBlock>
+                            <subBlock>Gruppe 2</subBlock>
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>2F418034AC27799C</personID>
+                    <name>
+                        <given>Peter</given>
+                        <family>Gutmann</family>
+                    </name>
+                    <title>
+                        <text>BSc</text>
+                    </title>
+                    <role roleID="B">
+                        <text>BetreuerIn</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>235169</courseID>
+            <courseName>
+                <text>Elektro-/Informationstechnisches Seminarprojekt</text>
+            </courseName>
+            <courseCode>448088</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=235169</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="4"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[zu Beginn des Semesters über das TUG Online "Anmeldung zur Lehrveranstaltung"]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=235169&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=235169</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/235169</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>SP</teachingActivityID>
+                <teachingActivityName>
+                    <text>Seminar-Projekt</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=235169</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>8A63346F7A8EE464</personID>
+                    <name>
+                        <given>Carlo Alberto</given>
+                        <family>Boano</family>
+                    </name>
+                    <title>
+                        <text>Assoc.Prof. Dott. Dott. mag. Dr.techn. MSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>E5D3277309238092</personID>
+                    <name>
+                        <given>Georg</given>
+                        <family>Macher</family>
+                    </name>
+                    <title>
+                        <text>Dipl.-Ing. Dr.techn. BSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>B89689D798837CCF</personID>
+                    <name>
+                        <given>Marcel Carsten</given>
+                        <family>Baunach</family>
+                    </name>
+                    <title>
+                        <text>Univ.-Prof. Dipl.-Inf. Univ. Dr.rer.nat.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>BC91EB43629EBA38</personID>
+                    <name>
+                        <given>Olga</given>
+                        <family>Saukh</family>
+                    </name>
+                    <title>
+                        <text>bak. Assoc.Prof. Dr.rer.nat. MSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>70463C81F9D6E57B</personID>
+                    <name>
+                        <given>Christian</given>
+                        <family>Steger</family>
+                    </name>
+                    <title>
+                        <text>Ass.Prof. Dipl.-Ing. Dr.techn.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Steger</subBlock>
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>0345C8CC02B76DD4</personID>
+                    <name>
+                        <given>Eugen</given>
+                        <family>Brenner</family>
+                    </name>
+                    <title>
+                        <text>Ao.Univ.-Prof. Dipl.-Ing. Dr.techn.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>234861</courseID>
+            <courseName>
+                <text>Fault-Tolerant Computing Systems</text>
+            </courseName>
+            <courseCode>448030</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=234861</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="2"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[zu Beginn des Semesters über das TUGRAZonline]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=234861&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=234861</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/234861</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>VO</teachingActivityID>
+                <teachingActivityName>
+                    <text>Vorlesung</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=234861</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>E5D3277309238092</personID>
+                    <name>
+                        <given>Georg</given>
+                        <family>Macher</family>
+                    </name>
+                    <title>
+                        <text>Dipl.-Ing. Dr.techn. BSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>234862</courseID>
+            <courseName>
+                <text>Mobile Computing, Seminar</text>
+            </courseName>
+            <courseCode>448072</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=234862</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="3"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[zu Beginn des Semesters über das TUG Online "Anmeldung zur Lehrveranstaltung"]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=234862&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=234862</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/234862</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>SE</teachingActivityID>
+                <teachingActivityName>
+                    <text>Seminar</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=234862</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>7E3B42179C46D0EF</personID>
+                    <name>
+                        <given>Kay Uwe</given>
+                        <family>Römer</family>
+                    </name>
+                    <title>
+                        <text>Univ.-Prof. Dipl.-Inform. Dr.sc.ETH</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>236020</courseID>
+            <courseName>
+                <text>Industrial Software Development and Quality Management</text>
+            </courseName>
+            <courseCode>448068</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=236020</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="2"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[zu Beginn des Semesters über das TUG Online "Anmeldung zur Lehrveranstaltung"]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=236020&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=236020</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/236020</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>VO</teachingActivityID>
+                <teachingActivityName>
+                    <text>Vorlesung</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=236020</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>E5D3277309238092</personID>
+                    <name>
+                        <given>Georg</given>
+                        <family>Macher</family>
+                    </name>
+                    <title>
+                        <text>Dipl.-Ing. Dr.techn. BSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>236097</courseID>
+            <courseName>
+                <text>Hardware-Software-Codesign</text>
+            </courseName>
+            <courseCode>448050</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=236097</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="2"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[zu Beginn des Semesters über das TUG Online "Anmeldung zur Lehrveranstaltung"]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=236097&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=236097</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/236097</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>VO</teachingActivityID>
+                <teachingActivityName>
+                    <text>Vorlesung</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=236097</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>70463C81F9D6E57B</personID>
+                    <name>
+                        <given>Christian</given>
+                        <family>Steger</family>
+                    </name>
+                    <title>
+                        <text>Ass.Prof. Dipl.-Ing. Dr.techn.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>236098</courseID>
+            <courseName>
+                <text>Hardware-Software-Codesign</text>
+            </courseName>
+            <courseCode>448051</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=236098</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="1"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[zu Beginn des Semesters über das TUG Online "Anmeldung zur Lehrveranstaltung"]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=236098&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=236098</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/236098</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>UE</teachingActivityID>
+                <teachingActivityName>
+                    <text>Übung</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=236098</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>23541AB1EBED2074</personID>
+                    <name>
+                        <given>Sebastian</given>
+                        <family>Juri</family>
+                    </name>
+                    <role roleID="B">
+                        <text>BetreuerIn</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>3CD0289739DE88C4</personID>
+                    <name>
+                        <given>Bernhard</given>
+                        <family>Teuschl</family>
+                    </name>
+                    <role roleID="B">
+                        <text>BetreuerIn</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>70463C81F9D6E57B</personID>
+                    <name>
+                        <given>Christian</given>
+                        <family>Steger</family>
+                    </name>
+                    <title>
+                        <text>Ass.Prof. Dipl.-Ing. Dr.techn.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>235423</courseID>
+            <courseName>
+                <text>Industrial Software Development and Quality Management</text>
+            </courseName>
+            <courseCode>448069</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=235423</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="1"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[zu Beginn des Semesters über TUG Online]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=235423&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=235423</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/235423</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>UE</teachingActivityID>
+                <teachingActivityName>
+                    <text>Übung</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=235423</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>42E3D2BCC884C53A</personID>
+                    <name>
+                        <given>Jürgen</given>
+                        <family>Dobaj</family>
+                    </name>
+                    <title>
+                        <text>Dipl.-Ing. BSc Ing.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>E5D3277309238092</personID>
+                    <name>
+                        <given>Georg</given>
+                        <family>Macher</family>
+                    </name>
+                    <title>
+                        <text>Dipl.-Ing. Dr.techn. BSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>244747</courseID>
+            <courseName>
+                <text>Bachelorprojekt</text>
+            </courseName>
+            <courseCode>448095</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=244747</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="1"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[zu Beginn des Semesters über das TUG Online "Anmeldung zur Lehrveranstaltung"]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=244747&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=244747</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/244747</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>PT</teachingActivityID>
+                <teachingActivityName>
+                    <text>Projekt</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=244747</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>0345C8CC02B76DD4</personID>
+                    <name>
+                        <given>Eugen</given>
+                        <family>Brenner</family>
+                    </name>
+                    <title>
+                        <text>Ao.Univ.-Prof. Dipl.-Ing. Dr.techn.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>70463C81F9D6E57B</personID>
+                    <name>
+                        <given>Christian</given>
+                        <family>Steger</family>
+                    </name>
+                    <title>
+                        <text>Ass.Prof. Dipl.-Ing. Dr.techn.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>B89689D798837CCF</personID>
+                    <name>
+                        <given>Marcel Carsten</given>
+                        <family>Baunach</family>
+                    </name>
+                    <title>
+                        <text>Univ.-Prof. Dipl.-Inf. Univ. Dr.rer.nat.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>235808</courseID>
+            <courseName>
+                <text>Fault-Tolerant Computing Systems</text>
+            </courseName>
+            <courseCode>448031</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=235808</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="1"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[zu Beginn des Semesters über das TUGRAZonline]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=235808&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=235808</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/235808</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>UE</teachingActivityID>
+                <teachingActivityName>
+                    <text>Übung</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=235808</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>42E3D2BCC884C53A</personID>
+                    <name>
+                        <given>Jürgen</given>
+                        <family>Dobaj</family>
+                    </name>
+                    <title>
+                        <text>Dipl.-Ing. BSc Ing.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>E5D3277309238092</personID>
+                    <name>
+                        <given>Georg</given>
+                        <family>Macher</family>
+                    </name>
+                    <title>
+                        <text>Dipl.-Ing. Dr.techn. BSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>236259</courseID>
+            <courseName>
+                <text>Embedded Systems, Laboratory</text>
+            </courseName>
+            <courseCode>448045</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=236259</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="1"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[zu Beginn des Semesters über das TUG Online "Anmeldung zur Lehrveranstaltung"]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=236259&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=236259</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/236259</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>LU</teachingActivityID>
+                <teachingActivityName>
+                    <text>Laborübung</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=236259</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>46202607082021E3</personID>
+                    <name>
+                        <given>Josef</given>
+                        <family>Kröll</family>
+                    </name>
+                    <role roleID="B">
+                        <text>BetreuerIn</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>316336127B99EC16</personID>
+                    <name>
+                        <given>Markus</given>
+                        <family>Schuß</family>
+                    </name>
+                    <title>
+                        <text>Dipl.-Ing. BSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>236526</courseID>
+            <courseName>
+                <text>Sensor Networks, Laboratory</text>
+            </courseName>
+            <courseCode>448063</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=236526</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="2"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[Zu Semesterbeginn, über das TUGRAZonline "Anmeldung zur Lehrveranstaltung".]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=236526&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=236526</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/236526</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>LU</teachingActivityID>
+                <teachingActivityName>
+                    <text>Laborübung</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=236526</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>8A63346F7A8EE464</personID>
+                    <name>
+                        <given>Carlo Alberto</given>
+                        <family>Boano</family>
+                    </name>
+                    <title>
+                        <text>Assoc.Prof. Dott. Dott. mag. Dr.techn. MSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>9DAEA3CB2AE3E701</personID>
+                    <name>
+                        <given>Patrick</given>
+                        <family>Schuster</family>
+                    </name>
+                    <role roleID="B">
+                        <text>BetreuerIn</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>A0FB8DE472E02F8A</personID>
+                    <name>
+                        <given>Michael</given>
+                        <family>Stocker</family>
+                    </name>
+                    <title>
+                        <text>Dipl.-Ing. BSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>236527</courseID>
+            <courseName>
+                <text>Mobile Computing, Laboratory</text>
+            </courseName>
+            <courseCode>448066</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=236527</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="2"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[Zu Semesterbeginn, über das TUGRAZonline.]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=236527&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=236527</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/236527</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>LU</teachingActivityID>
+                <teachingActivityName>
+                    <text>Laborübung</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=236527</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>2C712E1165A34FD6</personID>
+                    <name>
+                        <given>Peter</given>
+                        <family>Prodinger</family>
+                    </name>
+                    <role roleID="B">
+                        <text>BetreuerIn</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>BC91EB43629EBA38</personID>
+                    <name>
+                        <given>Olga</given>
+                        <family>Saukh</family>
+                    </name>
+                    <title>
+                        <text>bak. Assoc.Prof. Dr.rer.nat. MSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>235623</courseID>
+            <courseName>
+                <text>Embedded Systems</text>
+            </courseName>
+            <courseCode>448044</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=235623</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="2"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[zu Beginn des Semesters über das TUG Online "Anmeldung zur Lehrveranstaltung"]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=235623&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=235623</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/235623</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>VO</teachingActivityID>
+                <teachingActivityName>
+                    <text>Vorlesung</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=235623</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>8A63346F7A8EE464</personID>
+                    <name>
+                        <given>Carlo Alberto</given>
+                        <family>Boano</family>
+                    </name>
+                    <title>
+                        <text>Assoc.Prof. Dott. Dott. mag. Dr.techn. MSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>236744</courseID>
+            <courseName>
+                <text>Smart Service Development</text>
+            </courseName>
+            <courseCode>448018</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=236744</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="2"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[zu Beginn des Semesters über das TUG Online "Anmeldung zur Lehrveranstaltung"]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=236744&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=236744</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/236744</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>VO</teachingActivityID>
+                <teachingActivityName>
+                    <text>Vorlesung</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=236744</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>E7ED292B68FD26A8</personID>
+                    <name>
+                        <given>Konrad</given>
+                        <family>Diwold</family>
+                    </name>
+                    <title>
+                        <text>Dr.rer.nat. BSc MSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>236764</courseID>
+            <courseName>
+                <text>Bachelorarbeit Information and Computer Engineering</text>
+            </courseName>
+            <courseCode>448091</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=236764</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="4"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[zu Beginn des Semesters über das TUG Online "Anmeldung zur Lehrveranstaltung"]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=236764&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=236764</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/236764</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>SP</teachingActivityID>
+                <teachingActivityName>
+                    <text>Seminar-Projekt</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=236764</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>BC91EB43629EBA38</personID>
+                    <name>
+                        <given>Olga</given>
+                        <family>Saukh</family>
+                    </name>
+                    <title>
+                        <text>bak. Assoc.Prof. Dr.rer.nat. MSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>8A63346F7A8EE464</personID>
+                    <name>
+                        <given>Carlo Alberto</given>
+                        <family>Boano</family>
+                    </name>
+                    <title>
+                        <text>Assoc.Prof. Dott. Dott. mag. Dr.techn. MSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>B89689D798837CCF</personID>
+                    <name>
+                        <given>Marcel Carsten</given>
+                        <family>Baunach</family>
+                    </name>
+                    <title>
+                        <text>Univ.-Prof. Dipl.-Inf. Univ. Dr.rer.nat.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Baunach</subBlock>
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>E5D3277309238092</personID>
+                    <name>
+                        <given>Georg</given>
+                        <family>Macher</family>
+                    </name>
+                    <title>
+                        <text>Dipl.-Ing. Dr.techn. BSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>0345C8CC02B76DD4</personID>
+                    <name>
+                        <given>Eugen</given>
+                        <family>Brenner</family>
+                    </name>
+                    <title>
+                        <text>Ao.Univ.-Prof. Dipl.-Ing. Dr.techn.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>70463C81F9D6E57B</personID>
+                    <name>
+                        <given>Christian</given>
+                        <family>Steger</family>
+                    </name>
+                    <title>
+                        <text>Ass.Prof. Dipl.-Ing. Dr.techn.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>237132</courseID>
+            <courseName>
+                <text>Bachelorarbeit Software Engineering and Management</text>
+            </courseName>
+            <courseCode>448094</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=237132</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="2"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[zu Beginn des Semesters über das TUG Online "Anmeldung zur Lehrveranstaltung"]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=237132&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=237132</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/237132</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>SP</teachingActivityID>
+                <teachingActivityName>
+                    <text>Seminar-Projekt</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=237132</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>70463C81F9D6E57B</personID>
+                    <name>
+                        <given>Christian</given>
+                        <family>Steger</family>
+                    </name>
+                    <title>
+                        <text>Ass.Prof. Dipl.-Ing. Dr.techn.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>B89689D798837CCF</personID>
+                    <name>
+                        <given>Marcel Carsten</given>
+                        <family>Baunach</family>
+                    </name>
+                    <title>
+                        <text>Univ.-Prof. Dipl.-Inf. Univ. Dr.rer.nat.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>0345C8CC02B76DD4</personID>
+                    <name>
+                        <given>Eugen</given>
+                        <family>Brenner</family>
+                    </name>
+                    <title>
+                        <text>Ao.Univ.-Prof. Dipl.-Ing. Dr.techn.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>237752</courseID>
+            <courseName>
+                <text>Selected Topics Embedded and Automotive Systems</text>
+            </courseName>
+            <courseCode>448120</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=237752</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="2"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation">
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=237752&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=237752</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/237752</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>SE</teachingActivityID>
+                <teachingActivityName>
+                    <text>Seminar</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=237752</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>0345C8CC02B76DD4</personID>
+                    <name>
+                        <given>Eugen</given>
+                        <family>Brenner</family>
+                    </name>
+                    <title>
+                        <text>Ao.Univ.-Prof. Dipl.-Ing. Dr.techn.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>237756</courseID>
+            <courseName>
+                <text>Processor Architecture</text>
+            </courseName>
+            <courseCode>448024</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=237756</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="2"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation">
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=237756&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=237756</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/237756</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>VO</teachingActivityID>
+                <teachingActivityName>
+                    <text>Vorlesung</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=237756</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>B89689D798837CCF</personID>
+                    <name>
+                        <given>Marcel Carsten</given>
+                        <family>Baunach</family>
+                    </name>
+                    <title>
+                        <text>Univ.-Prof. Dipl.-Inf. Univ. Dr.rer.nat.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>237934</courseID>
+            <courseName>
+                <text>Microcontroller Design, Laboratory</text>
+            </courseName>
+            <courseCode>448029</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=237934</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="4"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[Registration online]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=237934&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=237934</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/237934</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>LU</teachingActivityID>
+                <teachingActivityName>
+                    <text>Laborübung</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=237934</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>2441622A528782D7</personID>
+                    <name>
+                        <given>Sebastian</given>
+                        <family>Knoll</family>
+                    </name>
+                    <role roleID="B">
+                        <text>BetreuerIn</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>F4C45FF28F9A2C2F</personID>
+                    <name>
+                        <given>Gabriel</given>
+                        <family>Stoll</family>
+                    </name>
+                    <role roleID="B">
+                        <text>BetreuerIn</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>4E08C0509295B4E5</personID>
+                    <name>
+                        <given>Tobias Peter</given>
+                        <family>Scheipel</family>
+                    </name>
+                    <title>
+                        <text>Dipl.-Ing. BSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                            <subBlock>Gruppe 1</subBlock>
+                            <subBlock>Gruppe 2</subBlock>
+                            <subBlock>Gruppe 3</subBlock>
+                            <subBlock>Gruppe 4</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>B89689D798837CCF</personID>
+                    <name>
+                        <given>Marcel Carsten</given>
+                        <family>Baunach</family>
+                    </name>
+                    <title>
+                        <text>Univ.-Prof. Dipl.-Inf. Univ. Dr.rer.nat.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                            <subBlock>Gruppe 1</subBlock>
+                            <subBlock>Gruppe 2</subBlock>
+                            <subBlock>Gruppe 3</subBlock>
+                            <subBlock>Gruppe 4</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>238147</courseID>
+            <courseName>
+                <text>AK Embedded Automotive Systems</text>
+            </courseName>
+            <courseCode>448112</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=238147</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="2"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation">
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=238147&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=238147</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/238147</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>PV</teachingActivityID>
+                <teachingActivityName>
+                    <text>Privatissimum</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=238147</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>B89689D798837CCF</personID>
+                    <name>
+                        <given>Marcel Carsten</given>
+                        <family>Baunach</family>
+                    </name>
+                    <title>
+                        <text>Univ.-Prof. Dipl.-Inf. Univ. Dr.rer.nat.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>237984</courseID>
+            <courseName>
+                <text>Technische Informatik 1</text>
+            </courseName>
+            <courseCode>448002</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=237984</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="1"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[Zu Beginn des Semesters über TUG Online "Anmeldung zur Lehrveranstaltung" an der Standardgruppe.]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=237984&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=237984</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/237984</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>UE</teachingActivityID>
+                <teachingActivityName>
+                    <text>Übung</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=237984</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>495B23AF61959252</personID>
+                    <name>
+                        <given>Stephan</given>
+                        <family>Gailer</family>
+                    </name>
+                    <role roleID="T">
+                        <text>TutorIn</text>
+                    </role>
+                    <role roleID="B">
+                        <text>BetreuerIn</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                            <subBlock>Standardgruppe</subBlock>
+                            <subBlock>Gruppe 7</subBlock>
+                            <subBlock>Gruppe 1</subBlock>
+                            <subBlock>Gruppe 2</subBlock>
+                            <subBlock>Gruppe 3</subBlock>
+                            <subBlock>Gruppe 4</subBlock>
+                            <subBlock>Gruppe 5</subBlock>
+                            <subBlock>Gruppe 6</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>FD26CF9106D36723</personID>
+                    <name>
+                        <given>Paul</given>
+                        <family>Mayr</family>
+                    </name>
+                    <role roleID="B">
+                        <text>BetreuerIn</text>
+                    </role>
+                    <role roleID="T">
+                        <text>TutorIn</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                            <subBlock>Standardgruppe</subBlock>
+                            <subBlock>Gruppe 7</subBlock>
+                            <subBlock>Gruppe 1</subBlock>
+                            <subBlock>Gruppe 2</subBlock>
+                            <subBlock>Gruppe 3</subBlock>
+                            <subBlock>Gruppe 4</subBlock>
+                            <subBlock>Gruppe 5</subBlock>
+                            <subBlock>Gruppe 6</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>486D114BCC3B5AC0</personID>
+                    <name>
+                        <given>Michael</given>
+                        <family>Spörk</family>
+                    </name>
+                    <title>
+                        <text>Dipl.-Ing. BSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                            <subBlock>Gruppe 7</subBlock>
+                            <subBlock>Gruppe 1</subBlock>
+                            <subBlock>Gruppe 2</subBlock>
+                            <subBlock>Gruppe 3</subBlock>
+                            <subBlock>Gruppe 4</subBlock>
+                            <subBlock>Gruppe 5</subBlock>
+                            <subBlock>Gruppe 6</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>8A63346F7A8EE464</personID>
+                    <name>
+                        <given>Carlo Alberto</given>
+                        <family>Boano</family>
+                    </name>
+                    <title>
+                        <text>Assoc.Prof. Dott. Dott. mag. Dr.techn. MSc</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                            <subBlock>Gruppe 7</subBlock>
+                            <subBlock>Gruppe 1</subBlock>
+                            <subBlock>Gruppe 2</subBlock>
+                            <subBlock>Gruppe 3</subBlock>
+                            <subBlock>Gruppe 4</subBlock>
+                            <subBlock>Gruppe 5</subBlock>
+                            <subBlock>Gruppe 6</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>238037</courseID>
+            <courseName>
+                <text>Architektur verteilter Systeme</text>
+            </courseName>
+            <courseCode>448010</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=238037</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="2"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation"><![CDATA[Zu Beginn des Semesters über das TUG Online "Anmeldung zur Lehrveranstaltung"]]><webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=238037&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=238037</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/238037</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>VO</teachingActivityID>
+                <teachingActivityName>
+                    <text>Vorlesung</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=238037</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>70463C81F9D6E57B</personID>
+                    <name>
+                        <given>Christian</given>
+                        <family>Steger</family>
+                    </name>
+                    <title>
+                        <text>Ass.Prof. Dipl.-Ing. Dr.techn.</text>
+                    </title>
+                    <role roleID="V">
+                        <text>Vortragende/r</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+        <course language="german" typeID="LVEAB" typeName="Erstausbildung/Weiterbildung">
+            <courseID>238140</courseID>
+            <courseName>
+                <text>Real-Time Operating Systems, Laboratory</text>
+            </courseName>
+            <courseCode>448027</courseCode>
+            <level>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbLv.wbShowStellungInStp?pStpSpNr=238140</href>
+                </webLink>
+            </level>
+            <teachingTerm>Sommersemester 2021</teachingTerm>
+            <credits hoursPerWeek="1"/>
+            <admissionInfo>
+                <admissionDescription userDefined="annotation">
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=238140&amp;corg=2337</href>
+                    </webLink>
+                </admissionDescription>
+            </admissionInfo>
+            <syllabus>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/LV_TX.wbLvInfotypen?pStpSpNr=238140</href>
+                </webLink>
+            </syllabus>
+            <exam>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/238140</href>
+                    </webLink>
+                </infoBlock>
+            </exam>
+            <teachingActivity>
+                <teachingActivityID>LU</teachingActivityID>
+                <teachingActivityName>
+                    <text>Laborübung</text>
+                </teachingActivityName>
+                <infoBlock>
+                    <webLink userDefined="CAMPUSonlineURL">
+                        <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=238140</href>
+                    </webLink>
+                </infoBlock>
+            </teachingActivity>
+            <contacts>
+                <person>
+                    <personID>BFD9F7F84566F446</personID>
+                    <name>
+                        <given>Lukas Anton</given>
+                        <family>Lamster</family>
+                    </name>
+                    <title>
+                        <text>BSc</text>
+                    </title>
+                    <role roleID="B">
+                        <text>BetreuerIn</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>ED9F917C16FC201D</personID>
+                    <name>
+                        <given>Alexander</given>
+                        <family>Deibel</family>
+                    </name>
+                    <role roleID="B">
+                        <text>BetreuerIn</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+                <person>
+                    <personID>B9B406A901B165C2</personID>
+                    <name>
+                        <given>Thomas</given>
+                        <family>Schwar</family>
+                    </name>
+                    <role roleID="B">
+                        <text>BetreuerIn</text>
+                    </role>
+                    <infoBlock>
+                        <subBlock userDefined="teacherOfGroup">
+                            <subBlock>Standardgruppe</subBlock>
+                        </subBlock>
+                    </infoBlock>
+                </person>
+            </contacts>
+        </course>
+    </orgUnit>
+</CDM>
+
+<!--  Metadata Generated On: Sat Feb 20 14:12:11 CET 2021  Time Taken: 382 msecs -->

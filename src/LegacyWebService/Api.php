@@ -13,12 +13,13 @@ use Psr\Log\LoggerInterface;
 
 class Api implements LoggerAwareInterface
 {
+    public const HTTP_STATUS_NOT_FOUND = 404;
     public const LANGUAGE_PARAMETER_NAME = 'lang';
 
     private $connection;
     private $rootOrgUnitId;
 
-    public function __construct($baseUrl, $accessToken, $rootOrgUnitId = 0,
+    public function __construct($baseUrl, $accessToken, $rootOrgUnitId = '',
                                 $logger = null, $cache = null, $cacheTTL = 0, $clientHandler = null)
     {
         $this->rootOrgUnitId = $rootOrgUnitId;
