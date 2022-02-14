@@ -3,7 +3,7 @@
     "type": "library",
     "license": "AGPL-3.0-or-later",
     "require": {
-        "php": "^7.3 || ^8.0",
+        "php": ">=7.3",
         "ext-json": "*",
         "ext-simplexml": "*",
         "guzzlehttp/guzzle": "^7.3",
