@@ -15,6 +15,7 @@
         "friendsofphp/php-cs-fixer": "^3.0",
         "phpstan/phpstan": "^1.0.0",
         "phpstan/phpstan-phpunit": "^1.0.0",
+        "phpunit/phpunit": "^9.5",
         "symfony/phpunit-bridge": "^5.2",
         "vimeo/psalm": "^4.2.1"
     },
@@ -39,14 +40,14 @@
     },
     "scripts": {
         "test": [
-            "@php vendor/bin/simple-phpunit"
+            "@php vendor/bin/phpunit"
         ],
         "phpstan": [
-            "@php vendor/bin/simple-phpunit --atleast-version 0",
+            "@php vendor/bin/phpunit --atleast-version 0",
             "@php vendor/bin/phpstan analyze --ansi"
         ],
         "psalm": [
-            "@php vendor/bin/simple-phpunit --atleast-version 0",
+            "@php vendor/bin/phpunit --atleast-version 0",
             "@php vendor/bin/psalm"
         ],
         "lint": [
@@ -61,7 +62,7 @@
             "@php vendor/bin/php-cs-fixer --ansi fix --dry-run --diff"
         ],
         "coverage": [
-            "@php vendor/bin/simple-phpunit --coverage-html _coverage"
+            "@php vendor/bin/phpunit --coverage-html _coverage"
         ]
     }
 }
