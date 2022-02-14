@@ -17,9 +17,17 @@ class CourseApi implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
+    public const TERM_OPTION_NAME = 'term';
+
     private const COURSE_BY_ID_URI = 'ws/webservice_v1.0/cdm/course/xml';
-    private const COURSE_BY_ORGANIZATION_URI = 'ws/webservice_v1.0/cdm/organization/courses/xml';
+    private const COURSES_BY_ORGANIZATION_URI = 'ws/webservice_v1.0/cdm/organization/courses/xml';
+    private const COURSES_BY_PERSON_URI = 'ws/webservice_v1.0/cdm/person/courses/xml';
+    private const STUDENTS_BY_COURSE_URI = 'ws/webservice_v1.0/cdm/course/students/xml';
     private const COURSE_ID_PARAMETER_NAME = 'courseId';
+    private const TEACHING_TERM_PARAMETER_NAME = 'teachingTerm';
+    private const PERSON_ID_PARAMETER_NAME = 'personID';
+    private const TEACHING_TERM_WINTER = 'W';
+    private const TEACHING_TERM_SUMMER = 'S';
 
     private $connection;
     private $rootOrgUnitId;
@@ -74,9 +82,9 @@ class CourseApi implements LoggerAwareInterface
      *
      * @throws ApiException
      */
-    public function getCoursesByOrganization(string $identifier, array $options = []): array
+    public function getCoursesByOrganization(string $orgUnitId, array $options = []): array
     {
-        return $this->getCoursesByOrganizationInternal($identifier, $options);
+        return $this->getCoursesByOrganizationInternal($orgUnitId, $options);
     }
 
     /**
@@ -84,16 +92,66 @@ class CourseApi implements LoggerAwareInterface
      *
      * @throws ApiException
      */
-    private function getCoursesByOrganizationInternal(string $identifier, array $options): array
+    public function getCoursesByPersons(string $personId, array $options = []): array
+    {
+        if (strlen($personId) === 0) {
+            return [];
+        }
+
+        $parameters = [];
+        $parameters[self::PERSON_ID_PARAMETER_NAME] = $personId;
+
+        $teachingTerm = $options[self::TERM_OPTION_NAME] ?? null;
+        if ($teachingTerm === self::TEACHING_TERM_WINTER || $teachingTerm === self::TEACHING_TERM_SUMMER) {
+            $parameters[self::TEACHING_TERM_PARAMETER_NAME] = $teachingTerm;
+        }
+
+        $responseBody = $this->connection->get(
+            self::COURSES_BY_PERSON_URI, $options[Api::LANGUAGE_PARAMETER_NAME] ?? '', $parameters);
+
+        return $this->parseCoursesResponse($responseBody, '');
+    }
+
+    /**
+     * @return PersonData[]
+     *
+     * @throws ApiException
+     */
+    public function getStudentsByCourse(string $identifier, array $options = []): array
     {
         if (strlen($identifier) === 0) {
             return [];
         }
+
         $parameters = [];
-        $parameters[OrganizationUnitApi::ORG_UNIT_ID_PARAMETER_NAME] = $identifier;
+        $parameters[self::COURSE_ID_PARAMETER_NAME] = $identifier;
 
         $responseBody = $this->connection->get(
-            self::COURSE_BY_ORGANIZATION_URI, $options[Api::LANGUAGE_PARAMETER_NAME] ?? '', $parameters);
+            self::STUDENTS_BY_COURSE_URI, $options[Api::LANGUAGE_PARAMETER_NAME] ?? '', $parameters);
+
+        return $this->parseStudentsResponse($responseBody);
+    }
+
+    /**
+     * @return CourseData[]
+     *
+     * @throws ApiException
+     */
+    private function getCoursesByOrganizationInternal(string $orgUnitId, array $options): array
+    {
+        if (strlen($orgUnitId) === 0) {
+            return [];
+        }
+        $parameters = [];
+        $parameters[OrganizationUnitApi::ORG_UNIT_ID_PARAMETER_NAME] = $orgUnitId;
+
+        $teachingTerm = $options[self::TERM_OPTION_NAME] ?? null;
+        if ($teachingTerm === self::TEACHING_TERM_WINTER || $teachingTerm === self::TEACHING_TERM_SUMMER) {
+            $parameters[self::TEACHING_TERM_PARAMETER_NAME] = $teachingTerm;
+        }
+
+        $responseBody = $this->connection->get(
+            self::COURSES_BY_ORGANIZATION_URI, $options[Api::LANGUAGE_PARAMETER_NAME] ?? '', $parameters);
 
         return $this->parseCoursesResponse($responseBody, '');
     }
@@ -138,6 +196,26 @@ class CourseApi implements LoggerAwareInterface
         }
 
         return $courses;
+    }
+
+    /**
+     * @return PersonData[]
+     *
+     * @throws ApiException
+     */
+    private function parseStudentsResponse(string $responsBody): array
+    {
+        $students = [];
+
+        $xml = new SimpleXMLElement($responsBody);
+        $studentNodes = $xml->xpath('.//person');
+
+        foreach ($studentNodes as $studentNode) {
+            $student = $this->parsePersonFromXML($studentNode);
+            $students[] = $student;
+        }
+
+        return $students;
     }
 
     private function parseCourseFromXML(SimpleXMLElement $xml): CourseData
