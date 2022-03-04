@@ -39,7 +39,7 @@ class OrganizationUnitApi implements LoggerAwareInterface
             $organizations = $this->getOrganizationUnitsInternal($identifier, $options);
             assert(count($organizations) <= 1);
         } catch (ApiException $e) {
-            if ($e->getCode() === Api::HTTP_STATUS_NOT_FOUND) {
+            if ($e->isHttpResponseCodeNotFound()) {
                 return null;
             } else {
                 throw $e;

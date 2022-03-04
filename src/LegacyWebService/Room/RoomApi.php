@@ -35,7 +35,7 @@ class RoomApi implements LoggerAwareInterface
             $rooms = $this->getRoomsInternal($identifier, $options);
             assert(count($rooms) <= 1);
         } catch (ApiException $e) {
-            if ($e->getCode() === Api::HTTP_STATUS_NOT_FOUND) {
+            if ($e->isHttpResponseCodeNotFound()) {
                 return null;
             } else {
                 throw $e;

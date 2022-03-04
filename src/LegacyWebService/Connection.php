@@ -156,9 +156,9 @@ class Connection implements LoggerAwareInterface
                 return new ApiException('Unknown error');
             }
 
-            return new ApiException(self::hideToken($e->getMessage()), $e->getCode());
+            return new ApiException(self::hideToken($e->getMessage()), $e->getCode(), $e->getResponse() !== null);
         } else {
-            return new ApiException(self::hideToken($e->getMessage()));
+            return new ApiException(self::hideToken($e->getMessage()), $e->getCode(), false);
         }
     }
 }

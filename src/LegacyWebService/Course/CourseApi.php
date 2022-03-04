@@ -54,7 +54,7 @@ class CourseApi implements LoggerAwareInterface
             $responseBody = $this->connection->get(
                 self::COURSE_BY_ID_URI, $options[Api::LANGUAGE_PARAMETER_NAME] ?? '', $parameters);
         } catch (ApiException $e) {
-            if ($e->getCode() === Api::HTTP_STATUS_NOT_FOUND) {
+            if ($e->isHttpResponseCodeNotFound()) {
                 return null;
             } else {
                 throw $e;
@@ -92,7 +92,7 @@ class CourseApi implements LoggerAwareInterface
      *
      * @throws ApiException
      */
-    public function getCoursesByPersons(string $personId, array $options = []): array
+    public function getCoursesByPerson(string $personId, array $options = []): array
     {
         if (strlen($personId) === 0) {
             return [];
