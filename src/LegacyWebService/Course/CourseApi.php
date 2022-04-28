@@ -43,7 +43,7 @@ class CourseApi implements LoggerAwareInterface
      */
     public function getCourseById(string $identifier, array $options = []): ?CourseData
     {
-        if (strlen($identifier) === 0) {
+        if (empty($identifier)) {
             return null;
         }
 
@@ -92,14 +92,14 @@ class CourseApi implements LoggerAwareInterface
      *
      * @throws ApiException
      */
-    public function getCoursesByPerson(string $personId, array $options = []): array
+    public function getCoursesByLecturer(string $lecturerId, array $options = []): array
     {
-        if (strlen($personId) === 0) {
+        if (empty($lecturerId)) {
             return [];
         }
 
         $parameters = [];
-        $parameters[self::PERSON_ID_PARAMETER_NAME] = $personId;
+        $parameters[self::PERSON_ID_PARAMETER_NAME] = $lecturerId;
 
         $teachingTerm = $options[self::TERM_OPTION_NAME] ?? null;
         if ($teachingTerm === self::TEACHING_TERM_WINTER || $teachingTerm === self::TEACHING_TERM_SUMMER) {
@@ -119,7 +119,7 @@ class CourseApi implements LoggerAwareInterface
      */
     public function getStudentsByCourse(string $identifier, array $options = []): array
     {
-        if (strlen($identifier) === 0) {
+        if (empty($identifier)) {
             return [];
         }
 
@@ -139,7 +139,7 @@ class CourseApi implements LoggerAwareInterface
      */
     private function getCoursesByOrganizationInternal(string $orgUnitId, array $options): array
     {
-        if (strlen($orgUnitId) === 0) {
+        if (empty($orgUnitId)) {
             return [];
         }
         $parameters = [];
