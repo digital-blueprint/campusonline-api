@@ -43,7 +43,7 @@ class CourseApi implements LoggerAwareInterface
      */
     public function getCourseById(string $identifier, array $options = []): ?CourseData
     {
-        if (empty($identifier)) {
+        if (strlen($identifier) === 0) {
             return null;
         }
 
@@ -94,7 +94,7 @@ class CourseApi implements LoggerAwareInterface
      */
     public function getCoursesByLecturer(string $lecturerId, array $options = []): array
     {
-        if (empty($lecturerId)) {
+        if (strlen($lecturerId) === 0) {
             return [];
         }
 
@@ -119,7 +119,7 @@ class CourseApi implements LoggerAwareInterface
      */
     public function getStudentsByCourse(string $identifier, array $options = []): array
     {
-        if (empty($identifier)) {
+        if (strlen($identifier) === 0) {
             return [];
         }
 
@@ -139,7 +139,7 @@ class CourseApi implements LoggerAwareInterface
      */
     private function getCoursesByOrganizationInternal(string $orgUnitId, array $options): array
     {
-        if (empty($orgUnitId)) {
+        if (strlen($orgUnitId) === 0) {
             return [];
         }
         $parameters = [];

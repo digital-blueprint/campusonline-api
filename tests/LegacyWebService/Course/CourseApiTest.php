@@ -22,7 +22,7 @@ class CourseApiTest extends TestCase
     {
         parent::setUp();
 
-        $this->api = new Api('http://localhost', 'token', '0');
+        $this->api = new Api('http://localhost', 'token', '1');
         $this->mockResponses([]);
     }
 
