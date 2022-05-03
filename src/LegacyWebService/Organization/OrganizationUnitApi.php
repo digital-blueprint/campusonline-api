@@ -35,18 +35,17 @@ class OrganizationUnitApi implements LoggerAwareInterface
      */
     public function getOrganizationUnitById(string $identifier, array $options = []): ?OrganizationUnitData
     {
-        try {
-            $organizations = $this->getOrganizationUnitsInternal($identifier, $options);
-            assert(count($organizations) <= 1);
-        } catch (ApiException $e) {
-            if ($e->isHttpResponseCodeNotFound()) {
-                return null;
-            } else {
-                throw $e;
-            }
+        if (strlen($identifier) === 0) {
+            throw new ApiException("identifier mustn't be empty");
         }
 
-        return empty($organizations) ? null : $organizations[0];
+        $organizations = $this->getOrganizationUnitsInternal($identifier, $options);
+        if (empty($organizations)) {
+            throw new ApiException("response doesn't contain organization unit with ID ".$identifier, 404, true);
+        }
+        assert(count($organizations) === 1);
+
+        return $organizations[0];
     }
 
     /**

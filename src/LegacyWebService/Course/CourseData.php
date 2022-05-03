@@ -8,49 +8,49 @@ use Dbp\CampusonlineApi\LegacyWebService\Person\PersonData;
 
 class CourseData
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $identifier;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $name;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $type;
 
-    /**
-     * @var string
-     */
+    /** @var string */
+    private $typeName;
+
+    /** @var string */
     private $language;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $code;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $teachingTerm;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $description;
 
-    /**
-     * @var string
-     */
+    /** @var float */
     private $numberOfCredits;
 
-    /**
-     * @var PersonData[]
-     */
+    /** @var string */
+    private $levelUrl;
+
+    /** @var string */
+    private $admissionUrl;
+
+    /** @var string */
+    private $syllabusUrl;
+
+    /** @var string */
+    private $examsUrl;
+
+    /** @var string */
+    private $datesUrl;
+
+    /** @var PersonData[] */
     private $contacts;
 
     public function getIdentifier(): string
@@ -88,9 +88,9 @@ class CourseData
         return $this->code;
     }
 
-    public function setCode(string $courseCode): void
+    public function setCode(string $code): void
     {
-        $this->code = $courseCode;
+        $this->code = $code;
     }
 
     public function getType(): string
@@ -101,6 +101,16 @@ class CourseData
     public function setType(string $type): void
     {
         $this->type = $type;
+    }
+
+    public function getTypeName(): string
+    {
+        return $this->typeName;
+    }
+
+    public function setTypeName(string $typeName): void
+    {
+        $this->typeName = $typeName;
     }
 
     public function getTeachingTerm(): string
@@ -123,14 +133,64 @@ class CourseData
         $this->description = $description;
     }
 
-    public function getNumberOfCredits(): string
+    public function getNumberOfCredits(): float
     {
         return $this->numberOfCredits;
     }
 
-    public function setNumberOfCredits(string $numberOfCredits): void
+    public function setNumberOfCredits(float $numberOfCredits): void
     {
         $this->numberOfCredits = $numberOfCredits;
+    }
+
+    public function getLevelUrl(): string
+    {
+        return $this->levelUrl;
+    }
+
+    public function setLevelUrl(string $levelUrl): void
+    {
+        $this->levelUrl = $levelUrl;
+    }
+
+    public function getAdmissionUrl(): string
+    {
+        return $this->admissionUrl;
+    }
+
+    public function setAdmissionUrl(string $admissionUrl): void
+    {
+        $this->admissionUrl = $admissionUrl;
+    }
+
+    public function getSyllabusUrl(): string
+    {
+        return $this->syllabusUrl;
+    }
+
+    public function setSyllabusUrl(string $syllabusUrl): void
+    {
+        $this->syllabusUrl = $syllabusUrl;
+    }
+
+    public function getExamsUrl(): string
+    {
+        return $this->examsUrl;
+    }
+
+    public function setExamsUrl(string $examsUrl): void
+    {
+        $this->examsUrl = $examsUrl;
+    }
+
+    public function getDatesUrl(): string
+    {
+        return $this->datesUrl;
+    }
+
+    public function setDatesUrl(string $datesUrl): void
+    {
+        $this->datesUrl = $datesUrl;
     }
 
     public function getContacts(): array

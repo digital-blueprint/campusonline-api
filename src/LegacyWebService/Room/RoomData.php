@@ -6,40 +6,29 @@ namespace Dbp\CampusonlineApi\LegacyWebService\Room;
 
 class RoomData
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $identifier;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $name;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $address;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $url;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     private $floorSize;
 
-    /**
-     * @var int
-     */
-    private $purposeID;
+    /** @var string */
+    private $purpose;
 
-    /**
-     * @var string
-     */
-    private $roomCode;
+    /** @var string */
+    private $purposeId;
+
+    /** @var string */
+    private $additionalInfo;
 
     public function getIdentifier(): string
     {
@@ -91,23 +80,33 @@ class RoomData
         $this->floorSize = $floorSize;
     }
 
-    public function getPurposeID(): int
+    public function getPurposeId(): string
     {
-        return $this->purposeID;
+        return $this->purposeId;
     }
 
-    public function setPurposeID(int $permittedUsage): void
+    public function setPurposeId(string $purposeId): void
     {
-        $this->purposeID = $permittedUsage;
+        $this->purposeId = $purposeId;
     }
 
-    public function getRoomCode(): string
+    public function getPurpose(): string
     {
-        return $this->roomCode;
+        return $this->purpose;
     }
 
-    public function setRoomCode(string $alternateName): void
+    public function setPurpose(string $purpose): void
     {
-        $this->roomCode = $alternateName;
+        $this->purpose = $purpose;
+    }
+
+    public function getAdditionalInfo(): string
+    {
+        return $this->additionalInfo;
+    }
+
+    public function setAdditionalInfo(string $additionalInfo): void
+    {
+        $this->additionalInfo = $additionalInfo;
     }
 }

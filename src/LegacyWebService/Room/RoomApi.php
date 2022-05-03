@@ -31,18 +31,17 @@ class RoomApi implements LoggerAwareInterface
      */
     public function getRoomById(string $identifier, array $options = []): ?RoomData
     {
-        try {
-            $rooms = $this->getRoomsInternal($identifier, $options);
-            assert(count($rooms) <= 1);
-        } catch (ApiException $e) {
-            if ($e->isHttpResponseCodeNotFound()) {
-                return null;
-            } else {
-                throw $e;
-            }
+        if (strlen($identifier) === 0) {
+            throw new ApiException("identifier mustn't be empty");
         }
 
-        return empty($rooms) ? null : $rooms[0];
+        $rooms = $this->getRoomsInternal($identifier, $options);
+        if (empty($rooms)) {
+            throw new ApiException("response doesn't contain room with ID ".$identifier, 404, true);
+        }
+        assert(count($rooms) === 1);
+
+        return $rooms[0];
     }
 
     /**
@@ -103,21 +102,23 @@ class RoomApi implements LoggerAwareInterface
                 }
             }
 
+            $roomCode = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="roomCode"]')[0] ?? ''));
             $address = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="address"]')[0] ?? ''));
             $url = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="address"]/@cor:attrAltUrl')[0] ?? ''));
             $floorSize = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="area"]')[0] ?? ''));
             $purposeID = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="purposeID"]')[0] ?? ''));
-            $name = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="additionalInformation"]')[0] ?? ''));
-            $roomCode = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="roomCode"]')[0] ?? ''));
+            $purpose = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="purpose"]')[0] ?? ''));
+            $additionalInfo = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="additionalInformation"]')[0] ?? ''));
 
             $room = new RoomData();
             $room->setIdentifier($identifier);
-            $room->setName($name);
+            $room->setName($roomCode);
             $room->setAddress($address);
             $room->setUrl($url);
             $room->setFloorSize(floatval($floorSize));
-            $room->setPurposeID(intval($purposeID));
-            $room->setRoomCode($roomCode);
+            $room->setPurposeId($purposeID);
+            $room->setPurpose($purpose);
+            $room->setAdditionalInfo($additionalInfo);
 
             $rooms[] = $room;
 
