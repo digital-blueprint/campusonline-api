@@ -41,7 +41,7 @@ class CourseApi implements LoggerAwareInterface
     /**
      * @throws ApiException
      */
-    public function getCourseById(string $identifier, array $options = []): ?CourseData
+    public function getCourseById(string $identifier, array $options = []): CourseData
     {
         if (strlen($identifier) === 0) {
             throw new ApiException("identifier mustn't be empty");

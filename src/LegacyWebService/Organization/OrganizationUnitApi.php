@@ -33,7 +33,7 @@ class OrganizationUnitApi implements LoggerAwareInterface
      *
      * @throws ApiException
      */
-    public function getOrganizationUnitById(string $identifier, array $options = []): ?OrganizationUnitData
+    public function getOrganizationUnitById(string $identifier, array $options = []): OrganizationUnitData
     {
         if (strlen($identifier) === 0) {
             throw new ApiException("identifier mustn't be empty");

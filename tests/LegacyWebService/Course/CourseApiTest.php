@@ -47,7 +47,7 @@ class CourseApiTest extends TestCase
         $this->assertSame('448001', $course->getCode());
         $this->assertSame('VO', $course->getType());
         $this->assertSame('', $course->getDescription());
-        $this->assertSame('2', $course->getNumberOfCredits());
+        $this->assertSame(2.0, $course->getNumberOfCredits());
     }
 
     public function testGetCourses500()
@@ -85,7 +85,7 @@ class CourseApiTest extends TestCase
         $this->assertSame('442071', $course->getCode());
         $this->assertSame('UE', $course->getType());
         $this->assertSame('Anwendungen der wichtigsten Methoden aus den Bereichen Maschinelles Lernen und Neuronale Netzwerke. Praxis-orientierte Probleme des Maschinellen Lernens im Allgemeinen und der einzelnen Ansätze im speziellen werden aufgezeigt und die entsprechende Lösungsansätze präsentiert.', $course->getDescription());
-        $this->assertSame('1', $course->getNumberOfCredits());
+        $this->assertSame(1.0, $course->getNumberOfCredits());
 
         $contacts = $course->getContacts();
 
@@ -98,8 +98,9 @@ class CourseApiTest extends TestCase
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/course_by_id_response.xml')),
         ]);
 
-        $course = $this->api->Course()->getCourseById('123');
-        $this->assertNull($course);
+        $this->expectException(ApiException::class);
+        $this->expectExceptionCode(404);
+        $this->api->Course()->getCourseById('123');
     }
 
     public function testGetCourseById500()
@@ -128,6 +129,6 @@ class CourseApiTest extends TestCase
         $this->assertSame('448001', $course->getCode());
         $this->assertSame('VO', $course->getType());
         $this->assertSame('', $course->getDescription());
-        $this->assertSame('2', $course->getNumberOfCredits());
+        $this->assertSame(2.0, $course->getNumberOfCredits());
     }
 }

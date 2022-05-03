@@ -29,7 +29,7 @@ class RoomApi implements LoggerAwareInterface
     /**
      * @throws ApiException
      */
-    public function getRoomById(string $identifier, array $options = []): ?RoomData
+    public function getRoomById(string $identifier, array $options = []): RoomData
     {
         if (strlen($identifier) === 0) {
             throw new ApiException("identifier mustn't be empty");
