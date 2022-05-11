@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\LegacyWebService\Room;
 
+use Dbp\CampusonlineApi\Helpers\Pagination;
+use Dbp\CampusonlineApi\Helpers\Paginator;
 use Dbp\CampusonlineApi\LegacyWebService\Api;
 use Dbp\CampusonlineApi\LegacyWebService\ApiException;
 use Dbp\CampusonlineApi\LegacyWebService\Connection;
@@ -35,21 +37,21 @@ class RoomApi implements LoggerAwareInterface
             throw new ApiException("identifier mustn't be empty");
         }
 
-        $rooms = $this->getRoomsInternal($identifier, $options);
-        if (empty($rooms)) {
+        $paginator = $this->getRoomsInternal($identifier, $options);
+
+        $roomItems = $paginator->getItems();
+        if (empty($roomItems)) {
             throw new ApiException("response doesn't contain room with ID ".$identifier, 404, true);
         }
-        assert(count($rooms) === 1);
+        assert(count($roomItems) === 1);
 
-        return $rooms[0];
+        return $roomItems[0];
     }
 
     /**
-     * @return RoomData[]
-     *
      * @throws ApiException
      */
-    public function getRooms(array $options = []): array
+    public function getRooms(array $options = []): Paginator
     {
         return $this->getRoomsInternal('', $options);
     }
@@ -57,76 +59,86 @@ class RoomApi implements LoggerAwareInterface
     /**
      * Currently all rooms are requested and cached. Requested rooms are then fetched from the XML response.
      *
-     * @return RoomData[]
-     *
      * @throws ApiException
      */
-    private function getRoomsInternal(string $roomId, array $options): array
+    private function getRoomsInternal(string $roomId, array $options): Paginator
     {
         $parameters = [];
         $parameters[OrganizationUnitApi::ORG_UNIT_ID_PARAMETER_NAME] = $this->rootOrgUnitId;
 
         $responseBody = $this->connection->get(self::URI, $options[Api::LANGUAGE_PARAMETER_NAME] ?? '', $parameters);
 
-        return $this->parseResponse($responseBody, $roomId);
+        return $this->parseResponse($responseBody, $roomId, $options);
     }
 
     /**
-     * @return RoomData[]
-     *
      * @throws ApiException
      */
-    private function parseResponse(string $responseBody, string $requestedId): array
+    private function parseResponse(string $responseBody, string $requestedId, array $options): Paginator
     {
         $rooms = [];
+        $isIdRequested = $requestedId !== '';
 
         try {
             $xml = new SimpleXMLElement($responseBody);
         } catch (\Exception $e) {
             throw new ApiException('response body is not in valid XML format');
         }
-        $nodes = $xml->xpath('.//cor:resource');
+        $nodes = $xml->xpath('.//cor:resource[@cor:typeID="room"]');
 
-        foreach ($nodes as $node) {
-            $identifier = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="roomID"]')[0] ?? ''));
-            if ($identifier === '') {
-                continue;
+        // count on php arrays seems to be O(1) (https://stackoverflow.com/questions/5835241/is-phps-count-function-o1-or-on-for-arrays, so we always return a full paginator.
+        // partial pagination would make sense for a streaming XML parser, though
+        $totalNumItems = count($nodes);
+        if ($totalNumItems > 0) {
+            $firstItemIndex = 0;
+            $lastItemIndex = $totalNumItems - 1;
+
+            if (!$isIdRequested) {
+                Pagination::getCurrentPageIndicesFull($totalNumItems, $options, $firstItemIndex, $lastItemIndex);
             }
 
-            $wasIdFound = false;
-            if ($requestedId !== '') {
-                if ($identifier === $requestedId) {
-                    $wasIdFound = true;
-                } else {
-                    continue;
+            for ($index = $firstItemIndex; $index <= $lastItemIndex; ++$index) {
+                $node = $nodes[$index];
+                $identifier = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="roomID"]')[0] ?? ''));
+                if ($identifier === '') {
+                    throw new ApiException('roomID missing in CO room resource');
                 }
-            }
 
-            $roomCode = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="roomCode"]')[0] ?? ''));
-            $address = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="address"]')[0] ?? ''));
-            $url = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="address"]/@cor:attrAltUrl')[0] ?? ''));
-            $floorSize = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="area"]')[0] ?? ''));
-            $purposeID = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="purposeID"]')[0] ?? ''));
-            $purpose = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="purpose"]')[0] ?? ''));
-            $additionalInfo = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="additionalInformation"]')[0] ?? ''));
+                $wasIdFound = false;
+                if ($isIdRequested) {
+                    if ($identifier === $requestedId) {
+                        $wasIdFound = true;
+                    } else {
+                        continue;
+                    }
+                }
 
-            $room = new RoomData();
-            $room->setIdentifier($identifier);
-            $room->setName($roomCode);
-            $room->setAddress($address);
-            $room->setUrl($url);
-            $room->setFloorSize(floatval($floorSize));
-            $room->setPurposeId($purposeID);
-            $room->setPurpose($purpose);
-            $room->setAdditionalInfo($additionalInfo);
+                $roomCode = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="roomCode"]')[0] ?? ''));
+                $address = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="address"]')[0] ?? ''));
+                $url = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="address"]/@cor:attrAltUrl')[0] ?? ''));
+                $floorSize = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="area"]')[0] ?? ''));
+                $purposeID = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="purposeID"]')[0] ?? ''));
+                $purpose = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="purpose"]')[0] ?? ''));
+                $additionalInfo = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="additionalInformation"]')[0] ?? ''));
 
-            $rooms[] = $room;
+                $room = new RoomData();
+                $room->setIdentifier($identifier);
+                $room->setName($roomCode);
+                $room->setAddress($address);
+                $room->setUrl($url);
+                $room->setFloorSize(floatval($floorSize));
+                $room->setPurposeId($purposeID);
+                $room->setPurpose($purpose);
+                $room->setAdditionalInfo($additionalInfo);
 
-            if ($wasIdFound) {
-                break;
+                $rooms[] = $room;
+
+                if ($wasIdFound) {
+                    break;
+                }
             }
         }
 
-        return $rooms;
+        return Pagination::createFullPaginator($rooms, $isIdRequested ? count($rooms) : $totalNumItems, $options);
     }
 }

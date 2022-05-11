@@ -38,7 +38,7 @@ class RoomApiTest extends TestCase
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/rooms_response_1.xml')),
         ]);
 
-        $rooms = $this->api->Room()->getRooms();
+        $rooms = $this->api->Room()->getRooms()->getItems();
         $this->assertCount(2, $rooms);
         $room = $rooms[0];
         $this->assertSame('1234', $room->getIdentifier());
