@@ -86,59 +86,123 @@ class RoomApi implements LoggerAwareInterface
         }
         $nodes = $xml->xpath('.//cor:resource[@cor:typeID="room"]');
 
-        // count on php arrays seems to be O(1) (https://stackoverflow.com/questions/5835241/is-phps-count-function-o1-or-on-for-arrays, so we always return a full paginator.
-        // partial pagination would make sense for a streaming XML parser, though
-        $totalNumItems = count($nodes);
-        if ($totalNumItems > 0) {
-            $firstItemIndex = 0;
-            $lastItemIndex = $totalNumItems - 1;
+        $firstMatchingItemsIndex = 0;
+        $isPartialPagination = false;
+        $nameSearchFilter = '';
+        $additionalInfoSearchFilter = '';
+        $isSearchFilterActive = false;
 
-            if (!$isIdRequested) {
-                Pagination::getCurrentPageIndicesFull($totalNumItems, $options, $firstItemIndex, $lastItemIndex);
+        if (!$isIdRequested) {
+            $firstMatchingItemsIndex = Pagination::getCurrentPageStartIndex($options);
+            $isPartialPagination = Pagination::isPartial($options);
+            $nameSearchFilter = $options[RoomData::NAME_SEARCH_FILTER_NAME] ?? '';
+            $additionalInfoSearchFilter = $options[RoomData::ADDITIONAL_INFO_SEARCH_FILTER_NAME] ?? '';
+            $isSearchFilterActive = $nameSearchFilter !== '' || $additionalInfoSearchFilter !== '';
+        }
+
+        $totalNumItems = count($nodes);
+        $numItemsPerPage = Pagination::getNumItemsPerPage($options);
+        $matchingItemCount = 0;
+
+        for ($nodeIndex = 0; $nodeIndex < $totalNumItems; ++$nodeIndex) {
+            $node = $nodes[$nodeIndex];
+
+            $identifier = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="roomID"]')[0] ?? ''));
+            if ($identifier === '') {
+                throw new ApiException('roomID missing in Campusonline room resource');
             }
 
-            for ($index = $firstItemIndex; $index <= $lastItemIndex; ++$index) {
-                $node = $nodes[$index];
-                $identifier = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="roomID"]')[0] ?? ''));
-                if ($identifier === '') {
-                    throw new ApiException('roomID missing in CO room resource');
-                }
+            $name = null;
+            $additionalInfo = null;
+            $isMatch = false;
 
-                $wasIdFound = false;
-                if ($isIdRequested) {
-                    if ($identifier === $requestedId) {
-                        $wasIdFound = true;
-                    } else {
-                        continue;
+            if ($isIdRequested) {
+                if ($identifier === $requestedId) {
+                    $isMatch = true;
+                }
+            } else {
+                $isMatch = !$isSearchFilterActive || self::passesSearchFilter($node, $nameSearchFilter, $additionalInfoSearchFilter, $name, $additionalInfo);
+            }
+
+            if ($isMatch) {
+                ++$matchingItemCount;
+                if ($isIdRequested || ($matchingItemCount > $firstMatchingItemsIndex && (!$numItemsPerPage || count($rooms) < $numItemsPerPage))) {
+                    $rooms[] = self::createRoom($node, $identifier, $name, $additionalInfo);
+
+                    $done = false;
+                    if ($isIdRequested) {
+                        $done = true;
+                    } elseif (count($rooms) === $numItemsPerPage) {
+                        if ($isPartialPagination) {
+                            $done = true;
+                        } elseif (!$isSearchFilterActive) {
+                            $done = true;
+                            $matchingItemCount = $totalNumItems;
+                        }
                     }
-                }
-
-                $roomCode = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="roomCode"]')[0] ?? ''));
-                $address = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="address"]')[0] ?? ''));
-                $url = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="address"]/@cor:attrAltUrl')[0] ?? ''));
-                $floorSize = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="area"]')[0] ?? ''));
-                $purposeID = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="purposeID"]')[0] ?? ''));
-                $purpose = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="purpose"]')[0] ?? ''));
-                $additionalInfo = trim((string) ($node->xpath('./cor:description/cor:attribute[@cor:attrID="additionalInformation"]')[0] ?? ''));
-
-                $room = new RoomData();
-                $room->setIdentifier($identifier);
-                $room->setName($roomCode);
-                $room->setAddress($address);
-                $room->setUrl($url);
-                $room->setFloorSize(floatval($floorSize));
-                $room->setPurposeId($purposeID);
-                $room->setPurpose($purpose);
-                $room->setAdditionalInfo($additionalInfo);
-
-                $rooms[] = $room;
-
-                if ($wasIdFound) {
-                    break;
+                    if ($done) {
+                        break;
+                    }
                 }
             }
         }
 
-        return Pagination::createFullPaginator($rooms, $isIdRequested ? count($rooms) : $totalNumItems, $options);
+        if ($isPartialPagination) {
+            return Pagination::createPartialPaginator($rooms, $options);
+        } else {
+            return Pagination::createFullPaginator($rooms, $matchingItemCount, $options);
+        }
+    }
+
+    /**
+     * Checks whether the room passes the given search filters. Performs a partial, case-insensitive text search.
+     * Passes if ANY of the given search filters passes or if NONE is given.
+     */
+    private static function passesSearchFilter(SimpleXMLElement $roomNode, string $nameSearchFilter, string $additionalInfoSearchFilter, ?string &$name, ?string &$additionalInfo): bool
+    {
+        $isNameSearchFilterActive = $nameSearchFilter !== '';
+        $isAdditionalInfoSearchFilterActive = $additionalInfoSearchFilter !== '';
+
+        return
+            ($isNameSearchFilterActive && stripos($name = self::getRoomName($roomNode), $nameSearchFilter) !== false) ||
+            ($isAdditionalInfoSearchFilterActive && stripos($additionalInfo = self::getRoomAdditionalInfo($roomNode), $additionalInfoSearchFilter) !== false) ||
+            (!$isNameSearchFilterActive && !$isAdditionalInfoSearchFilterActive);
+    }
+
+    private static function getRoomName(SimpleXMLElement $roomNode): string
+    {
+        return trim((string) ($roomNode->xpath('./cor:description/cor:attribute[@cor:attrID="roomCode"]')[0] ?? ''));
+    }
+
+    private static function getRoomAdditionalInfo(SimpleXMLElement $roomNode): string
+    {
+        return trim((string) ($roomNode->xpath('./cor:description/cor:attribute[@cor:attrID="additionalInformation"]')[0] ?? ''));
+    }
+
+    private static function createRoom(SimpleXMLElement $roomNode, string $identifier, ?string $name, ?string $additionalInfo): RoomData
+    {
+        if (!$name) {
+            $name = self::getRoomName($roomNode);
+        }
+        if (!$additionalInfo) {
+            $additionalInfo = self::getRoomAdditionalInfo($roomNode);
+        }
+        $address = trim((string) ($roomNode->xpath('./cor:description/cor:attribute[@cor:attrID="address"]')[0] ?? ''));
+        $url = trim((string) ($roomNode->xpath('./cor:description/cor:attribute[@cor:attrID="address"]/@cor:attrAltUrl')[0] ?? ''));
+        $floorSize = trim((string) ($roomNode->xpath('./cor:description/cor:attribute[@cor:attrID="area"]')[0] ?? ''));
+        $purposeID = trim((string) ($roomNode->xpath('./cor:description/cor:attribute[@cor:attrID="purposeID"]')[0] ?? ''));
+        $purpose = trim((string) ($roomNode->xpath('./cor:description/cor:attribute[@cor:attrID="purpose"]')[0] ?? ''));
+
+        $room = new RoomData();
+        $room->setIdentifier($identifier);
+        $room->setName($name);
+        $room->setAddress($address);
+        $room->setUrl($url);
+        $room->setFloorSize(floatval($floorSize));
+        $room->setPurposeId($purposeID);
+        $room->setPurpose($purpose);
+        $room->setAdditionalInfo($additionalInfo);
+
+        return $room;
     }
 }
