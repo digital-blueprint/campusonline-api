@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\LegacyWebService\Organization;
 
-use Dbp\CampusonlineApi\LegacyWebService\Api;
+use Dbp\CampusonlineApi\Helpers\Paginator;
 use Dbp\CampusonlineApi\LegacyWebService\ApiException;
 use Dbp\CampusonlineApi\LegacyWebService\Connection;
+use Dbp\CampusonlineApi\LegacyWebService\ResourceApi;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use SimpleXMLElement;
 
-class OrganizationUnitApi implements LoggerAwareInterface
+class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
@@ -19,13 +20,14 @@ class OrganizationUnitApi implements LoggerAwareInterface
 
     private const URI = 'ws/webservice_v1.0/cdm/organization/xml';
 
-    private $connection;
-    private $rootOrgUnitId;
+    private const ORG_UNIT_RESOURCE_XML_PATH = './/orgUnit';
+    private const ORG_UNIT_IDENTIFIER_XML_PATH = './orgUnitID';
+    private const ORG_UNIT_NAME_XML_PATH = './orgUnitName/text';
 
-    public function __construct(Connection $connection, $rootOrgUnitId)
+    public function __construct(Connection $connection, string $rootOrgUnitId)
     {
-        $this->connection = $connection;
-        $this->rootOrgUnitId = $rootOrgUnitId;
+        parent::__construct($connection, $rootOrgUnitId,
+            self::ORG_UNIT_RESOURCE_XML_PATH, self::ORG_UNIT_IDENTIFIER_XML_PATH);
     }
 
     /**
@@ -39,92 +41,57 @@ class OrganizationUnitApi implements LoggerAwareInterface
             throw new ApiException("identifier mustn't be empty");
         }
 
-        $organizations = $this->getOrganizationUnitsInternal($identifier, $options);
-        if (empty($organizations)) {
+        $paginator = $this->getOrganizationUnitsInternal($identifier, $options);
+
+        $orgUnitItems = $paginator->getItems();
+        if (empty($orgUnitItems)) {
             throw new ApiException("response doesn't contain organization unit with ID ".$identifier, 404, true);
         }
-        assert(count($organizations) === 1);
+        assert(count($orgUnitItems) === 1);
 
-        return $organizations[0];
+        return $orgUnitItems[0];
     }
 
     /**
-     * @return OrganizationUnitData[]
-     *
      * @throws ApiException
      */
-    public function getOrganizationUnits(array $options = []): array
+    public function getOrganizationUnits(array $options = []): Paginator
     {
         return $this->getOrganizationUnitsInternal('', $options);
     }
 
     /**
-     * @param string $identifier the ID of the requested org unit or an empty string if all org units are requested
-     *
-     * @return OrganizationUnitData[]
+     * @param string $orgUnitId the ID of the requested org unit or an empty string if all org units are requested
      *
      * @throws ApiException
      */
-    private function getOrganizationUnitsInternal(string $identifier, array $options): array
+    private function getOrganizationUnitsInternal(string $orgUnitId, array $options): Paginator
     {
         $parameters = [];
-        $parameters[self::ORG_UNIT_ID_PARAMETER_NAME] = $identifier !== '' ? $identifier : $this->rootOrgUnitId;
+        $parameters[self::ORG_UNIT_ID_PARAMETER_NAME] = $orgUnitId !== '' ? $orgUnitId : $this->rootOrgUnitId;
 
-        $responseBody = $this->connection->get(self::URI, $options[Api::LANGUAGE_PARAMETER_NAME] ?? '', $parameters);
-
-        return $this->parseResponse($responseBody, $identifier);
+        return $this->getResourcesInternal(self::URI, $parameters, $options, $orgUnitId);
     }
 
-    /**
-     * @return OrganizationUnitData[]
-     *
-     * @throws ApiException
-     */
-    private function parseResponse(string $responseBody, string $requestedId): array
+    protected function createResource(SimpleXMLElement $node, string $identifier): object
     {
-        $organizations = [];
+        $name = $this->getResourceName($node);
+        $code = self::getResourcePropertyOrEmptyString($node, './orgUnitCode');
+        $type = self::getResourcePropertyOrEmptyString($node, './orgUnitKind/subBlock');
+        $url = self::getResourcePropertyOrEmptyString($node, './infoBlock/webLink/href');
 
-        try {
-            $xml = new SimpleXMLElement($responseBody);
-        } catch (\Exception $e) {
-            throw new ApiException('response body is not in valid XML format');
-        }
-        $nodes = $xml->xpath('.//orgUnit');
+        $orgUnit = new OrganizationUnitData();
+        $orgUnit->setIdentifier($identifier);
+        $orgUnit->setName($name);
+        $orgUnit->setCode($code);
+        $orgUnit->setType($type);
+        $orgUnit->setUrl($url);
 
-        foreach ($nodes as $node) {
-            $identifier = trim((string) ($node->xpath('./orgUnitID')[0] ?? ''));
-            if ($identifier === '') {
-                continue;
-            }
+        return $orgUnit;
+    }
 
-            $wasIdFound = false;
-            if ($requestedId !== '') {
-                if ($identifier === $requestedId) {
-                    $wasIdFound = true;
-                } else {
-                    continue;
-                }
-            }
-
-            $name = trim((string) ($node->xpath('./orgUnitName/text')[0] ?? ''));
-            $code = trim((string) ($node->xpath('./orgUnitCode')[0] ?? ''));
-            $type = trim((string) ($node->xpath('./orgUnitKind/subBlock')[0] ?? ''));
-            $url = trim((string) ($node->xpath('./infoBlock/webLink/href')[0] ?? ''));
-
-            $organization = new OrganizationUnitData();
-            $organization->setIdentifier($identifier);
-            $organization->setName($name);
-            $organization->setCode($code);
-            $organization->setType($type);
-            $organization->setUrl($url);
-
-            $organizations[] = $organization;
-
-            if ($wasIdFound) {
-                break;
-            }
-        }
-
-        return $organizations;
+    protected function getResourceName(SimpleXMLElement $node): string
+    {
+        return self::getResourcePropertyOrEmptyString($node, self::ORG_UNIT_NAME_XML_PATH);
     }
 }

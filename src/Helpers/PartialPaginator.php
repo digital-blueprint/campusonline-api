@@ -6,8 +6,8 @@ namespace Dbp\CampusonlineApi\Helpers;
 
 class PartialPaginator extends Paginator
 {
-    public function __construct(array $items, int $page, int $numItemsPerPage)
+    public function __construct(array $items, int $currentPageNumber, int $maxNumItemsPerPage)
     {
-        parent::__construct($items, $page, $numItemsPerPage);
+        parent::__construct($items, $currentPageNumber, $maxNumItemsPerPage);
     }
 }

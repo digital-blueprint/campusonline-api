@@ -9,9 +9,9 @@ class FullPaginator extends Paginator
     /** @var int */
     private $totalNumItems;
 
-    public function __construct(array $items, int $page, int $numItemsPerPage, int $totalNumItems)
+    public function __construct(array $items, int $currentPageNumber, int $maxNumItemsPerPage, int $totalNumItems)
     {
-        parent::__construct($items, $page, $numItemsPerPage);
+        parent::__construct($items, $currentPageNumber, $maxNumItemsPerPage);
 
         $this->totalNumItems = $totalNumItems;
     }

@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\LegacyWebService\Room;
 
-class RoomData
+use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
+
+class RoomData extends ResourceData
 {
     /** Search filters: Pass, if ANY of the given search filters passes or if NONE is given */
 
-    /** @var string Partial, case-insensitive text search on the 'name' attribute. Passes if filter is empty. */
-    public const NAME_SEARCH_FILTER_NAME = 'nameSearchFilter';
     /** @var string Partial, case-insensitive text search on the 'additionalInfo' attribute. Passes if filter is empty. */
     public const ADDITIONAL_INFO_SEARCH_FILTER_NAME = 'additionalInfoSearchFilter';
 
+    /** @var string */
     public const ADDITIONAL_INFO_ATTRIBUTE_NAME = 'additionalInfo';
 
     /** @var string */

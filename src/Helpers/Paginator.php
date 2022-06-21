@@ -9,15 +9,15 @@ class Paginator
     /** @var array */
     private $items;
     /** @var int */
-    private $page;
+    private $currentPageNumber;
     /** @var int */
-    private $numItemsPerPage;
+    private $maxNumItemsPerPage;
 
-    public function __construct(array $items, int $page, int $numItemsPerPage)
+    public function __construct(array $items, int $currentPageNumber, int $maxNumItemsPerPage)
     {
         $this->items = $items;
-        $this->page = $page;
-        $this->numItemsPerPage = $numItemsPerPage;
+        $this->currentPageNumber = $currentPageNumber;
+        $this->maxNumItemsPerPage = $maxNumItemsPerPage;
     }
 
     public function getItems(): array
@@ -25,13 +25,13 @@ class Paginator
         return $this->items;
     }
 
-    public function getPage(): int
+    public function getCurrentPageNumber(): int
     {
-        return $this->page;
+        return $this->currentPageNumber;
     }
 
-    public function getNumItemsPerPage(): int
+    public function getMaxNumItemsPerPage(): int
     {
-        return $this->numItemsPerPage;
+        return $this->maxNumItemsPerPage;
     }
 }

@@ -108,8 +108,8 @@ class RoomApiTest extends TestCase
         $paginator = $this->api->Room()->getRooms(['perPage' => 1, 'page' => 1]);
         $this->assertTrue($paginator instanceof FullPaginator);
         $this->assertSame($paginator->getTotalNumItems(), 2);
-        $this->assertSame($paginator->getPage(), 1);
-        $this->assertSame($paginator->getNumItemsPerPage(), 1);
+        $this->assertSame($paginator->getCurrentPageNumber(), 1);
+        $this->assertSame($paginator->getMaxNumItemsPerPage(), 1);
         $this->assertCount(1, $paginator->getItems());
 
         $room = $paginator->getItems()[0];
@@ -129,8 +129,8 @@ class RoomApiTest extends TestCase
         $paginator = $this->api->Room()->getRooms(['partialPagination' => false, 'perPage' => 1, 'page' => 2]);
         $this->assertTrue($paginator instanceof FullPaginator);
         $this->assertSame($paginator->getTotalNumItems(), 2);
-        $this->assertSame($paginator->getPage(), 2);
-        $this->assertSame($paginator->getNumItemsPerPage(), 1);
+        $this->assertSame($paginator->getCurrentPageNumber(), 2);
+        $this->assertSame($paginator->getMaxNumItemsPerPage(), 1);
         $this->assertCount(1, $paginator->getItems());
 
         $room = $paginator->getItems()[0];
@@ -154,9 +154,9 @@ class RoomApiTest extends TestCase
 
         // partial pagination of a page 1 with 1 item
         $paginator = $this->api->Room()->getRooms(['partialPagination' => true, 'perPage' => 1, 'page' => 1]);
-        $this->assertTrue($paginator instanceof PartialPaginator);
-        $this->assertSame($paginator->getPage(), 1);
-        $this->assertSame($paginator->getNumItemsPerPage(), 1);
+        $this->assertInstanceOf(PartialPaginator::class, $paginator);
+        $this->assertSame($paginator->getCurrentPageNumber(), 1);
+        $this->assertSame($paginator->getMaxNumItemsPerPage(), 1);
         $this->assertCount(1, $paginator->getItems());
 
         $room = $paginator->getItems()[0];
@@ -175,8 +175,8 @@ class RoomApiTest extends TestCase
         // partial pagination of a page 2 with 1 item
         $paginator = $this->api->Room()->getRooms(['partialPagination' => true, 'perPage' => 1, 'page' => 2]);
         $this->assertTrue($paginator instanceof PartialPaginator);
-        $this->assertSame($paginator->getPage(), 2);
-        $this->assertSame($paginator->getNumItemsPerPage(), 1);
+        $this->assertSame($paginator->getCurrentPageNumber(), 2);
+        $this->assertSame($paginator->getMaxNumItemsPerPage(), 1);
         $this->assertCount(1, $paginator->getItems());
 
         $room = $paginator->getItems()[0];

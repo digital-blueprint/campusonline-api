@@ -4,26 +4,14 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\LegacyWebService\Organization;
 
-class OrganizationUnitData
+use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
+
+class OrganizationUnitData extends ResourceData
 {
-    /**
-     * @var string
-     */
-    private $identifier;
-
-    /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var string
-     */
+    /** @var string */
     private $code;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $type;
 
     /**
@@ -32,26 +20,6 @@ class OrganizationUnitData
      * @var string
      */
     private $url;
-
-    public function getIdentifier(): ?string
-    {
-        return $this->identifier;
-    }
-
-    public function setIdentifier(string $identifier): void
-    {
-        $this->identifier = $identifier;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): void
-    {
-        $this->name = $name;
-    }
 
     public function getCode(): ?string
     {

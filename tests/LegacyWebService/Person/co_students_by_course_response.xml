@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CDM xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://campusonline.at/xmlschema/cdm/CDMv2.01.xsd" language="german">
+    <properties>
+        <datasource>tugraz.at</datasource>
+        <datetime date="2022-06-21" time="10:39:07"/>
+    </properties>
+    <course id="course_276525" language="german">
+        <courseID>276525</courseID>
+        <courseName>
+            <text>Englisch für TechnikerInnen: Oberstufe - mündliche Kompetenz (B2/2)</text>
+        </courseName>
+        <courseCode>940042</courseCode>
+        <teachingTerm>Sommersemester 2022</teachingTerm>
+        <admissionInfo>
+            <admissionDescription userDefined="annotation">
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/sa.gruppen_einteilung?clvnr=276525&amp;corg=14815</href>
+                </webLink>
+            </admissionDescription>
+        </admissionInfo>
+        <instructionLanguage teachingLang="Englisch"/>
+        <exam>
+            <infoBlock>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/ee/rest/pages/slc.xm.ex/exams-of-course/276525</href>
+                </webLink>
+            </infoBlock>
+        </exam>
+        <teachingActivity>
+            <infoBlock>
+                <webLink userDefined="CAMPUSonlineURL">
+                    <href>https://online.tugraz.at/tug_online/wbTvw_List.lehrveranstaltung?pStpSpNr=276525</href>
+                </webLink>
+            </infoBlock>
+        </teachingActivity>
+    </course>
+    <person ident="1">
+        <personID>1A</personID>
+        <name>
+            <given>Terrence</given>
+            <family>Hill</family>
+        </name>
+        <contactData>
+            <email>terrence.hill@student.tugraz.at</email>
+        </contactData>
+        <infoBlock>
+            <refCourse ref="course_276525"/>
+            <subBlock userDefined="study">UF 033 282 (UG2002)</subBlock>
+            <subBlock userDefined="group">Standardgruppe</subBlock>
+            <subBlock userDefined="code">79779792874448</subBlock>
+            <subBlock userDefined="attendance">J</subBlock>
+            <subBlock userDefined="registrationDate">20220207T125551</subBlock>
+            <subBlock userDefined="semesterWithinCourseOfStudy">4</subBlock>
+        </infoBlock>
+    </person>
+    <person ident="2">
+        <personID>2B</personID>
+        <name>
+            <given>Josephine</given>
+            <family>Baker</family>
+        </name>
+        <title>
+            <text>BSc</text>
+        </title>
+        <contactData>
+            <email>josephine.baker@student.tugraz.at</email>
+        </contactData>
+        <infoBlock>
+            <refCourse ref="course_276525"/>
+            <subBlock userDefined="study">UF 066 921 (UG2002)</subBlock>
+            <subBlock userDefined="group">Standardgruppe</subBlock>
+            <subBlock userDefined="code">79779782844553</subBlock>
+            <subBlock userDefined="attendance">J</subBlock>
+            <subBlock userDefined="registrationDate">20220217T155446</subBlock>
+            <subBlock userDefined="semesterWithinCourseOfStudy">3</subBlock>
+        </infoBlock>
+    </person>
+    <person ident="3">
+        <personID>3C</personID>
+        <name>
+            <given>John</given>
+            <family>Doe</family>
+        </name>
+        <title>
+            <text>BSc</text>
+        </title>
+        <contactData>
+            <email>john.doe@student.tugraz.at</email>
+        </contactData>
+        <infoBlock>
+            <refCourse ref="course_276525"/>
+            <subBlock userDefined="study">UF 066 411 (UG2002)</subBlock>
+            <subBlock userDefined="group">Standardgruppe</subBlock>
+            <subBlock userDefined="code">79779780874193</subBlock>
+            <subBlock userDefined="attendance">J</subBlock>
+            <subBlock userDefined="registrationDate">20220219T125806</subBlock>
+            <subBlock userDefined="semesterWithinCourseOfStudy">2</subBlock>
+        </infoBlock>
+    </person>
+</CDM>
+
+<!--  Metadata Generated On: Tue Jun 21 10:39:07 CEST 2022  Time Taken: 64 msecs -->

@@ -6,6 +6,7 @@ namespace Dbp\CampusonlineApi\LegacyWebService;
 
 use Dbp\CampusonlineApi\LegacyWebService\Course\CourseApi;
 use Dbp\CampusonlineApi\LegacyWebService\Organization\OrganizationUnitApi;
+use Dbp\CampusonlineApi\LegacyWebService\Person\PersonApi;
 use Dbp\CampusonlineApi\LegacyWebService\Room\RoomApi;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -64,5 +65,10 @@ class Api implements LoggerAwareInterface
     public function Course(): CourseApi
     {
         return new CourseApi($this->connection, $this->rootOrgUnitId);
+    }
+
+    public function Person(): PersonApi
+    {
+        return new PersonApi($this->connection, $this->rootOrgUnitId);
     }
 }

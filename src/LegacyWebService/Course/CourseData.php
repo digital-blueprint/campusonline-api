@@ -5,15 +5,10 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\LegacyWebService\Course;
 
 use Dbp\CampusonlineApi\LegacyWebService\Person\PersonData;
+use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
 
-class CourseData
+class CourseData extends ResourceData
 {
-    /** @var string */
-    private $identifier;
-
-    /** @var string */
-    private $name;
-
     /** @var string */
     private $type;
 
@@ -52,26 +47,6 @@ class CourseData
 
     /** @var PersonData[] */
     private $contacts;
-
-    public function getIdentifier(): string
-    {
-        return $this->identifier;
-    }
-
-    public function setIdentifier(string $identifier): void
-    {
-        $this->identifier = $identifier;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): void
-    {
-        $this->name = $name;
-    }
 
     public function getLanguage(): string
     {
