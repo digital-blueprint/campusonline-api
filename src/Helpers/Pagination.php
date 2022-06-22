@@ -31,6 +31,10 @@ class Pagination
             throw new ApiException(self::MAX_NUM_ITEMS_PER_PAGE_PARAMETER_NAME.' parameter must be larger than 0');
         }
 
+        if ($numItemsPerPage === null && $page > 1) {
+            throw new ApiException(self::MAX_NUM_ITEMS_PER_PAGE_PARAMETER_NAME.' must be specified when requesting other than first page');
+        }
+
         return $numItemsPerPage ? ($page - 1) * $numItemsPerPage : 0;
     }
 

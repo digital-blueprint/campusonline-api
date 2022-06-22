@@ -69,7 +69,6 @@ abstract class ResourceApi
             $node = $nodes[$nodeIndex];
 
             $identifier = null;
-            $name = null;
             $isMatch = false;
 
             if ($isIdRequested) {
