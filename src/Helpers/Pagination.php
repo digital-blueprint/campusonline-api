@@ -61,23 +61,36 @@ class Pagination
     /**
      * If num items per page is not provided, we use the total number of items.
      */
-    public static function createFullPaginator(array $items, int $totalNumItems, array $options): FullPaginator
+    public static function createFullPaginator(array $pageItems, int $totalNumItems, array $options): FullPaginator
     {
         $currentPageNum = self::getCurrentPageNumberInternal($options);
         $numItemsPerPage = self::getMaxNumItemsPerPage($options, $totalNumItems);
 
-        return new FullPaginator($items, $currentPageNum, $numItemsPerPage, $totalNumItems);
+        return new FullPaginator($pageItems, $currentPageNum, $numItemsPerPage, $totalNumItems);
+    }
+
+    /**
+     * If num items per page is not provided, we use the total number of items.
+     */
+    public static function createPaginatorFromWholeResult(array $wholeResultItems, array $options): FullPaginator
+    {
+        $totalNumItems = count($wholeResultItems);
+        $numItemsPerPage = self::getMaxNumItemsPerPage($options, $totalNumItems);
+
+        $pageItems = array_slice($wholeResultItems, Pagination::getCurrentPageStartIndex($options), $numItemsPerPage);
+
+        return Pagination::createFullPaginator($pageItems, $totalNumItems, $options);
     }
 
     /**
      * If num items per page is not provided, we use the total number of result items.
      */
-    public static function createPartialPaginator(array $items, array $options): PartialPaginator
+    public static function createPartialPaginator(array $pageItems, array $options): PartialPaginator
     {
         $currentPageNum = self::getCurrentPageNumberInternal($options);
-        $numItemsPerPage = self::getMaxNumItemsPerPage($options, count($items));
+        $numItemsPerPage = self::getMaxNumItemsPerPage($options, count($pageItems));
 
-        return new PartialPaginator($items, $currentPageNum, $numItemsPerPage);
+        return new PartialPaginator($pageItems, $currentPageNum, $numItemsPerPage);
     }
 
     private static function getCurrentPageNumberInternal(array $options): int
