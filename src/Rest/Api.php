@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\Rest;
 
+use Dbp\CampusonlineApi\Rest\ResearchProject\ResearchProjectApi;
 use Dbp\CampusonlineApi\Rest\Student\StudentApi;
 use Dbp\CampusonlineApi\Rest\UCard\UCardApi;
 use Psr\Log\LoggerAwareInterface;
@@ -41,5 +42,10 @@ class Api implements LoggerAwareInterface
     public function UCard(): UCardApi
     {
         return new UCardApi($this->connection);
+    }
+
+    public function ResearchProject(): ResearchProjectApi
+    {
+        return new ResearchProjectApi($this->connection);
     }
 }
