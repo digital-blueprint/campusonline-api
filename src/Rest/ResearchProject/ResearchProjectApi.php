@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\Rest\ResearchProject;
 
-use Dbp\CampusonlineApi\Helpers\FullPaginator;
+use Dbp\CampusonlineApi\Helpers\Pagination;
 use Dbp\CampusonlineApi\Helpers\Paginator;
 use Dbp\CampusonlineApi\Rest\ApiException;
 use Dbp\CampusonlineApi\Rest\Connection;
@@ -12,33 +12,31 @@ use Dbp\CampusonlineApi\Rest\Tools;
 use GuzzleHttp\Exception\RequestException;
 use League\Uri\UriTemplate;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
 
-class ResearchProjectApi implements LoggerAwareInterface
+class ResearchProjectApi
 {
-    use LoggerAwareTrait;
-
     /**
      * Request.
+     *
+     * Example: https://online.tugraz.at/tug_online/pl/rest/loc_apiProjekte?$filter=TITEL-like=Aufnahme;SPRACHE-eq=DE
+     *
+     * Alternative Endpoint (is said to be able to handle whitespaces in filter strings):
+     * https://online.tugraz.at/tug_online/pl/rest/loc_proj.getprojects?Sprache=DE&Titel=Aufnahme
      */
+    private const DATA_SERVICE = 'loc_apiProjekte';
+
     private const EQUALS_FILTER_OPERATOR = 1;
-    private const LIKE_FILTER_OPERATOR = 2;
+    private const LIKE_CASE_INSENSITIVE_FILTER_OPERATOR = 2;
 
     private const LANG_DE = 'DE';
     private const LANG_EN = 'EN';
 
-    // https://online.tugraz.at/tug_online/pl/rest/loc_apiProjekte?access_token=xxxxxxx&$filter=TITEL-like=Aufnahme;SPRACHE-eq=DE
-    private const DATA_SERVICE = 'loc_apiProjekte';
     private const LANGUAGE_FILTER_NAME = 'SPRACHE';
-    private const ID_FILTER_NAME = 'SPRACHE';
-
-    // https://online.tugraz.at/tug_online/pl/rest/loc_proj.getprojects?access_token=xxxxxx&Sprache=DE&Titel=Aufnahme
-    //private const DATA_SERVICE = 'loc_proj.getprojects'
-    //private const LANGUAGE_PARAMETER_NAME = 'Sprache';
+    private const ID_FILTER_NAME = 'ID';
+    private const TITLE_FILTER_NAME = 'TITEL';
 
     /**
-     * Respone.
+     * Response.
      */
     private const FIELD_ID = 'ID';
     private const FIELD_TITLE = 'TITEL';
@@ -57,39 +55,16 @@ class ResearchProjectApi implements LoggerAwareInterface
     /**
      * @throws ApiException
      */
-    public function getResearchProject(string $identifier, array $options = []): ResearchProjectData
+    public function getResearchProject(string $identifier, array $options = []): ?ResearchProjectData
     {
-        $lang = $options['lang'] ?? 'de';
-        $langFilter = $lang === 'en' ? self::LANG_EN : self::LANG_DE;
-        $service = self::DATA_SERVICE;
-
         $filters = [];
-        $filters[] = self::getFilterValue(self::LANGUAGE_FILTER_NAME, self::EQUALS_FILTER_OPERATOR, $langFilter);
-        $filters[] = self::getFilterValue(self::ID_FILTER_NAME, self::EQUALS_FILTER_OPERATOR, $identifier);
+        $filters[] = self::getFilter(self::ID_FILTER_NAME, self::EQUALS_FILTER_OPERATOR, $identifier);
 
-        $uriTemplate = new UriTemplate('pl/rest/{service}/{?%24filter,%24format,%24ctx,%24top}');
-        $uri = (string) $uriTemplate->expand([
-            'service' => $service,
-            '%24filter' => implode(';', $filters),
-        ]);
+        $projectDataList = $this->getProjectDataList($filters, $options);
 
-        $client = $this->connection->getClient();
-        try {
-            $response = $client->get($uri);
-        } catch (RequestException $e) {
-            throw Tools::createResponseError($e);
-        }
+        assert(count($projectDataList) === 0 || count($projectDataList) === 1);
 
-        $projectDataList = $this->parseStudentDataResponse($response);
-
-        $numProjects = count($projectDataList);
-        if ($numProjects === 0) {
-            throw new ApiException('id not found');
-        }
-
-        assert($numProjects === 1);
-
-        return $projectDataList[0];
+        return $projectDataList[0] ?? null;
     }
 
     /**
@@ -97,19 +72,27 @@ class ResearchProjectApi implements LoggerAwareInterface
      */
     public function getResearchProjects(array $options): Paginator
     {
-        $lang = $options['lang'] ?? 'de';
-        $langFilter = $lang === 'en' ? self::LANG_EN : self::LANG_DE;
-        $service = self::DATA_SERVICE;
-        $titleFilterValue = 'Aufnahme';
+        $titleFilterValue = $options[ResearchProjectData::TITLE_SEARCH_FILTER_NAME] ?? '';
+        $titleFilterValue = trim($titleFilterValue);
 
         $filters = [];
-        $filters[] = self::getFilterValue(self::LANGUAGE_FILTER_NAME, self::EQUALS_FILTER_OPERATOR, $lang);
-        $filters[] = self::getFilterValue(self::FIELD_TITLE, self::LIKE_FILTER_OPERATOR, $titleFilterValue);
+        $filters[] = self::getFilter(self::TITLE_FILTER_NAME, self::LIKE_CASE_INSENSITIVE_FILTER_OPERATOR, $titleFilterValue);
 
-        $uriTemplate = new UriTemplate('pl/rest/{service}/{?%24filter,%24format,%24ctx,%24top}');
+        return Pagination::createPaginatorFromWholeResult($this->getProjectDataList($filters, $options), $options);
+    }
+
+    /**
+     * @throws ApiException
+     */
+    private function getProjectDataList(array $filters, array $options): array
+    {
+        $filters[] = self::getLanguageFilter($options);
+
+        $uriTemplate = new UriTemplate('pl/rest/{service}/{?%24filter,%24format}');
         $uri = (string) $uriTemplate->expand([
-            'service' => $service,
+            'service' => self::DATA_SERVICE,
             '%24filter' => implode(';', $filters),
+            '%24format' => 'json',
         ]);
 
         $client = $this->connection->getClient();
@@ -119,9 +102,34 @@ class ResearchProjectApi implements LoggerAwareInterface
             throw Tools::createResponseError($e);
         }
 
-        $projectDataList = $this->parseStudentDataResponse($response);
+        return $this->parseStudentDataResponse($response);
+    }
 
-        return new FullPaginator($projectDataList, 1, count($projectDataList), count($projectDataList));
+    /**
+     * @throws ApiException
+     */
+    private function parseStudentDataResponse(ResponseInterface $response): array
+    {
+        $content = (string) $response->getBody();
+        try {
+            $json = Tools::decodeJSON($content, true);
+        } catch (\JsonException $exception) {
+            throw new ApiException('json response invalid');
+        }
+
+        $projectDataList = [];
+        foreach ($json['resource'] as $res) {
+            $raw = $res['content']['API_PROJEKTE'];
+            $projectData = new ResearchProjectData();
+            $projectData->setIdentifier($raw[self::FIELD_ID] ?? null);
+            $projectData->setTitle($raw[self::FIELD_TITLE] ?? null);
+            $projectData->setDescription($raw[self::FIELD_DESCRIPTION] ?? null);
+            $projectData->setStartDate($raw[self::FIELD_START_DATE]['value'] ?? null);
+            $projectData->setEndDate($raw[self::FIELD_END_DATE]['value'] ?? null);
+            $projectDataList[] = $projectData;
+        }
+
+        return $projectDataList;
     }
 
     /**
@@ -129,14 +137,14 @@ class ResearchProjectApi implements LoggerAwareInterface
      *
      * @throws ApiException
      */
-    private static function getFilterValue(string $filterName, int $operator, $filterValue): string
+    private static function getFilter(string $filterName, int $operator, $filterValue): string
     {
         switch ($operator) {
             case self::EQUALS_FILTER_OPERATOR:
                 $operatorString = '-eq=';
                 break;
-            case self::LIKE_FILTER_OPERATOR:
-                $operatorString = '-like=';
+            case self::LIKE_CASE_INSENSITIVE_FILTER_OPERATOR:
+                $operatorString = '-likeI=';
                 break;
             default:
                 throw new ApiException('unknown filter operator '.$operator);
@@ -148,27 +156,11 @@ class ResearchProjectApi implements LoggerAwareInterface
     /**
      * @throws ApiException
      */
-    public function parseStudentDataResponse(ResponseInterface $response): array
+    private static function getLanguageFilter(array $options): string
     {
-        $content = (string) $response->getBody();
-        try {
-            $json = Tools::decodeJSON($content, true);
-        } catch (\JsonException $exception) {
-            throw new ApiException('json response invalid');
-        }
+        $lang = $options['lang'] ?? 'de';
+        $langFilterValue = $lang === 'en' ? self::LANG_EN : self::LANG_DE;
 
-        $projectDataList = [];
-        foreach ($json['resource'] as $res) {
-            $raw = $res['content']['plsqlStudierendendatenDto'];
-            $projectData = new ResearchProjectData();
-            $projectData->setIdentifier($raw[self::FIELD_ID] ?? '');
-            $projectData->setTitle($raw[self::FIELD_TITLE] ?? '');
-            $projectData->setDescription($raw[self::FIELD_DESCRIPTION] ?? '');
-            $projectData->setStartDate($raw[self::FIELD_START_DATE] ?? '');
-            $projectData->setEndDate($raw[self::FIELD_END_DATE] ?? '');
-            $projectDataList[] = $projectData;
-        }
-
-        return $projectDataList;
+        return self::getFilter(self::LANGUAGE_FILTER_NAME, self::EQUALS_FILTER_OPERATOR, $langFilterValue);
     }
 }
