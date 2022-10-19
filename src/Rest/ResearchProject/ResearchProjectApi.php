@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\Rest\ResearchProject;
 
+use Dbp\CampusonlineApi\Helpers\ApiException;
 use Dbp\CampusonlineApi\Helpers\Pagination;
 use Dbp\CampusonlineApi\Helpers\Paginator;
-use Dbp\CampusonlineApi\Rest\ApiException;
+use Dbp\CampusonlineApi\Rest\Api;
 use Dbp\CampusonlineApi\Rest\Connection;
 use Dbp\CampusonlineApi\Rest\Tools;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
+use League\Uri\Contracts\UriException;
 use League\Uri\UriTemplate;
 use Psr\Http\Message\ResponseInterface;
 
@@ -25,15 +28,14 @@ class ResearchProjectApi
      */
     private const DATA_SERVICE = 'loc_apiProjekte';
 
-    private const EQUALS_FILTER_OPERATOR = 1;
-    private const LIKE_CASE_INSENSITIVE_FILTER_OPERATOR = 2;
-
     private const LANG_DE = 'DE';
     private const LANG_EN = 'EN';
 
     private const LANGUAGE_FILTER_NAME = 'SPRACHE';
     private const ID_FILTER_NAME = 'ID';
     private const TITLE_FILTER_NAME = 'TITEL';
+
+    private const DEFAULT_MAX_NUM_ITEMS_PER_PAGE = 50;
 
     /**
      * Response.
@@ -58,7 +60,7 @@ class ResearchProjectApi
     public function getResearchProject(string $identifier, array $options = []): ?ResearchProjectData
     {
         $filters = [];
-        $filters[] = self::getFilter(self::ID_FILTER_NAME, self::EQUALS_FILTER_OPERATOR, $identifier);
+        $filters[] = Api::getFilter(self::ID_FILTER_NAME, Api::EQUALS_FILTER_OPERATOR, $identifier);
 
         $projectDataList = $this->getProjectDataList($filters, $options);
 
@@ -76,9 +78,9 @@ class ResearchProjectApi
         $titleFilterValue = trim($titleFilterValue);
 
         $filters = [];
-        $filters[] = self::getFilter(self::TITLE_FILTER_NAME, self::LIKE_CASE_INSENSITIVE_FILTER_OPERATOR, $titleFilterValue);
+        $filters[] = Api::getFilter(self::TITLE_FILTER_NAME, Api::LIKE_CASE_INSENSITIVE_FILTER_OPERATOR, $titleFilterValue);
 
-        return Pagination::createPaginatorFromWholeResult($this->getProjectDataList($filters, $options), $options);
+        return Pagination::createPartialPaginator($this->getProjectDataList($filters, $options), $options);
     }
 
     /**
@@ -88,18 +90,32 @@ class ResearchProjectApi
     {
         $filters[] = self::getLanguageFilter($options);
 
-        $uriTemplate = new UriTemplate('pl/rest/{service}/{?%24filter,%24format}');
-        $uri = (string) $uriTemplate->expand([
-            'service' => self::DATA_SERVICE,
-            '%24filter' => implode(';', $filters),
-            '%24format' => 'json',
-        ]);
+        $top = Pagination::getMaxNumItemsPerPage($options, self::DEFAULT_MAX_NUM_ITEMS_PER_PAGE);
+        $skip = Pagination::getCurrentPageStartIndex($options);
+
+        $uriTemplate = new UriTemplate('pl/rest/{service}/{?%24filter,%24top,%24skip,%24format}');
+
+        try {
+            $uri = (string) $uriTemplate->expand([
+                'service' => self::DATA_SERVICE,
+                '%24filter' => implode(';', $filters),
+                '%24top' => $top,
+                '%24skip' => $skip,
+                '%24format' => 'json',
+            ]);
+        } catch (UriException $exception) {
+            throw new ApiException('invalid URI format: '.$exception->getMessage());
+        }
 
         $client = $this->connection->getClient();
         try {
             $response = $client->get($uri);
-        } catch (RequestException $e) {
-            throw Tools::createResponseError($e);
+        } catch (GuzzleException $exception) {
+            if ($exception instanceof RequestException) {
+                throw Tools::createResponseError($exception);
+            } else {
+                throw new ApiException('http client error: '.$exception->getMessage());
+            }
         }
 
         return $this->parseStudentDataResponse($response);
@@ -118,8 +134,8 @@ class ResearchProjectApi
         }
 
         $projectDataList = [];
-        foreach ($json['resource'] as $res) {
-            $raw = $res['content']['API_PROJEKTE'];
+        foreach ($json['resource'] as $resource) {
+            $raw = $resource['content']['API_PROJEKTE'];
             $projectData = new ResearchProjectData();
             $projectData->setIdentifier($raw[self::FIELD_ID] ?? null);
             $projectData->setTitle($raw[self::FIELD_TITLE] ?? null);
@@ -133,27 +149,6 @@ class ResearchProjectApi
     }
 
     /**
-     * @param mixed $filterValue
-     *
-     * @throws ApiException
-     */
-    private static function getFilter(string $filterName, int $operator, $filterValue): string
-    {
-        switch ($operator) {
-            case self::EQUALS_FILTER_OPERATOR:
-                $operatorString = '-eq=';
-                break;
-            case self::LIKE_CASE_INSENSITIVE_FILTER_OPERATOR:
-                $operatorString = '-likeI=';
-                break;
-            default:
-                throw new ApiException('unknown filter operator '.$operator);
-        }
-
-        return $filterName.$operatorString.$filterValue;
-    }
-
-    /**
      * @throws ApiException
      */
     private static function getLanguageFilter(array $options): string
@@ -161,6 +156,6 @@ class ResearchProjectApi
         $lang = $options['lang'] ?? 'de';
         $langFilterValue = $lang === 'en' ? self::LANG_EN : self::LANG_DE;
 
-        return self::getFilter(self::LANGUAGE_FILTER_NAME, self::EQUALS_FILTER_OPERATOR, $langFilterValue);
+        return Api::getFilter(self::LANGUAGE_FILTER_NAME, Api::EQUALS_FILTER_OPERATOR, $langFilterValue);
     }
 }

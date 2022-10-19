@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\Rest\UCard;
 
-use Dbp\CampusonlineApi\Rest\ApiException;
+use Dbp\CampusonlineApi\Helpers\ApiException;
+use Dbp\CampusonlineApi\Rest\Api;
 use Dbp\CampusonlineApi\Rest\Connection;
 use Dbp\CampusonlineApi\Rest\Tools;
 use GuzzleHttp\Exception\RequestException;
@@ -38,10 +39,10 @@ class UCardApi implements LoggerAwareInterface
         // this functionality for now
         $identIdObfuscated = Tools::validateFilterValue($identIdObfuscated);
         $filters = [];
-        $filters[] = 'IDENT_NR_OBFUSCATED-eq='.$identIdObfuscated;
+        $filters[] = Api::getFilter('IDENT_NR_OBFUSCATED', Api::EQUALS_FILTER_OPERATOR, $identIdObfuscated);
         if ($cardType !== null) {
             $cardType = Tools::validateFilterValue($cardType);
-            $filters[] = 'CARD_TYPE-eq='.$cardType;
+            $filters[] = Api::getFilter('CARD_TYPE', Api::EQUALS_FILTER_OPERATOR, $cardType);
         }
 
         $dataService = $connection->getDataServiceId(self::DATA_SERVICE);

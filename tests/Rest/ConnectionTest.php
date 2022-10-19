@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\Tests\Rest;
 
-use Dbp\CampusonlineApi\Rest\ApiException;
+use Dbp\CampusonlineApi\Helpers\ApiException;
 use Dbp\CampusonlineApi\Rest\Connection;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;

@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\Rest;
 
+use Dbp\CampusonlineApi\Helpers\ApiException;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\HandlerStack;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -87,6 +88,9 @@ class Connection implements LoggerAwareInterface
         return $this->token;
     }
 
+    /**
+     * @throws ApiException
+     */
     private function refreshToken(): void
     {
         $stack = HandlerStack::create($this->clientHandler);
@@ -106,12 +110,16 @@ class Connection implements LoggerAwareInterface
                     'grant_type' => 'client_credentials',
                 ],
             ]);
-        } catch (RequestException $e) {
-            throw new ApiException($e->getMessage());
+        } catch (GuzzleException $exception) {
+            throw new ApiException($exception->getMessage());
         }
         $data = $response->getBody()->getContents();
 
-        $token = Tools::decodeJSON($data, true);
+        try {
+            $token = Tools::decodeJSON($data, true);
+        } catch (\JsonException $exception) {
+            throw new ApiException($exception->getMessage());
+        }
         $this->token = $token['access_token'];
     }
 }

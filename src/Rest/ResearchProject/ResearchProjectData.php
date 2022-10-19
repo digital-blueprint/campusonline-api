@@ -6,7 +6,7 @@ namespace Dbp\CampusonlineApi\Rest\ResearchProject;
 
 class ResearchProjectData
 {
-    /** @var string Partial, case-insensitive text search on the 'additionalInfo' attribute. Passes if filter is empty. */
+    /** @var string Partial, case-insensitive text search on the 'title' attribute. */
     public const TITLE_SEARCH_FILTER_NAME = 'titleSearchFilter';
 
     private $identifier;

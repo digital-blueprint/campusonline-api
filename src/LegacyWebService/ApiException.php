@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\LegacyWebService;
 
-class ApiException extends \Exception
+class ApiException extends \Dbp\CampusonlineApi\Helpers\ApiException
 {
     private const HTTP_NOT_FOUND = 404;
     private const HTTP_UNAUTHORIZED = 401;

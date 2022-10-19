@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\Helpers;
 
-use Dbp\CampusonlineApi\LegacyWebService\ApiException;
-
 class Pagination
 {
     private const CURRENT_PAGE_NUMBER_PARAMETER_NAME = 'page';

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\Rest;
 
+use Dbp\CampusonlineApi\Helpers\ApiException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Middleware;
@@ -19,17 +20,29 @@ class Tools
         );
     }
 
-    public static function validateFilterValue(string $input): string
+    /**
+     * @param mixed $input
+     *
+     * @return mixed
+     */
+    public static function validateFilterValue($input)
     {
-        // Filtering breaks if the value is empty, so don't allow
-        if (strlen($input) === 0) {
-            throw new \ValueError('empty value not allowed');
-        }
+        if (is_string($input)) {
+            // Filtering breaks if the value is empty, so don't allow
+            if (strlen($input) === 0) {
+                throw new \ValueError('empty filter value not allowed');
+            }
 
-        // XXX: Filter expressions are delimited by ";" and I don't know how
-        // to escape them, which could lead to filter injections, so throw.
-        if (\str_contains($input, ';')) {
-            throw new \ValueError('value not allowed to contain ";"');
+            // Filtering breaks if the value contains a whitespace, so don't allow
+            if (str_contains($input, ' ')) {
+                throw new \ValueError('filter value not allowed to contain whitespaces');
+            }
+
+            // XXX: Filter expressions are delimited by ";" and I don't know how
+            // to escape them, which could lead to filter injections, so throw.
+            if (str_contains($input, ';')) {
+                throw new \ValueError('filter value not allowed to contain ";"');
+            }
         }
 
         return $input;
@@ -54,7 +67,12 @@ class Tools
             return new ApiException('Unknown error');
         }
         $data = (string) $response->getBody();
-        $json = Tools::decodeJSON($data, true);
+        $json = [];
+        try {
+            $json = Tools::decodeJSON($data, true);
+        } catch (\JsonException $exception) {
+        }
+
         if (($json['type'] ?? '') === 'resources') {
             $coErrorDto = $json['resource'][0]['content']['coErrorDto'];
             $message = $coErrorDto['errorType'].'['.$coErrorDto['httpCode'].']: '.$coErrorDto['message'];

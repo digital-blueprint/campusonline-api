@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\Tests\Rest\UCard;
 
+use Dbp\CampusonlineApi\Helpers\ApiException;
 use Dbp\CampusonlineApi\Rest\Api;
-use Dbp\CampusonlineApi\Rest\ApiException;
 use Dbp\CampusonlineApi\Rest\UCard\UCard;
 use Dbp\CampusonlineApi\Rest\UCard\UCardPicture;
 use Dbp\CampusonlineApi\Rest\UCard\UCardType;

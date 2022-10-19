@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\Rest\Student;
 
+use Dbp\CampusonlineApi\Helpers\ApiException;
+use Dbp\CampusonlineApi\Rest\Api;
 use Dbp\CampusonlineApi\Rest\Connection;
 use Dbp\CampusonlineApi\Rest\Tools;
 use GuzzleHttp\Exception\RequestException;
@@ -33,55 +35,42 @@ class StudentApi implements LoggerAwareInterface
 
     /**
      * @return StudentData[]
+     *
+     * @throws ApiException
      */
     public function getStudentDataByPersonId(string $personId): array
     {
-        $connection = $this->connection;
-
-        $personId = Tools::validateFilterValue($personId);
-        $service = $connection->getDataServiceId(self::DATA_SERVICE);
         $filters = [];
-        $filters[] = self::FIELD_PERSON_ID.'-eq='.$personId;
-        $uriTemplate = new UriTemplate('pl/rest/{service}/{?%24filter,%24format,%24ctx,%24top}');
-        $uri = (string) $uriTemplate->expand([
-            'service' => $service,
-            '%24filter' => implode(';', $filters),
-            '%24format' => 'json',
-            '%24ctx' => 'lang=en',
-            '%24top' => '-1',
-        ]);
+        $filters[] = Api::getFilter(self::FIELD_PERSON_ID, Api::EQUALS_FILTER_OPERATOR, Tools::validateFilterValue($personId));
 
-        $client = $connection->getClient();
-        try {
-            $response = $client->get($uri);
-        } catch (RequestException $e) {
-            throw Tools::createResponseError($e);
-        }
-
-        return $this->parseStudentDataResponse($response);
+        return $this->getStudentDataList($filters);
     }
 
     /**
      * @return StudentData[]
+     *
+     * @throws ApiException
      */
     public function getStudentDataByIdentId(string $identId): array
     {
-        $connection = $this->connection;
-
-        $identId = Tools::validateFilterValue($identId);
-        $service = $connection->getDataServiceId(self::DATA_SERVICE);
         $filters = [];
-        $filters[] = self::FIELD_IDENT_ID.'-eq='.$identId;
+        $filters[] = Api::getFilter(self::FIELD_IDENT_ID, Api::EQUALS_FILTER_OPERATOR, Tools::validateFilterValue($identId));
+
+        return $this->getStudentDataList($filters);
+    }
+
+    private function getStudentDataList(array $filters): array
+    {
         $uriTemplate = new UriTemplate('pl/rest/{service}/{?%24filter,%24format,%24ctx,%24top}');
         $uri = (string) $uriTemplate->expand([
-            'service' => $service,
+            'service' => $this->connection->getDataServiceId(self::DATA_SERVICE),
             '%24filter' => implode(';', $filters),
             '%24format' => 'json',
             '%24ctx' => 'lang=en',
             '%24top' => '-1',
         ]);
 
-        $client = $connection->getClient();
+        $client = $this->connection->getClient();
         try {
             $response = $client->get($uri);
         } catch (RequestException $e) {
@@ -91,7 +80,7 @@ class StudentApi implements LoggerAwareInterface
         return $this->parseStudentDataResponse($response);
     }
 
-    public function parseStudentDataResponse(ResponseInterface $response): array
+    private function parseStudentDataResponse(ResponseInterface $response): array
     {
         $content = (string) $response->getBody();
         $json = Tools::decodeJSON($content, true);

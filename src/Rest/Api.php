@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\Rest;
 
+use Dbp\CampusonlineApi\Helpers\ApiException;
 use Dbp\CampusonlineApi\Rest\ResearchProject\ResearchProjectApi;
 use Dbp\CampusonlineApi\Rest\Student\StudentApi;
 use Dbp\CampusonlineApi\Rest\UCard\UCardApi;
@@ -12,6 +13,9 @@ use Psr\Log\LoggerInterface;
 
 class Api implements LoggerAwareInterface
 {
+    public const EQUALS_FILTER_OPERATOR = 1;
+    public const LIKE_CASE_INSENSITIVE_FILTER_OPERATOR = 2;
+
     private $connection;
 
     public function __construct($baseUrl, $clientId, $clientSecret)
@@ -47,5 +51,26 @@ class Api implements LoggerAwareInterface
     public function ResearchProject(): ResearchProjectApi
     {
         return new ResearchProjectApi($this->connection);
+    }
+
+    /**
+     * @param mixed $filterValue
+     *
+     * @throws ApiException
+     */
+    public static function getFilter(string $filterName, int $operator, $filterValue): string
+    {
+        switch ($operator) {
+            case self::EQUALS_FILTER_OPERATOR:
+                $operatorString = '-eq=';
+                break;
+            case self::LIKE_CASE_INSENSITIVE_FILTER_OPERATOR:
+                $operatorString = '-likeI=';
+                break;
+            default:
+                throw new ApiException('unknown filter operator '.$operator);
+        }
+
+        return $filterName.$operatorString.Tools::validateFilterValue($filterValue);
     }
 }
