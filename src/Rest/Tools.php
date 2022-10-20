@@ -24,6 +24,8 @@ class Tools
      * @param mixed $input
      *
      * @return mixed
+     *
+     * @throws \ValueError
      */
     public static function validateFilterValue($input)
     {
