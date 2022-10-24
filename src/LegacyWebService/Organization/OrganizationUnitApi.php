@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\LegacyWebService\Organization;
 
+use Dbp\CampusonlineApi\Helpers\Filters;
 use Dbp\CampusonlineApi\Helpers\Paginator;
 use Dbp\CampusonlineApi\LegacyWebService\ApiException;
 use Dbp\CampusonlineApi\LegacyWebService\Connection;
@@ -41,7 +42,9 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
             throw new ApiException("identifier mustn't be empty");
         }
 
-        $paginator = $this->getOrganizationUnitsInternal($identifier, $options);
+        $options[Filters::IDENTIFIERS_FILTER] = [$identifier];
+
+        $paginator = $this->getOrganizationUnitsInternal($options);
 
         $orgUnitItems = $paginator->getItems();
         if (empty($orgUnitItems)) {
@@ -57,20 +60,20 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
      */
     public function getOrganizationUnits(array $options = []): Paginator
     {
-        return $this->getOrganizationUnitsInternal('', $options);
+        return $this->getOrganizationUnitsInternal($options);
     }
 
     /**
-     * @param string $orgUnitId the ID of the requested org unit or an empty string if all org units are requested
-     *
      * @throws ApiException
      */
-    private function getOrganizationUnitsInternal(string $orgUnitId, array $options): Paginator
+    private function getOrganizationUnitsInternal(array $options): Paginator
     {
         $parameters = [];
-        $parameters[self::ORG_UNIT_ID_PARAMETER_NAME] = $orgUnitId !== '' ? $orgUnitId : $this->rootOrgUnitId;
+        $requestedIdentifiers = $options[Filters::IDENTIFIERS_FILTER] ?? [];
+        $parameters[self::ORG_UNIT_ID_PARAMETER_NAME] =
+            count($requestedIdentifiers) === 1 ? $requestedIdentifiers[0] : $this->rootOrgUnitId;
 
-        return $this->getResourcesInternal(self::URI, $parameters, $options, $orgUnitId);
+        return $this->getResourcesInternal(self::URI, $parameters, $options);
     }
 
     protected function createResource(SimpleXMLElement $node, string $identifier): object

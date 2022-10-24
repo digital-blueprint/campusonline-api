@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\LegacyWebService;
 
+use Dbp\CampusonlineApi\Helpers\Filters;
 use Dbp\CampusonlineApi\Helpers\Pagination;
 use Dbp\CampusonlineApi\Helpers\Paginator;
 use SimpleXMLElement;
@@ -28,21 +29,27 @@ abstract class ResourceApi
     /**
      * @throws ApiException
      */
-    protected function getResourcesInternal(string $uri, array $parameters, array $options, string $requestedId = ''): Paginator
+    protected function getResourcesInternal(string $uri, array $parameters, array $options): Paginator
     {
         $responseBody = $this->connection->get(
             $uri, $options[Api::LANGUAGE_PARAMETER_NAME] ?? '', $parameters);
 
-        return $this->parseResponse($responseBody, $requestedId, $options);
+        return $this->parseResponse($responseBody, $options);
     }
 
     /**
      * @throws ApiException
      */
-    protected function parseResponse(string $responseBody, string $requestedId, array $options): Paginator
+    protected function parseResponse(string $responseBody, array $options): Paginator
     {
         $resources = [];
-        $isIdRequested = $requestedId !== '';
+
+        $isIdFilterActive = false;
+        $requestedIdentifiers = $options[Filters::IDENTIFIERS_FILTER] ?? [];
+        if (!empty($requestedIdentifiers)) {
+            $isIdFilterActive = true;
+            $requestedIdentifiers = array_unique($requestedIdentifiers);
+        }
 
         try {
             $xml = new SimpleXMLElement($responseBody);
@@ -55,7 +62,7 @@ abstract class ResourceApi
         $isPartialPagination = false;
         $isSearchFilterActive = false;
 
-        if (!$isIdRequested) {
+        if (!$isIdFilterActive) {
             $firstMatchingItemsIndex = Pagination::getCurrentPageStartIndex($options);
             $isPartialPagination = Pagination::isPartial($options);
             $isSearchFilterActive = $this->isSearchFilterActive($options);
@@ -71,8 +78,9 @@ abstract class ResourceApi
             $identifier = null;
             $isMatch = false;
 
-            if ($isIdRequested) {
-                if ($this->getResourceIdentifier($node, $identifier) === $requestedId) {
+            if ($isIdFilterActive) {
+                if (($key = array_search($this->getResourceIdentifier($node, $identifier), $requestedIdentifiers, true)) !== false) {
+                    unset($requestedIdentifiers[$key]);
                     $isMatch = true;
                 }
             } else {
@@ -81,11 +89,11 @@ abstract class ResourceApi
 
             if ($isMatch) {
                 ++$matchingItemCount;
-                if ($isIdRequested || ($matchingItemCount > $firstMatchingItemsIndex && ($numItemsPerPage === $totalNumItems || count($resources) < $numItemsPerPage))) {
+                if ($isIdFilterActive || ($matchingItemCount > $firstMatchingItemsIndex && ($numItemsPerPage === $totalNumItems || count($resources) < $numItemsPerPage))) {
                     $resources[] = $this->createResource($node, $this->getResourceIdentifier($node, $identifier));
 
                     $done = false;
-                    if ($isIdRequested) {
+                    if ($isIdFilterActive && empty($requestedIdentifiers)) {
                         $done = true;
                     } elseif (count($resources) === $numItemsPerPage) {
                         if ($isPartialPagination) {

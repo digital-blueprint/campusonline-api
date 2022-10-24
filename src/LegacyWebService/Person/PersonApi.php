@@ -41,7 +41,7 @@ class PersonApi extends ResourceApi implements LoggerAwareInterface
         $parameters = [];
         $parameters[self::COURSE_ID_PARAMETER_NAME] = $courseId;
 
-        return $this->getResourcesInternal(self::STUDENTS_BY_COURSE_URI, $parameters, $options, '');
+        return $this->getResourcesInternal(self::STUDENTS_BY_COURSE_URI, $parameters, $options);
     }
 
     public static function createPersonResource(SimpleXMLElement $node): PersonData

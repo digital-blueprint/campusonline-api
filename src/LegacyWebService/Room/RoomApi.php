@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\LegacyWebService\Room;
 
+use Dbp\CampusonlineApi\Helpers\Filters;
 use Dbp\CampusonlineApi\Helpers\Paginator;
 use Dbp\CampusonlineApi\LegacyWebService\ApiException;
 use Dbp\CampusonlineApi\LegacyWebService\Connection;
@@ -38,7 +39,9 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
             throw new ApiException("identifier mustn't be empty");
         }
 
-        $paginator = $this->getRoomsInternal($identifier, $options);
+        $options[Filters::IDENTIFIERS_FILTER] = [$identifier];
+
+        $paginator = $this->getRoomsInternal($options);
 
         $roomItems = $paginator->getItems();
         if (empty($roomItems)) {
@@ -54,7 +57,7 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
      */
     public function getRooms(array $options = []): Paginator
     {
-        return $this->getRoomsInternal('', $options);
+        return $this->getRoomsInternal($options);
     }
 
     /**
@@ -62,12 +65,12 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
      *
      * @throws ApiException
      */
-    private function getRoomsInternal(string $roomId, array $options): Paginator
+    private function getRoomsInternal(array $options): Paginator
     {
         $parameters = [];
         $parameters[OrganizationUnitApi::ORG_UNIT_ID_PARAMETER_NAME] = $this->rootOrgUnitId;
 
-        return $this->getResourcesInternal(self::URI, $parameters, $options, $roomId);
+        return $this->getResourcesInternal(self::URI, $parameters, $options);
     }
 
     protected function createResource(SimpleXMLElement $node, string $identifier): object

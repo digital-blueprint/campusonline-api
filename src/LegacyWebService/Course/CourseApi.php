@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\LegacyWebService\Course;
 
+use Dbp\CampusonlineApi\Helpers\Filters;
 use Dbp\CampusonlineApi\Helpers\Pagination;
 use Dbp\CampusonlineApi\Helpers\Paginator;
 use Dbp\CampusonlineApi\LegacyWebService\ApiException;
@@ -49,10 +50,12 @@ class CourseApi extends ResourceApi implements LoggerAwareInterface
             throw new ApiException("identifier mustn't be empty");
         }
 
+        $options[Filters::IDENTIFIERS_FILTER] = [$identifier];
+
         $parameters = [];
         $parameters[self::COURSE_ID_PARAMETER_NAME] = $identifier;
 
-        $coursePaginator = $this->getCoursesInternal(self::COURSE_BY_ID_URI, $parameters, $options, $identifier);
+        $coursePaginator = $this->getCoursesInternal(self::COURSE_BY_ID_URI, $parameters, $options);
         $courseItems = $coursePaginator->getItems();
         if (empty($courseItems)) {
             throw new ApiException("response doesn't contain course with ID ".$identifier, 404, true);
@@ -111,14 +114,14 @@ class CourseApi extends ResourceApi implements LoggerAwareInterface
     /**
      * @throws ApiException
      */
-    private function getCoursesInternal(string $uri, array $parameters, array $options, string $courseId = ''): Paginator
+    private function getCoursesInternal(string $uri, array $parameters, array $options): Paginator
     {
         $teachingTerm = $options[self::TERM_OPTION_NAME] ?? null;
         if ($teachingTerm === self::TEACHING_TERM_WINTER || $teachingTerm === self::TEACHING_TERM_SUMMER) {
             $parameters[self::TEACHING_TERM_PARAMETER_NAME] = $teachingTerm;
         }
 
-        return $this->getResourcesInternal($uri, $parameters, $options, $courseId);
+        return $this->getResourcesInternal($uri, $parameters, $options);
     }
 
     protected function createResource(SimpleXMLElement $node, string $identifier): object
