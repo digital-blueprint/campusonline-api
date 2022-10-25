@@ -12,6 +12,11 @@ class Pagination
 
     private const IS_PARTIAL_PAGINATION_DEFAULT = false;
 
+    public static function getPageStartIndex(int $pageNumber, int $maxNumItemsPerPage)
+    {
+        return ($pageNumber - 1) * $maxNumItemsPerPage;
+    }
+
     /**
      * Provides the indices of the first and the last element of the current page.
      *
@@ -33,7 +38,7 @@ class Pagination
             throw new ApiException(self::MAX_NUM_ITEMS_PER_PAGE_PARAMETER_NAME.' must be specified when requesting other than first page');
         }
 
-        return $numItemsPerPage ? ($page - 1) * $numItemsPerPage : 0;
+        return $numItemsPerPage ? self::getPageStartIndex($page, $numItemsPerPage) : 0;
     }
 
     public static function getMaxNumItemsPerPage(array $options, int $default): int

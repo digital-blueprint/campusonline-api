@@ -6,7 +6,6 @@ namespace Dbp\CampusonlineApi\Rest\ResearchProject;
 
 use Dbp\CampusonlineApi\Helpers\ApiException;
 use Dbp\CampusonlineApi\Helpers\Pagination;
-use Dbp\CampusonlineApi\Helpers\Paginator;
 use Dbp\CampusonlineApi\Rest\Api;
 use Dbp\CampusonlineApi\Rest\Connection;
 use Dbp\CampusonlineApi\Rest\Tools;
@@ -35,7 +34,7 @@ class ResearchProjectApi
     private const ID_FILTER_NAME = 'ID';
     private const TITLE_FILTER_NAME = 'TITEL';
 
-    private const DEFAULT_MAX_NUM_ITEMS_PER_PAGE = 50;
+    private const MAX_NUM_ITEMS_PER_PAGE_MAX = 1000;
 
     /**
      * Response.
@@ -62,7 +61,7 @@ class ResearchProjectApi
         $filters = [];
         $filters[] = Api::getFilter(self::ID_FILTER_NAME, Api::EQUALS_FILTER_OPERATOR, $identifier);
 
-        $projectDataList = $this->getProjectDataList($filters, $options);
+        $projectDataList = $this->getProjectDataList(1, 2, $filters, $options);
 
         assert(count($projectDataList) === 0 || count($projectDataList) === 1);
 
@@ -72,53 +71,70 @@ class ResearchProjectApi
     /**
      * @throws ApiException
      */
-    public function getResearchProjects(array $options): Paginator
+    public function getResearchProjects(int $currentPageNumber, int $maxNumItemsPerPage, array $filters = [], array $options = []): array
     {
-        $titleFilterValue = $options[ResearchProjectData::TITLE_SEARCH_FILTER_NAME] ?? '';
+        $titleFilterValue = $filters[ResearchProjectData::TITLE_SEARCH_FILTER_NAME] ?? '';
         $titleFilterValue = trim($titleFilterValue);
 
-        $filters = [];
-        $filters[] = Api::getFilter(self::TITLE_FILTER_NAME, Api::LIKE_CASE_INSENSITIVE_FILTER_OPERATOR, $titleFilterValue);
+        $apiFilters = [];
+        $apiFilters[] = Api::getFilter(self::TITLE_FILTER_NAME, Api::LIKE_CASE_INSENSITIVE_FILTER_OPERATOR, $titleFilterValue);
 
-        return Pagination::createPartialPaginator($this->getProjectDataList($filters, $options), $options);
+        return $this->getProjectDataList($currentPageNumber, $maxNumItemsPerPage, $apiFilters, $options);
     }
 
     /**
      * @throws ApiException
      */
-    private function getProjectDataList(array $filters, array $options): array
+    private function getProjectDataList(int $currentPageNumber, int $maxNumItemsPerPage, array $filters, array $options): array
     {
         $filters[] = self::getLanguageFilter($options);
 
-        $top = Pagination::getMaxNumItemsPerPage($options, self::DEFAULT_MAX_NUM_ITEMS_PER_PAGE);
-        $skip = Pagination::getCurrentPageStartIndex($options);
+        $maxNumItemsPerPage = min($maxNumItemsPerPage, self::MAX_NUM_ITEMS_PER_PAGE_MAX);
+        $top = $maxNumItemsPerPage;
+        $skip = Pagination::getPageStartIndex($currentPageNumber, $maxNumItemsPerPage);
 
+        $projectDataList = [];
         $uriTemplate = new UriTemplate('pl/rest/{service}/{?%24filter,%24top,%24skip,%24format}');
 
-        try {
-            $uri = (string) $uriTemplate->expand([
-                'service' => self::DATA_SERVICE,
-                '%24filter' => implode(';', $filters),
-                '%24top' => $top,
-                '%24skip' => $skip,
-                '%24format' => 'json',
-            ]);
-        } catch (UriException $exception) {
-            throw new ApiException('invalid URI format: '.$exception->getMessage());
-        }
+        while (true) {
+            try {
+                $uri = (string) $uriTemplate->expand([
+                    'service' => self::DATA_SERVICE,
+                    '%24filter' => implode(';', $filters),
+                    '%24top' => $top,
+                    '%24skip' => $skip,
+                    '%24format' => 'json',
+                ]);
+            } catch (UriException $exception) {
+                throw new ApiException('invalid URI format: '.$exception->getMessage());
+            }
 
-        $client = $this->connection->getClient();
-        try {
-            $response = $client->get($uri);
-        } catch (GuzzleException $exception) {
-            if ($exception instanceof RequestException) {
-                throw Tools::createResponseError($exception);
+            $client = $this->connection->getClient();
+            try {
+                $response = $client->get($uri);
+            } catch (GuzzleException $exception) {
+                if ($exception instanceof RequestException) {
+                    throw Tools::createResponseError($exception);
+                } else {
+                    throw new ApiException('http client error: '.$exception->getMessage());
+                }
+            }
+
+            $currentProjectDataList = $this->parseStudentDataResponse($response);
+            $numReturnedProjects = count($currentProjectDataList);
+            $projectDataList = array_merge($projectDataList, $currentProjectDataList);
+
+            // if the returned number is smaller than the requested number, we issue another request
+            // (but only for larger numbers in order to prevent the second request being issued every time the last (non-full) page is returned)
+            // assuming that CO max page size is larger. Tests showed that CO returned at least 2959 items at once.
+            if ($maxNumItemsPerPage > 250 && $numReturnedProjects > 0 && $numReturnedProjects < $maxNumItemsPerPage) {
+                $skip += $numReturnedProjects;
             } else {
-                throw new ApiException('http client error: '.$exception->getMessage());
+                break;
             }
         }
 
-        return $this->parseStudentDataResponse($response);
+        return $projectDataList;
     }
 
     /**
