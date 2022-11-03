@@ -56,6 +56,34 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
     }
 
     /**
+     * Returns a Paginator of OrganizationUnitData for the passed identifiers.
+     * The order of the response is undefined and might not match the order of
+     * the passed in identifiers.
+     *
+     * @param string[] $identifiers
+     *
+     * @throws ApiException
+     */
+    public function getOrganizationUnitsById(array $identifiers, array $options = []): Paginator
+    {
+        foreach ($identifiers as $identifier) {
+            if (strlen($identifier) === 0) {
+                throw new ApiException("identifier mustn't be empty");
+            }
+        }
+
+        $options[Filters::IDENTIFIERS_FILTER] = $identifiers;
+
+        $paginator = $this->getOrganizationUnitsInternal($options);
+        $orgUnitItems = $paginator->getItems();
+        if (count($orgUnitItems) !== count($identifiers)) {
+            throw new ApiException("response doesn't contain all requested organization units", 404, true);
+        }
+
+        return $paginator;
+    }
+
+    /**
      * @throws ApiException
      */
     public function getOrganizationUnits(array $options = []): Paginator

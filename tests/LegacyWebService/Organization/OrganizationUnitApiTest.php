@@ -94,6 +94,19 @@ class OrganizationUnitApiTest extends TestCase
         $this->assertSame('6351', $orgUnits[2]->getCode());
     }
 
+    public function testGetSomeOrganizations()
+    {
+        $this->mockResponses([
+            new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/co_orgunit_response_nested.xml')),
+        ]);
+        $api = $this->getOrgUnitApi();
+        $result = $api->getOrganizationUnitsById(['18452', '18454']);
+        $items = $result->getItems();
+        $this->assertCount(2, $items);
+        $this->assertSame($items[0]->getIdentifier(), '18454');
+        $this->assertSame($items[1]->getIdentifier(), '18452');
+    }
+
     /**
      * @throws ApiException
      */
