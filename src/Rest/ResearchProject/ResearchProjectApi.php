@@ -73,11 +73,12 @@ class ResearchProjectApi
      */
     public function getResearchProjects(int $currentPageNumber, int $maxNumItemsPerPage, array $filters = [], array $options = []): array
     {
-        $titleFilterValue = $filters[ResearchProjectData::TITLE_SEARCH_FILTER_NAME] ?? '';
-        $titleFilterValue = trim($titleFilterValue);
-
         $apiFilters = [];
-        $apiFilters[] = Api::getFilter(self::TITLE_FILTER_NAME, Api::LIKE_CASE_INSENSITIVE_FILTER_OPERATOR, $titleFilterValue);
+
+        if (($titleFilterValue = $filters[ResearchProjectData::TITLE_SEARCH_FILTER_NAME] ?? '') !== '') {
+            $titleFilterValue = trim($titleFilterValue);
+            $apiFilters[] = Api::getFilter(self::TITLE_FILTER_NAME, Api::LIKE_CASE_INSENSITIVE_FILTER_OPERATOR, $titleFilterValue);
+        }
 
         return $this->getProjectDataList($currentPageNumber, $maxNumItemsPerPage, $apiFilters, $options);
     }
