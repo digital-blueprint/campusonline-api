@@ -44,7 +44,7 @@ class RoomApiTest extends TestCase
         ]);
 
         // full pagination of all items
-        $paginator = $this->api->Room()->getRooms();
+        $paginator = $this->api->Room()->getRooms(['partialPagination' => false]);
         $this->assertTrue($paginator instanceof FullPaginator);
         $this->assertSame($paginator->getTotalNumItems(), 2);
         $this->assertCount(2, $paginator->getItems());
@@ -104,8 +104,8 @@ class RoomApiTest extends TestCase
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/rooms_response_1.xml')),
         ]);
 
-        // default full pagination of a page 1 with 1 item
-        $paginator = $this->api->Room()->getRooms(['perPage' => 1, 'page' => 1]);
+        // full pagination of a page 1 with 1 item
+        $paginator = $this->api->Room()->getRooms(['partialPagination' => false, 'perPage' => 1, 'page' => 1]);
         $this->assertTrue($paginator instanceof FullPaginator);
         $this->assertSame($paginator->getTotalNumItems(), 2);
         $this->assertSame($paginator->getCurrentPageNumber(), 1);
@@ -201,7 +201,7 @@ class RoomApiTest extends TestCase
         ]);
 
         // name search filter only with 1 match => 1 result
-        $paginator = $this->api->Room()->getRooms(['nameSearchFilter' => 'iee']);
+        $paginator = $this->api->Room()->getRooms(['partialPagination' => false, 'nameSearchFilter' => 'iee']);
         $this->assertTrue($paginator instanceof FullPaginator);
         $this->assertSame($paginator->getTotalNumItems(), 1);
         $this->assertCount(1, $paginator->getItems());
@@ -238,7 +238,7 @@ class RoomApiTest extends TestCase
         ]);
 
         // name filter only with no match => no results
-        $paginator = $this->api->Room()->getRooms(['nameSearchFilter' => 'not to be found']);
+        $paginator = $this->api->Room()->getRooms(['partialPagination' => false, 'nameSearchFilter' => 'not to be found']);
         $this->assertTrue($paginator instanceof FullPaginator);
         $this->assertSame($paginator->getTotalNumItems(), 0);
         $this->assertCount(0, $paginator->getItems());
@@ -248,7 +248,7 @@ class RoomApiTest extends TestCase
         ]);
 
         // no search filters => all results
-        $paginator = $this->api->Room()->getRooms(['nameSearchFilter' => '', 'additionalInfoSearchFilter' => '']);
+        $paginator = $this->api->Room()->getRooms(['partialPagination' => false, 'nameSearchFilter' => '', 'additionalInfoSearchFilter' => '']);
         $this->assertTrue($paginator instanceof FullPaginator);
         $this->assertSame($paginator->getTotalNumItems(), 2);
         $this->assertCount(2, $paginator->getItems());
@@ -258,7 +258,7 @@ class RoomApiTest extends TestCase
         ]);
 
         // name search filter with no match, additional info search filter with 1 match => 1 result
-        $paginator = $this->api->Room()->getRooms(['nameSearchFilter' => 'not to be found', 'additionalInfoSearchFilter' => 'NORD']);
+        $paginator = $this->api->Room()->getRooms(['partialPagination' => false, 'nameSearchFilter' => 'not to be found', 'additionalInfoSearchFilter' => 'NORD']);
         $this->assertTrue($paginator instanceof FullPaginator);
         $this->assertSame($paginator->getTotalNumItems(), 1);
         $this->assertCount(1, $paginator->getItems());

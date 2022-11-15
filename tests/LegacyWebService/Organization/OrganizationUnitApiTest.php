@@ -76,7 +76,7 @@ class OrganizationUnitApiTest extends TestCase
         $this->mockResponses([
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/co_orgunit_response_nested.xml')),
         ]);
-        $paginator = $this->getOrgUnitApi()->getOrganizationUnits(['en']);
+        $paginator = $this->getOrgUnitApi()->getOrganizationUnits(['partialPagination' => false, 'en']);
         $this->assertInstanceOf(FullPaginator::class, $paginator);
         $this->assertSame(3, $paginator->getTotalNumItems());
         $this->assertSame(3, $paginator->getMaxNumItemsPerPage());
@@ -115,7 +115,7 @@ class OrganizationUnitApiTest extends TestCase
         $this->mockResponses([
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/co_orgunit_response_nested.xml')),
         ]);
-        $paginator = $this->getOrgUnitApi()->getOrganizationUnits(['perPage' => 1, 'page' => 3]);
+        $paginator = $this->getOrgUnitApi()->getOrganizationUnits(['partialPagination' => false, 'perPage' => 1, 'page' => 3]);
         $this->assertInstanceOf(FullPaginator::class, $paginator);
         $this->assertSame(3, $paginator->getTotalNumItems());
         $this->assertSame(1, $paginator->getMaxNumItemsPerPage());

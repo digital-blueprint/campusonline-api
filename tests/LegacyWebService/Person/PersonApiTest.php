@@ -43,7 +43,7 @@ class PersonApiTest extends TestCase
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/co_students_by_course_response.xml')),
         ]);
 
-        $paginator = $this->api->Person()->getStudentsByCourse('276525');
+        $paginator = $this->api->Person()->getStudentsByCourse('276525', ['partialPagination' => false]);
         $this->assertInstanceOf(FullPaginator::class, $paginator);
         $this->assertSame(3, $paginator->getTotalNumItems());
         $this->assertSame(3, $paginator->getMaxNumItemsPerPage());
@@ -68,7 +68,7 @@ class PersonApiTest extends TestCase
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/co_students_by_course_response.xml')),
         ]);
 
-        $paginator = $this->api->Person()->getStudentsByCourse('276525', ['perPage' => 1, 'page' => 2]);
+        $paginator = $this->api->Person()->getStudentsByCourse('276525', ['partialPagination' => false, 'perPage' => 1, 'page' => 2]);
         $this->assertInstanceOf(FullPaginator::class, $paginator);
         $this->assertSame(3, $paginator->getTotalNumItems());
         $this->assertSame(1, $paginator->getMaxNumItemsPerPage());

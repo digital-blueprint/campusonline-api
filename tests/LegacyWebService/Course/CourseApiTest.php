@@ -43,7 +43,7 @@ class CourseApiTest extends TestCase
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/courses_by_organization_response.xml')),
         ]);
 
-        $paginator = $this->api->Course()->getCourses();
+        $paginator = $this->api->Course()->getCourses(['partialPagination' => false]);
         $this->assertInstanceOf(FullPaginator::class, $paginator);
         $this->assertSame(34, $paginator->getTotalNumItems());
         $this->assertSame(34, $paginator->getMaxNumItemsPerPage());
@@ -71,7 +71,7 @@ class CourseApiTest extends TestCase
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/courses_by_organization_response.xml')),
         ]);
 
-        $paginator = $this->api->Course()->getCourses(['perPage' => 30, 'page' => 2]);
+        $paginator = $this->api->Course()->getCourses(['partialPagination' => false, 'perPage' => 30, 'page' => 2]);
         $this->assertInstanceOf(FullPaginator::class, $paginator);
         $this->assertSame(34, $paginator->getTotalNumItems());
         $this->assertSame(30, $paginator->getMaxNumItemsPerPage());
@@ -204,7 +204,7 @@ class CourseApiTest extends TestCase
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/courses_by_organization_response.xml')),
         ]);
 
-        $paginator = $this->api->Course()->getCoursesByOrganization('abc');
+        $paginator = $this->api->Course()->getCoursesByOrganization('abc', ['partialPagination' => false]);
         $this->assertInstanceOf(FullPaginator::class, $paginator);
         $this->assertSame(34, $paginator->getTotalNumItems());
 
