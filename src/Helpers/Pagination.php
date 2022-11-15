@@ -6,11 +6,11 @@ namespace Dbp\CampusonlineApi\Helpers;
 
 class Pagination
 {
-    private const CURRENT_PAGE_NUMBER_PARAMETER_NAME = 'page';
-    private const MAX_NUM_ITEMS_PER_PAGE_PARAMETER_NAME = 'perPage';
-    private const IS_PARTIAL_PAGINATION_PARAMETER_NAME = 'partialPagination';
+    public const CURRENT_PAGE_NUMBER_PARAMETER_NAME = 'page';
+    public const MAX_NUM_ITEMS_PER_PAGE_PARAMETER_NAME = 'perPage';
+    public const IS_PARTIAL_PAGINATION_PARAMETER_NAME = 'partialPagination';
 
-    private const IS_PARTIAL_PAGINATION_DEFAULT = false;
+    private const IS_PARTIAL_PAGINATION_DEFAULT = true;
 
     public static function getPageStartIndex(int $pageNumber, int $maxNumItemsPerPage)
     {

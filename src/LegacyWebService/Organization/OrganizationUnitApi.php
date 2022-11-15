@@ -6,6 +6,7 @@ namespace Dbp\CampusonlineApi\LegacyWebService\Organization;
 
 use Dbp\CampusonlineApi\Helpers\Filters;
 use Dbp\CampusonlineApi\Helpers\Paginator;
+use Dbp\CampusonlineApi\LegacyWebService\Address\AddressData;
 use Dbp\CampusonlineApi\LegacyWebService\ApiException;
 use Dbp\CampusonlineApi\LegacyWebService\Connection;
 use Dbp\CampusonlineApi\LegacyWebService\ResourceApi;
@@ -117,6 +118,12 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
         $orgUnit->setCode($code);
         $orgUnit->setType($type);
         $orgUnit->setUrl($url);
+
+        $addressNode = $node->xpath('./contacts/contactData/adr')[0] ?? null;
+        $addressData = $addressNode !== null ? AddressData::fromSimpleXmlElement($addressNode) : null;
+        if ($addressData !== null) {
+            $orgUnit->setAddress($addressData);
+        }
 
         return $orgUnit;
     }

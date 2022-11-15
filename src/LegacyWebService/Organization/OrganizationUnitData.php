@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\LegacyWebService\Organization;
 
+use Dbp\CampusonlineApi\LegacyWebService\Address\AddressData;
 use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
 
 class OrganizationUnitData extends ResourceData
@@ -20,6 +21,9 @@ class OrganizationUnitData extends ResourceData
      * @var string
      */
     private $url;
+
+    /** @var AddressData */
+    private $address;
 
     public function getCode(): ?string
     {
@@ -49,5 +53,15 @@ class OrganizationUnitData extends ResourceData
     public function setUrl(string $url): void
     {
         $this->url = $url;
+    }
+
+    public function getAddress(): AddressData
+    {
+        return $this->address;
+    }
+
+    public function setAddress(AddressData $address): void
+    {
+        $this->address = $address;
     }
 }

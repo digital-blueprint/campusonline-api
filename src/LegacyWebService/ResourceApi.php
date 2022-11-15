@@ -156,7 +156,7 @@ abstract class ResourceApi
         return $identifier;
     }
 
-    protected static function getResourcePropertyOrEmptyString(SimpleXMLElement $node, string $xmlPath): string
+    public static function getResourcePropertyOrEmptyString(SimpleXMLElement $node, string $xmlPath): string
     {
         return trim((string) ($node->xpath($xmlPath)[0] ?? ''));
     }
