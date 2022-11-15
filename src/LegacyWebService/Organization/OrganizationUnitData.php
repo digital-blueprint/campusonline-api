@@ -22,7 +22,7 @@ class OrganizationUnitData extends ResourceData
      */
     private $url;
 
-    /** @var AddressData */
+    /** @var AddressData|null */
     private $address;
 
     public function getCode(): ?string
@@ -55,12 +55,12 @@ class OrganizationUnitData extends ResourceData
         $this->url = $url;
     }
 
-    public function getAddress(): AddressData
+    public function getAddress(): ?AddressData
     {
         return $this->address;
     }
 
-    public function setAddress(AddressData $address): void
+    public function setAddress(?AddressData $address): void
     {
         $this->address = $address;
     }
