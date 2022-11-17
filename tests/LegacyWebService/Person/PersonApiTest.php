@@ -34,6 +34,17 @@ class PersonApiTest extends TestCase
         $this->api->setClientHandler($stack);
     }
 
+    public function testCheckConnection()
+    {
+        $this->mockResponses([
+            new Response(400, ['Content-Type' => 'text/xml;charset=utf-8'], ''),
+            new Response(404, ['Content-Type' => 'text/xml;charset=utf-8'], ''),
+        ]);
+
+        $this->api->Person()->checkConnection();
+        $this->assertTrue(true);
+    }
+
     /**
      * @throws ApiException
      */

@@ -19,6 +19,7 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
     use LoggerAwareTrait;
 
     private const URI = 'ws/webservice_v1.0/rdm/rooms/xml';
+    private const ROOM_ID_PARAMETER_NAME = 'roomID';
 
     private const ROOM_RESOURCE_XML_PATH = './/cor:resource[@cor:typeID="room"]';
     private const ROOM_IDENTIFIER_XML_PATH = './cor:description/cor:attribute[@cor:attrID="roomID"]';
@@ -28,6 +29,15 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
     {
         parent::__construct($connection, $rootOrgUnitId,
             self::ROOM_RESOURCE_XML_PATH, self::ROOM_IDENTIFIER_XML_PATH);
+    }
+
+    public function checkConnection()
+    {
+        // To check if the API can respond with a proper error
+        $this->expectGetError(self::URI, [], 400);
+        // To check that the token is valid (otherwise we get 401)
+        // passing an empty ID results in all rooms getting returned, so we pass a non-existing one
+        $this->expectGetError(self::URI, [self::ROOM_ID_PARAMETER_NAME => uniqid('relay-health-check-')], 404);
     }
 
     /**
@@ -123,10 +133,5 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
     private static function getRoomAdditionalInfo(SimpleXMLElement $node): string
     {
         return self::getResourcePropertyOrEmptyString($node, './cor:description/cor:attribute[@cor:attrID="additionalInformation"]');
-    }
-
-    public function checkConnection()
-    {
-        // TODO: Implement checkConnection() method.
     }
 }
