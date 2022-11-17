@@ -27,6 +27,30 @@ abstract class ResourceApi
     }
 
     /**
+     * Check if the API responds with the given error for the given parameters.
+     * Useful for checkConnection().
+     */
+    protected function expectGetError(string $uri, array $parameters, int $statusCode): void
+    {
+        try {
+            // disable caching, so we don't get a stale response
+            $this->connection->get($uri, '', $parameters, false);
+        } catch (ApiException $e) {
+            if ($e->isHttpResponseCode() && $e->getCode() === $statusCode) {
+                return;
+            }
+            throw $e;
+        }
+        throw new \RuntimeException("Didn't respond with $statusCode as expected");
+    }
+
+    /**
+     * Tries to check if the service is reachable and the authorization works in a reasonable time.
+     * Will throw if the service isn't responding as expected.
+     */
+    abstract public function checkConnection(); // make sure this doesn't take long with lots of data provided by the API
+
+    /**
      * @throws ApiException
      */
     protected function getResourcesInternal(string $uri, array $parameters, array $options): Paginator

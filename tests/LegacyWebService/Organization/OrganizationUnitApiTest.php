@@ -56,6 +56,17 @@ class OrganizationUnitApiTest extends TestCase
         $this->assertSame('https://online.tugraz.at/tug_online/wborg.display?pOrgNr=2322', $org->getUrl());
     }
 
+    public function testCheckConnection()
+    {
+        $this->mockResponses([
+            new Response(400, ['Content-Type' => 'text/xml;charset=utf-8'], ''),
+            new Response(404, ['Content-Type' => 'text/xml;charset=utf-8'], ''),
+        ]);
+
+        $this->getOrgUnitApi()->checkConnection();
+        $this->assertTrue(true);
+    }
+
     /**
      * @throws ApiException
      */

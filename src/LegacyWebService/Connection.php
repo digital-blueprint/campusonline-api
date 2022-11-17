@@ -60,7 +60,7 @@ class Connection implements LoggerAwareInterface
      *
      * @throws ApiException
      */
-    public function get(string $uri, string $lang = '', array $parameters = []): string
+    public function get(string $uri, string $lang = '', array $parameters = [], bool $cache = true): string
     {
         try {
             $uri = $this->makeUri($uri, $lang, $parameters);
@@ -68,7 +68,7 @@ class Connection implements LoggerAwareInterface
             throw new ApiException('invalid uri or parameters: '.$uri);
         }
 
-        $client = $this->getClient();
+        $client = $this->getClient($cache);
         try {
             $response = $client->get($uri);
         } catch (GuzzleException $e) {
@@ -78,7 +78,7 @@ class Connection implements LoggerAwareInterface
         return (string) $response->getBody();
     }
 
-    private function getClient(): Client
+    private function getClient(bool $cache = true): Client
     {
         $base_uri = $this->baseUrl;
         if (substr($base_uri, -1) !== '/') {
@@ -90,7 +90,7 @@ class Connection implements LoggerAwareInterface
             $stack->push(Tools::createLoggerMiddleware($this->logger));
         }
 
-        if ($this->cachePool !== null) {
+        if ($this->cachePool !== null && $cache) {
             $cacheMiddleWare = new CacheMiddleware(
                 new GreedyCacheStrategy(
                     new Psr6CacheStorage($this->cachePool),

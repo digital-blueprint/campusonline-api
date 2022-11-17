@@ -29,6 +29,14 @@ class PersonApi extends ResourceApi implements LoggerAwareInterface
             self::PERSON_RESOURCE_XML_PATH, self::PERSON_IDENTIFIER_XML_PATH);
     }
 
+    public function checkConnection()
+    {
+        // To check if the API can respond with a proper error
+        $this->expectGetError(self::STUDENTS_BY_COURSE_URI, [], 400);
+        // To check that the token is valid (otherwise we get 401)
+        $this->expectGetError(self::STUDENTS_BY_COURSE_URI, [self::COURSE_ID_PARAMETER_NAME => ''], 404);
+    }
+
     /**
      * @throws ApiException
      */

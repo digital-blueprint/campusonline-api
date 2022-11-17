@@ -32,6 +32,14 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
             self::ORG_UNIT_RESOURCE_XML_PATH, self::ORG_UNIT_IDENTIFIER_XML_PATH);
     }
 
+    public function checkConnection()
+    {
+        // To check if the API can respond with a proper error
+        $this->expectGetError(self::URI, [], 400);
+        // To check that the token is valid (otherwise we get 401)
+        $this->expectGetError(self::URI, [self::ORG_UNIT_ID_PARAMETER_NAME => ''], 404);
+    }
+
     /**
      * CAUTION: Campusonline seems to return '401 Unauthorized' instead of '404 Not found' in case the given ID is not found.
      *
