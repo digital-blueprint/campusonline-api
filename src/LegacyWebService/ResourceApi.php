@@ -27,6 +27,12 @@ abstract class ResourceApi
     }
 
     /**
+     * Tries to check if the service is reachable and the authorization works in a reasonable time.
+     * Will throw if the service isn't responding as expected.
+     */
+    abstract public function checkConnection(); // make sure this doesn't take long with lots of data provided by the API
+
+    /**
      * @throws ApiException
      */
     protected function getResourcesInternal(string $uri, array $parameters, array $options): Paginator

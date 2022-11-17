@@ -33,6 +33,30 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
     }
 
     /**
+     * Check if the API responds with the given error for the given parameters.
+     */
+    private function expectError(array $parameters, int $statusCode): void
+    {
+        try {
+            $this->connection->get(self::URI, '', $parameters, false);
+        } catch (ApiException $e) {
+            if ($e->isHttpResponseCode() && $e->getCode() === $statusCode) {
+                return;
+            }
+            throw $e;
+        }
+        throw new \RuntimeException("Didn't respond with $statusCode as expected");
+    }
+
+    public function checkConnection()
+    {
+        // To check if the API can respond with a proper error
+        $this->expectError([], 400);
+        // To check that the token is valid (otherwise we get 401)
+        $this->expectError([self::ORG_UNIT_ID_PARAMETER_NAME => ''], 404);
+    }
+
+    /**
      * CAUTION: Campusonline seems to return '401 Unauthorized' instead of '404 Not found' in case the given ID is not found.
      *
      * @throws ApiException

@@ -100,4 +100,9 @@ class PersonApi extends ResourceApi implements LoggerAwareInterface
 
         return $person;
     }
+
+    public function checkConnection()
+    {
+        // TODO: Implement checkConnection() method.
+    }
 }

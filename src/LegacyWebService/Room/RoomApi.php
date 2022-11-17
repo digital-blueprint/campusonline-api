@@ -124,4 +124,9 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
     {
         return self::getResourcePropertyOrEmptyString($node, './cor:description/cor:attribute[@cor:attrID="additionalInformation"]');
     }
+
+    public function checkConnection()
+    {
+        // TODO: Implement checkConnection() method.
+    }
 }

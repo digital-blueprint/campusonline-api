@@ -171,4 +171,9 @@ class CourseApi extends ResourceApi implements LoggerAwareInterface
     {
         return self::getResourcePropertyOrEmptyString($node, self::COURSE_NAME_XML_PATH);
     }
+
+    public function checkConnection()
+    {
+        // TODO: Implement checkConnection() method.
+    }
 }
