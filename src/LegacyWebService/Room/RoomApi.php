@@ -18,7 +18,8 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    private const URI = 'ws/webservice_v1.0/rdm/rooms/xml';
+    private const COLLECTION_URI = 'ws/webservice_v1.0/rdm/rooms/xml';
+    private const ITEM_URI = 'ws/webservice_v1.0/rdm/room/xml';
     private const ROOM_ID_PARAMETER_NAME = 'roomID';
 
     private const ROOM_RESOURCE_XML_PATH = './/cor:resource[@cor:typeID="room"]';
@@ -34,10 +35,10 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
     public function checkConnection()
     {
         // To check if the API can respond with a proper error
-        $this->expectGetError(self::URI, [], 400);
+        // NOTE: room API returns 404 if no id is specified, where other APIs (course, organization, ...) return 400
+        $this->expectGetError(self::ITEM_URI, [], 404);
         // To check that the token is valid (otherwise we get 401)
-        // passing an empty ID results in all rooms getting returned, so we pass a non-existing one
-        $this->expectGetError(self::URI, [self::ROOM_ID_PARAMETER_NAME => uniqid('relay-health-check-')], 404);
+        $this->expectGetError(self::ITEM_URI, [self::ROOM_ID_PARAMETER_NAME => ''], 404);
     }
 
     /**
@@ -80,7 +81,7 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
         $parameters = [];
         $parameters[OrganizationUnitApi::ORG_UNIT_ID_PARAMETER_NAME] = $this->rootOrgUnitId;
 
-        return $this->getResourcesInternal(self::URI, $parameters, $options);
+        return $this->getResourcesInternal(self::COLLECTION_URI, $parameters, $options);
     }
 
     protected function createResource(SimpleXMLElement $node, string $identifier): object

@@ -73,4 +73,20 @@ class Api implements LoggerAwareInterface
 
         return $filterName.$operatorString.Tools::validateFilterValue($filterValue);
     }
+
+    /**
+     * Check if the API responds with the given HTTP response code.
+     * Useful for checkConnection().
+     */
+    public static function expectApiException(callable $apiCall, int $expectedHttpResponseCode): void
+    {
+        try {
+            $apiCall();
+        } catch (ApiException $e) {
+            if ($e->isHttpResponseCode() && $e->getCode() === $expectedHttpResponseCode) {
+                return;
+            }
+        }
+        throw new \RuntimeException("Didn't respond with $expectedHttpResponseCode as expected");
+    }
 }

@@ -1,0 +1,8 @@
+{ "type": "resources", "link": [  ]
+
+, "resource": [ 
+{ "link": [  ]
+, "content": { "type": "model-CO_LOC_DS.API_PROJEKTE", "API_PROJEKTE": { "ID": "F10427", "TITEL": "Topographic and thematic maps for high mountain regions", "BESCHREIBUNG": "This is a test description", "BEGINN": { "value": "1994-01-01" }, "ENDE": { "value": "1996-01-31" }, "SPRACHE": "EN" } } }
+ ]
+
+ }

@@ -36,8 +36,9 @@ class RoomApiTest extends TestCase
 
     public function testCheckConnection()
     {
+        // NOTE: room API returns 404 if no id is specified, where other APIs (course, organization, ...) return 400
         $this->mockResponses([
-            new Response(400, ['Content-Type' => 'text/xml;charset=utf-8'], ''),
+            new Response(404, ['Content-Type' => 'text/xml;charset=utf-8'], ''),
             new Response(404, ['Content-Type' => 'text/xml;charset=utf-8'], ''),
         ]);
 

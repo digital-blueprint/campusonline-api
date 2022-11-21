@@ -79,7 +79,7 @@ class Tools
             $coErrorDto = $json['resource'][0]['content']['coErrorDto'];
             $message = $coErrorDto['errorType'].'['.$coErrorDto['httpCode'].']: '.$coErrorDto['message'];
 
-            return new ApiException($message);
+            return new ApiException($message, intval($coErrorDto['httpCode']), true);
         } else {
             return new ApiException($json['type']);
         }

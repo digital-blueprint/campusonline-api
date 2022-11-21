@@ -54,6 +54,16 @@ class ResearchProjectApi
     }
 
     /**
+     * @throws \Exception
+     */
+    public function checkConnection(): void
+    {
+        $this->getResearchProject(uniqid('relay-health-check-'));
+    }
+
+    /**
+     * Returns the ResearchProject resource with the given $identifier or null, if not found (i.e. DOES NOT THROW 404 error).
+     *
      * @throws ApiException
      */
     public function getResearchProject(string $identifier, array $options = []): ?ResearchProjectData
@@ -144,6 +154,9 @@ class ResearchProjectApi
     private function parseStudentDataResponse(ResponseInterface $response): array
     {
         $content = (string) $response->getBody();
+
+        file_put_contents('research_project_api_response.json', $content);
+
         try {
             $json = Tools::decodeJSON($content, true);
         } catch (\JsonException $exception) {
