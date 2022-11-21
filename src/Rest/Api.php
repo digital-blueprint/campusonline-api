@@ -16,6 +16,7 @@ class Api implements LoggerAwareInterface
     public const EQUALS_FILTER_OPERATOR = 1;
     public const LIKE_CASE_INSENSITIVE_FILTER_OPERATOR = 2;
 
+    /** @var Connection */
     private $connection;
 
     public function __construct($baseUrl, $clientId, $clientSecret)
@@ -26,6 +27,11 @@ class Api implements LoggerAwareInterface
     public function setLogger(LoggerInterface $logger): void
     {
         $this->connection->setLogger($logger);
+    }
+
+    public function setClientHandler(?object $handler)
+    {
+        $this->connection->setClientHandler($handler);
     }
 
     public function getConnection(): Connection

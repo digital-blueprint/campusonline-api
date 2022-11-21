@@ -155,8 +155,6 @@ class ResearchProjectApi
     {
         $content = (string) $response->getBody();
 
-        file_put_contents('research_project_api_response.json', $content);
-
         try {
             $json = Tools::decodeJSON($content, true);
         } catch (\JsonException $exception) {
