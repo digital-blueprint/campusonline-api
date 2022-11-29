@@ -115,17 +115,31 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
 
     protected function createResource(SimpleXMLElement $node, string $identifier): object
     {
-        $name = $this->getResourceName($node);
-        $code = self::getResourcePropertyOrEmptyString($node, './orgUnitCode');
-        $type = self::getResourcePropertyOrEmptyString($node, './orgUnitKind/subBlock');
-        $url = self::getResourcePropertyOrEmptyString($node, './infoBlock/webLink/href');
-
         $orgUnit = new OrganizationUnitData();
         $orgUnit->setIdentifier($identifier);
+
+        $name = $this->getResourceName($node);
         $orgUnit->setName($name);
-        $orgUnit->setCode($code);
-        $orgUnit->setType($type);
-        $orgUnit->setUrl($url);
+
+        $codeNode = $node->xpath('./orgUnitCode');
+        if ($codeNode) {
+            $orgUnit->setCode((string) $codeNode[0]);
+        }
+
+        $kindNameNode = $node->xpath('./orgUnitKind/subBlock[@userDefined="name"]');
+        if ($kindNameNode) {
+            $orgUnit->setKindName((string) $kindNameNode[0]);
+        }
+
+        $kindCodeNode = $node->xpath('./orgUnitKind/subBlock[@userDefined="codeDesignation"]');
+        if ($kindCodeNode) {
+            $orgUnit->setKindCode((string) $kindCodeNode[0]);
+        }
+
+        $urlNode = $node->xpath('./infoBlock/webLink/href');
+        if ($codeNode) {
+            $orgUnit->setUrl((string) $urlNode[0]);
+        }
 
         $addressNode = $node->xpath('./contacts/contactData/adr')[0] ?? null;
         $addressData = $addressNode !== null ? AddressData::fromSimpleXmlElement($addressNode) : null;

@@ -12,9 +12,6 @@ class OrganizationUnitData extends ResourceData
     /** @var string */
     private $code;
 
-    /** @var string */
-    private $type;
-
     /**
      * @ApiProperty(iri="https://schema.org/url")
      *
@@ -25,6 +22,20 @@ class OrganizationUnitData extends ResourceData
     /** @var AddressData|null */
     private $address;
 
+    /**
+     * An ID for the organization kind.
+     *
+     * @var ?string
+     */
+    private $kindCode;
+
+    /**
+     * The translated display name of the organization kind.
+     *
+     * @var ?string
+     */
+    private $kindName;
+
     public function getCode(): ?string
     {
         return $this->code;
@@ -33,16 +44,6 @@ class OrganizationUnitData extends ResourceData
     public function setCode(string $code): void
     {
         $this->code = $code;
-    }
-
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): void
-    {
-        $this->type = $type;
     }
 
     public function getUrl(): ?string
@@ -63,5 +64,25 @@ class OrganizationUnitData extends ResourceData
     public function setAddress(?AddressData $address): void
     {
         $this->address = $address;
+    }
+
+    public function getKindCode(): ?string
+    {
+        return $this->kindCode;
+    }
+
+    public function setKindCode(string $kindCode): void
+    {
+        $this->kindCode = $kindCode;
+    }
+
+    public function getKindName(): ?string
+    {
+        return $this->kindName;
+    }
+
+    public function setKindName(string $kindName): void
+    {
+        $this->kindName = $kindName;
     }
 }

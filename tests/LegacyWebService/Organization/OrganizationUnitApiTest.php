@@ -54,6 +54,8 @@ class OrganizationUnitApiTest extends TestCase
         $this->assertSame('Institute of Fundamentals and Theory in Electrical  Engineering', $org->getName());
         $this->assertSame('4370', $org->getCode());
         $this->assertSame('https://online.tugraz.at/tug_online/wborg.display?pOrgNr=2322', $org->getUrl());
+        $this->assertSame('INSTITUT', $org->getKindCode());
+        $this->assertSame('Institute', $org->getKindName());
     }
 
     public function testCheckConnection()
