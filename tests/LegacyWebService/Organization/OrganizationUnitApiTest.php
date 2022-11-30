@@ -57,6 +57,8 @@ class OrganizationUnitApiTest extends TestCase
         $this->assertSame('Graz', $org->getLocality());
         $this->assertSame('8010', $org->getPostalCode());
         $this->assertSame('AT', $org->getCountry());
+        $this->assertSame('INSTITUT', $org->getKindCode());
+        $this->assertSame('Institute', $org->getKindName());
 
         $this->assertSame('2322', $org->getData()[ResourceData::IDENTIFIER_ATTRIBUTE]);
         $this->assertSame('Institute of Fundamentals and Theory in Electrical  Engineering', $org->getData()[ResourceData::NAME_ATTRIBUTE]);

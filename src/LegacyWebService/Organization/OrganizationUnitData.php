@@ -85,4 +85,24 @@ class OrganizationUnitData extends ResourceData
     {
         $this->data[self::COUNTRY_ATTRIBUTE] = $country;
     }
+
+    public function getKindCode(): ?string
+    {
+        return $this->kindCode;
+    }
+
+    public function setKindCode(string $kindCode): void
+    {
+        $this->kindCode = $kindCode;
+    }
+
+    public function getKindName(): ?string
+    {
+        return $this->kindName;
+    }
+
+    public function setKindName(string $kindName): void
+    {
+        $this->kindName = $kindName;
+    }
 }
