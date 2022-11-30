@@ -119,26 +119,10 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
 
         $name = $this->getResourceName($node);
         $orgUnit->setName($name);
-
-        $codeNode = $node->xpath('./orgUnitCode');
-        if ($codeNode) {
-            $orgUnit->setCode((string) $codeNode[0]);
-        }
-
-        $kindNameNode = $node->xpath('./orgUnitKind/subBlock[@userDefined="name"]');
-        if ($kindNameNode) {
-            $orgUnit->setKindName((string) $kindNameNode[0]);
-        }
-
-        $kindCodeNode = $node->xpath('./orgUnitKind/subBlock[@userDefined="codeDesignation"]');
-        if ($kindCodeNode) {
-            $orgUnit->setKindCode((string) $kindCodeNode[0]);
-        }
-
-        $urlNode = $node->xpath('./infoBlock/webLink/href');
-        if ($codeNode) {
-            $orgUnit->setUrl((string) $urlNode[0]);
-        }
+        $orgUnit->setCode(ResourceApi::getResourcePropertyOrEmptyString($node, './orgUnitCode'));
+        $orgUnit->setKindName(ResourceApi::getResourcePropertyOrEmptyString($node, './orgUnitKind/subBlock[@userDefined="name"]'));
+        $orgUnit->setKindCode(ResourceApi::getResourcePropertyOrEmptyString($node, './orgUnitKind/subBlock[@userDefined="codeDesignation"]'));
+        $orgUnit->setUrl(ResourceApi::getResourcePropertyOrEmptyString($node, './infoBlock/webLink/href'));
 
         $addressNode = $node->xpath('./contacts/contactData/adr')[0] ?? null;
         $orgUnit->setStreet($addressNode ? ResourceApi::getResourcePropertyOrEmptyString($addressNode, './street') : '');

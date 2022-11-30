@@ -68,6 +68,8 @@ class OrganizationUnitApiTest extends TestCase
         $this->assertSame('Graz', $org->getData()[OrganizationUnitData::LOCALITY_ATTRIBUTE]);
         $this->assertSame('8010', $org->getData()[OrganizationUnitData::POSTAL_CODE_ATTRIBUTE]);
         $this->assertSame('AT', $org->getData()[OrganizationUnitData::COUNTRY_ATTRIBUTE]);
+        $this->assertSame('INSTITUT', $org->getData()[OrganizationUnitData::KIND_CODE_ATTRIBUTE]);
+        $this->assertSame('Institute', $org->getData()[OrganizationUnitData::KIND_NAME_ATTRIBUTE]);
     }
 
     public function testCheckConnection()

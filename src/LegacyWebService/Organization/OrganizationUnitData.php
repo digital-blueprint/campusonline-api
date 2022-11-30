@@ -15,6 +15,8 @@ class OrganizationUnitData extends ResourceData
     public const LOCALITY_ATTRIBUTE = 'addressLocality';
     public const POSTAL_CODE_ATTRIBUTE = 'postalCode';
     public const COUNTRY_ATTRIBUTE = 'addressCountry';
+    public const KIND_NAME_ATTRIBUTE = 'kindName';
+    public const KIND_CODE_ATTRIBUTE = 'kindCode';
 
     public function getCode(): string
     {
@@ -86,23 +88,23 @@ class OrganizationUnitData extends ResourceData
         $this->data[self::COUNTRY_ATTRIBUTE] = $country;
     }
 
-    public function getKindCode(): ?string
+    public function getKindCode(): string
     {
-        return $this->kindCode;
+        return $this->data[self::KIND_CODE_ATTRIBUTE];
     }
 
     public function setKindCode(string $kindCode): void
     {
-        $this->kindCode = $kindCode;
+        $this->data[self::KIND_CODE_ATTRIBUTE] = $kindCode;
     }
 
-    public function getKindName(): ?string
+    public function getKindName(): string
     {
-        return $this->kindName;
+        return $this->data[self::KIND_NAME_ATTRIBUTE];
     }
 
     public function setKindName(string $kindName): void
     {
-        $this->kindName = $kindName;
+        $this->data[self::KIND_NAME_ATTRIBUTE] = $kindName;
     }
 }
