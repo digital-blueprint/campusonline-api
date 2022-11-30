@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\Tests\LegacyWebService\Course;
 
-use Dbp\CampusonlineApi\Helpers\FullPaginator;
-use Dbp\CampusonlineApi\Helpers\PartialPaginator;
+use Dbp\CampusonlineApi\Helpers\Page;
 use Dbp\CampusonlineApi\LegacyWebService\Api;
 use Dbp\CampusonlineApi\LegacyWebService\ApiException;
+use Dbp\CampusonlineApi\LegacyWebService\Course\CourseData;
+use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -54,13 +55,12 @@ class CourseApiTest extends TestCase
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/courses_by_organization_response.xml')),
         ]);
 
-        $paginator = $this->api->Course()->getCourses(['partialPagination' => false]);
-        $this->assertInstanceOf(FullPaginator::class, $paginator);
-        $this->assertSame(34, $paginator->getTotalNumItems());
-        $this->assertSame(34, $paginator->getMaxNumItemsPerPage());
-        $this->assertSame(1, $paginator->getCurrentPageNumber());
+        $page = $this->api->Course()->getCourses(['partialPagination' => false]);
+        $this->assertInstanceOf(Page::class, $page);
+        $this->assertSame(34, $page->getMaxNumItemsPerPage());
+        $this->assertSame(1, $page->getCurrentPageNumber());
 
-        $courses = $paginator->getItems();
+        $courses = $page->getItems();
         $this->assertCount(34, $courses);
         $course = $courses[0];
 
@@ -71,6 +71,14 @@ class CourseApiTest extends TestCase
         $this->assertSame('VO', $course->getType());
         $this->assertSame('', $course->getDescription());
         $this->assertSame(2.0, $course->getNumberOfCredits());
+
+        $this->assertSame('241333', $course->getData()[ResourceData::IDENTIFIER_ATTRIBUTE]);
+        $this->assertSame('Technische Informatik 1', $course->getData()[ResourceData::NAME_ATTRIBUTE]);
+        $this->assertSame('german', $course->getData()[CourseData::LANGUAGE_ATTRIBUTE]);
+        $this->assertSame('448001', $course->getData()[CourseData::CODE_ATTRIBUTE]);
+        $this->assertSame('VO', $course->getData()[CourseData::TYPE_ATTRIBUTE]);
+        $this->assertSame('', $course->getData()[CourseData::DESCRIPTION_ATTRIBUTE]);
+        $this->assertSame(2.0, $course->getData()[CourseData::NUMBER_OF_CREDITS_ATTRIBUTE]);
     }
 
     /**
@@ -82,40 +90,12 @@ class CourseApiTest extends TestCase
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/courses_by_organization_response.xml')),
         ]);
 
-        $paginator = $this->api->Course()->getCourses(['partialPagination' => false, 'perPage' => 30, 'page' => 2]);
-        $this->assertInstanceOf(FullPaginator::class, $paginator);
-        $this->assertSame(34, $paginator->getTotalNumItems());
-        $this->assertSame(30, $paginator->getMaxNumItemsPerPage());
-        $this->assertSame(2, $paginator->getCurrentPageNumber());
+        $page = $this->api->Course()->getCourses(['perPage' => 30, 'page' => 2]);
+        $this->assertInstanceOf(Page::class, $page);
+        $this->assertSame(30, $page->getMaxNumItemsPerPage());
+        $this->assertSame(2, $page->getCurrentPageNumber());
 
-        $courses = $paginator->getItems();
-        $this->assertCount(4, $courses);
-        $course = $courses[0];
-
-        $this->assertSame('238147', $course->getIdentifier());
-        $this->assertSame('AK Embedded Automotive Systems', $course->getName());
-        $this->assertSame('german', $course->getLanguage());
-        $this->assertSame('448112', $course->getCode());
-        $this->assertSame('PV', $course->getType());
-        $this->assertSame('', $course->getDescription());
-        $this->assertSame(2.0, $course->getNumberOfCredits());
-    }
-
-    /**
-     * @throws ApiException
-     */
-    public function testGetCoursesPartialPagination()
-    {
-        $this->mockResponses([
-            new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/courses_by_organization_response.xml')),
-        ]);
-
-        $paginator = $this->api->Course()->getCourses(['partialPagination' => true, 'perPage' => 30, 'page' => 2]);
-        $this->assertInstanceOf(PartialPaginator::class, $paginator);
-        $this->assertSame(30, $paginator->getMaxNumItemsPerPage());
-        $this->assertSame(2, $paginator->getCurrentPageNumber());
-
-        $courses = $paginator->getItems();
+        $courses = $page->getItems();
         $this->assertCount(4, $courses);
         $course = $courses[0];
 
@@ -215,11 +195,10 @@ class CourseApiTest extends TestCase
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/courses_by_organization_response.xml')),
         ]);
 
-        $paginator = $this->api->Course()->getCoursesByOrganization('abc', ['partialPagination' => false]);
-        $this->assertInstanceOf(FullPaginator::class, $paginator);
-        $this->assertSame(34, $paginator->getTotalNumItems());
+        $page = $this->api->Course()->getCoursesByOrganization('abc');
+        $this->assertInstanceOf(Page::class, $page);
 
-        $course = $paginator->getItems()[0];
+        $course = $page->getItems()[0];
         $this->assertSame('241333', $course->getIdentifier());
         $this->assertSame('Technische Informatik 1', $course->getName());
         $this->assertSame('german', $course->getLanguage());

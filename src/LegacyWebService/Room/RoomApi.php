@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\LegacyWebService\Room;
 
 use Dbp\CampusonlineApi\Helpers\Filters;
-use Dbp\CampusonlineApi\Helpers\Paginator;
+use Dbp\CampusonlineApi\Helpers\Page;
 use Dbp\CampusonlineApi\LegacyWebService\ApiException;
 use Dbp\CampusonlineApi\LegacyWebService\Connection;
 use Dbp\CampusonlineApi\LegacyWebService\Organization\OrganizationUnitApi;
@@ -18,10 +18,12 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
+    /** Request attributes: */
     private const COLLECTION_URI = 'ws/webservice_v1.0/rdm/rooms/xml';
     private const ITEM_URI = 'ws/webservice_v1.0/rdm/room/xml';
     private const ROOM_ID_PARAMETER_NAME = 'roomID';
 
+    /** Response attributes: */
     private const ROOM_RESOURCE_XML_PATH = './/cor:resource[@cor:typeID="room"]';
     private const ROOM_IDENTIFIER_XML_PATH = './cor:description/cor:attribute[@cor:attrID="roomID"]';
     private const ROOM_NAME_XML_PATH = './cor:description/cor:attribute[@cor:attrID="roomCode"]';
@@ -66,7 +68,7 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
     /**
      * @throws ApiException
      */
-    public function getRooms(array $options = []): Paginator
+    public function getRooms(array $options = []): Page
     {
         return $this->getRoomsInternal($options);
     }
@@ -76,7 +78,7 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
      *
      * @throws ApiException
      */
-    private function getRoomsInternal(array $options): Paginator
+    private function getRoomsInternal(array $options): Page
     {
         $parameters = [];
         $parameters[OrganizationUnitApi::ORG_UNIT_ID_PARAMETER_NAME] = $this->rootOrgUnitId;

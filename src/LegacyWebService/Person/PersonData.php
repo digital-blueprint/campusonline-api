@@ -4,65 +4,64 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\LegacyWebService\Person;
 
+use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
+
 class PersonData
 {
-    /**
-     * @var string
-     */
-    private $identifier;
+    public const GIVEN_NAME_ATTRIBUTE = 'givenName';
+    public const FAMILY_NAME_ATTRIBUTE = 'familyName';
+    public const EMAIL_ATTRIBUTE = 'email';
 
-    /**
-     * @var string
-     */
-    private $givenName;
+    /** @var array */
+    private $data;
 
-    /**
-     * @var string
-     */
-    private $familyName;
+    public function __construct()
+    {
+        $this->data = [];
+    }
 
-    /**
-     * @var string
-     */
-    private $email;
+    public function getData(): array
+    {
+        return $this->data;
+    }
 
     public function setIdentifier(string $identifier): void
     {
-        $this->identifier = $identifier;
+        $this->data[ResourceData::IDENTIFIER_ATTRIBUTE] = $identifier;
     }
 
-    public function getIdentifier(): ?string
+    public function getIdentifier(): string
     {
-        return $this->identifier;
+        return $this->data[ResourceData::IDENTIFIER_ATTRIBUTE];
     }
 
-    public function getGivenName(): ?string
+    public function getGivenName(): string
     {
-        return $this->givenName;
+        return $this->data[self::GIVEN_NAME_ATTRIBUTE];
     }
 
     public function setGivenName(string $givenName): void
     {
-        $this->givenName = $givenName;
+        $this->data[self::GIVEN_NAME_ATTRIBUTE] = $givenName;
     }
 
-    public function getFamilyName(): ?string
+    public function getFamilyName(): string
     {
-        return $this->familyName;
+        return $this->data[self::FAMILY_NAME_ATTRIBUTE];
     }
 
     public function setFamilyName(string $familyName): void
     {
-        $this->familyName = $familyName;
+        $this->data[self::FAMILY_NAME_ATTRIBUTE] = $familyName;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
-        return $this->email;
+        return $this->data[self::EMAIL_ATTRIBUTE];
     }
 
     public function setEmail(string $email): void
     {
-        $this->email = $email;
+        $this->data[self::EMAIL_ATTRIBUTE] = $email;
     }
 }

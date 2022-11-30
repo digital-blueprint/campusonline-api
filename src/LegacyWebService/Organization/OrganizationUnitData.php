@@ -4,64 +4,85 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\LegacyWebService\Organization;
 
-use Dbp\CampusonlineApi\LegacyWebService\Address\AddressData;
 use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
 
 class OrganizationUnitData extends ResourceData
 {
-    /** @var string */
-    private $code;
+    public const CODE_ATTRIBUTE = 'code';
+    public const TYPE_ATTRIBUTE = 'type';
+    public const URL_ATTRIBUTE = 'url';
+    public const STREET_ATTRIBUTE = 'streetAddress';
+    public const LOCALITY_ATTRIBUTE = 'addressLocality';
+    public const POSTAL_CODE_ATTRIBUTE = 'postalCode';
+    public const COUNTRY_ATTRIBUTE = 'addressCountry';
 
-    /** @var string */
-    private $type;
-
-    /**
-     * @ApiProperty(iri="https://schema.org/url")
-     *
-     * @var string
-     */
-    private $url;
-
-    /** @var AddressData|null */
-    private $address;
-
-    public function getCode(): ?string
+    public function getCode(): string
     {
-        return $this->code;
+        return $this->data[self::CODE_ATTRIBUTE];
     }
 
     public function setCode(string $code): void
     {
-        $this->code = $code;
+        $this->data[self::CODE_ATTRIBUTE] = $code;
     }
 
-    public function getType(): ?string
+    public function getType(): string
     {
-        return $this->type;
+        return $this->data[self::TYPE_ATTRIBUTE];
     }
 
     public function setType(string $type): void
     {
-        $this->type = $type;
+        $this->data[self::TYPE_ATTRIBUTE] = $type;
     }
 
-    public function getUrl(): ?string
+    public function getUrl(): string
     {
-        return $this->url;
+        return $this->data[self::URL_ATTRIBUTE];
     }
 
     public function setUrl(string $url): void
     {
-        $this->url = $url;
+        $this->data[self::URL_ATTRIBUTE] = $url;
     }
 
-    public function getAddress(): ?AddressData
+    public function getStreet(): string
     {
-        return $this->address;
+        return $this->data[self::STREET_ATTRIBUTE];
     }
 
-    public function setAddress(?AddressData $address): void
+    public function setStreet(string $street): void
     {
-        $this->address = $address;
+        $this->data[self::STREET_ATTRIBUTE] = $street;
+    }
+
+    public function getLocality(): string
+    {
+        return $this->data[self::LOCALITY_ATTRIBUTE];
+    }
+
+    public function setLocality(string $locality): void
+    {
+        $this->data[self::LOCALITY_ATTRIBUTE] = $locality;
+    }
+
+    public function getPostalCode(): string
+    {
+        return $this->data[self::POSTAL_CODE_ATTRIBUTE];
+    }
+
+    public function setPostalCode(string $postalCode): void
+    {
+        $this->data[self::POSTAL_CODE_ATTRIBUTE] = $postalCode;
+    }
+
+    public function getCountry(): string
+    {
+        return $this->data[self::COUNTRY_ATTRIBUTE];
+    }
+
+    public function setCountry(string $country): void
+    {
+        $this->data[self::COUNTRY_ATTRIBUTE] = $country;
     }
 }

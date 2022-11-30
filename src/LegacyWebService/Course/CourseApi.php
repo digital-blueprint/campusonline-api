@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\LegacyWebService\Course;
 
 use Dbp\CampusonlineApi\Helpers\Filters;
+use Dbp\CampusonlineApi\Helpers\Page;
 use Dbp\CampusonlineApi\Helpers\Pagination;
-use Dbp\CampusonlineApi\Helpers\Paginator;
 use Dbp\CampusonlineApi\LegacyWebService\ApiException;
 use Dbp\CampusonlineApi\LegacyWebService\Connection;
 use Dbp\CampusonlineApi\LegacyWebService\Organization\OrganizationUnitApi;
@@ -20,8 +20,8 @@ class CourseApi extends ResourceApi implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
+    // Request attributes:
     public const TERM_OPTION_NAME = 'term';
-
     private const COURSE_BY_ID_URI = 'ws/webservice_v1.0/cdm/course/xml';
     private const COURSES_BY_ORGANIZATION_URI = 'ws/webservice_v1.0/cdm/organization/courses/xml';
     private const COURSES_BY_PERSON_URI = 'ws/webservice_v1.0/cdm/person/courses/xml';
@@ -31,6 +31,7 @@ class CourseApi extends ResourceApi implements LoggerAwareInterface
     private const TEACHING_TERM_WINTER = 'W';
     private const TEACHING_TERM_SUMMER = 'S';
 
+    // Response attributes:
     private const COURSE_RESOURCE_XML_PATH = '//course';
     private const COURSE_IDENTIFIER_XML_PATH = './courseID';
     private const COURSE_NAME_XML_PATH = './courseName/text';
@@ -76,7 +77,7 @@ class CourseApi extends ResourceApi implements LoggerAwareInterface
     /**
      * @throws ApiException
      */
-    public function getCourses(array $options = []): Paginator
+    public function getCourses(array $options = []): Page
     {
         return $this->getCoursesByOrganizationInternal($this->rootOrgUnitId, $options);
     }
@@ -84,7 +85,7 @@ class CourseApi extends ResourceApi implements LoggerAwareInterface
     /**
      * @throws ApiException
      */
-    public function getCoursesByOrganization(string $orgUnitId, array $options = []): Paginator
+    public function getCoursesByOrganization(string $orgUnitId, array $options = []): Page
     {
         return $this->getCoursesByOrganizationInternal($orgUnitId, $options);
     }
@@ -92,10 +93,10 @@ class CourseApi extends ResourceApi implements LoggerAwareInterface
     /**
      * @throws ApiException
      */
-    public function getCoursesByLecturer(string $lecturerId, array $options = []): Paginator
+    public function getCoursesByLecturer(string $lecturerId, array $options = []): Page
     {
         if (strlen($lecturerId) === 0) {
-            return Pagination::createEmptyPaginator($options);
+            return Pagination::createEmptyPage($options);
         }
 
         $parameters = [];
@@ -107,10 +108,10 @@ class CourseApi extends ResourceApi implements LoggerAwareInterface
     /**
      * @throws ApiException
      */
-    private function getCoursesByOrganizationInternal(string $orgUnitId, array $options): Paginator
+    private function getCoursesByOrganizationInternal(string $orgUnitId, array $options): Page
     {
         if (strlen($orgUnitId) === 0) {
-            return Pagination::createEmptyPaginator($options);
+            return Pagination::createEmptyPage($options);
         }
 
         $parameters = [];
@@ -122,7 +123,7 @@ class CourseApi extends ResourceApi implements LoggerAwareInterface
     /**
      * @throws ApiException
      */
-    private function getCoursesInternal(string $uri, array $parameters, array $options): Paginator
+    private function getCoursesInternal(string $uri, array $parameters, array $options): Page
     {
         $teachingTerm = $options[self::TERM_OPTION_NAME] ?? null;
         if ($teachingTerm === self::TEACHING_TERM_WINTER || $teachingTerm === self::TEACHING_TERM_SUMMER) {

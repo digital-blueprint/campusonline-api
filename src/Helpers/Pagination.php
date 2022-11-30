@@ -8,9 +8,6 @@ class Pagination
 {
     public const CURRENT_PAGE_NUMBER_PARAMETER_NAME = 'page';
     public const MAX_NUM_ITEMS_PER_PAGE_PARAMETER_NAME = 'perPage';
-    public const IS_PARTIAL_PAGINATION_PARAMETER_NAME = 'partialPagination';
-
-    private const IS_PARTIAL_PAGINATION_DEFAULT = true;
 
     public static function getPageStartIndex(int $pageNumber, int $maxNumItemsPerPage)
     {
@@ -46,54 +43,25 @@ class Pagination
         return self::getMaxNumItemsPerPageInternal($options) ?? $default;
     }
 
-    public static function isPartial(array $options): bool
-    {
-        return $options[self::IS_PARTIAL_PAGINATION_PARAMETER_NAME] ?? self::IS_PARTIAL_PAGINATION_DEFAULT;
-    }
-
     /**
      * If num items per page is not provided, we use the total number of items.
      */
-    public static function createEmptyPaginator(array $options): FullPaginator
+    public static function createEmptyPage(array $options): Page
     {
         $numItemsPerPage = self::getMaxNumItemsPerPage($options, 0);
 
-        return new FullPaginator([], 1, $numItemsPerPage, 0);
-    }
-
-    /**
-     * If num items per page is not provided, we use the total number of items.
-     */
-    public static function createFullPaginator(array $pageItems, int $totalNumItems, array $options): FullPaginator
-    {
-        $currentPageNum = self::getCurrentPageNumberInternal($options);
-        $numItemsPerPage = self::getMaxNumItemsPerPage($options, $totalNumItems);
-
-        return new FullPaginator($pageItems, $currentPageNum, $numItemsPerPage, $totalNumItems);
-    }
-
-    /**
-     * If num items per page is not provided, we use the total number of items.
-     */
-    public static function createPaginatorFromWholeResult(array $wholeResultItems, array $options): FullPaginator
-    {
-        $totalNumItems = count($wholeResultItems);
-        $numItemsPerPage = self::getMaxNumItemsPerPage($options, $totalNumItems);
-
-        $pageItems = array_slice($wholeResultItems, Pagination::getCurrentPageStartIndex($options), $numItemsPerPage);
-
-        return Pagination::createFullPaginator($pageItems, $totalNumItems, $options);
+        return new Page([], 1, $numItemsPerPage);
     }
 
     /**
      * If num items per page is not provided, we use the total number of result items.
      */
-    public static function createPartialPaginator(array $pageItems, array $options): PartialPaginator
+    public static function createPage(array $pageItems, array $options): Page
     {
         $currentPageNum = self::getCurrentPageNumberInternal($options);
-        $numItemsPerPage = self::getMaxNumItemsPerPage($options, count($pageItems));
+        $maxNumItemsPerPage = self::getMaxNumItemsPerPage($options, count($pageItems));
 
-        return new PartialPaginator($pageItems, $currentPageNum, $numItemsPerPage);
+        return new Page($pageItems, $currentPageNum, $maxNumItemsPerPage);
     }
 
     private static function getCurrentPageNumberInternal(array $options): int

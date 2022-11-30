@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\Tests\LegacyWebService\Room;
 
-use Dbp\CampusonlineApi\Helpers\FullPaginator;
-use Dbp\CampusonlineApi\Helpers\PartialPaginator;
+use Dbp\CampusonlineApi\Helpers\Page;
 use Dbp\CampusonlineApi\LegacyWebService\Api;
 use Dbp\CampusonlineApi\LegacyWebService\ApiException;
+use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
+use Dbp\CampusonlineApi\LegacyWebService\Room\RoomData;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -56,12 +57,11 @@ class RoomApiTest extends TestCase
         ]);
 
         // full pagination of all items
-        $paginator = $this->api->Room()->getRooms(['partialPagination' => false]);
-        $this->assertTrue($paginator instanceof FullPaginator);
-        $this->assertSame($paginator->getTotalNumItems(), 2);
-        $this->assertCount(2, $paginator->getItems());
+        $page = $this->api->Room()->getRooms();
+        $this->assertInstanceOf(Page::class, $page);
+        $this->assertCount(2, $page->getItems());
 
-        $room = $paginator->getItems()[0];
+        $room = $page->getItems()[0];
         $this->assertSame('1234', $room->getIdentifier());
         $this->assertSame('Unit Test Projekt', $room->getAdditionalInfo());
         $this->assertSame('Teststraße 24, Erdgeschoß', $room->getAddress());
@@ -70,7 +70,7 @@ class RoomApiTest extends TestCase
         $this->assertSame(42.42, $room->getFloorSize());
         $this->assertSame('https://online.tugraz.at/tug_online/ris.einzelraum?raumkey=1234', $room->getUrl());
 
-        $room = $paginator->getItems()[1];
+        $room = $page->getItems()[1];
         $this->assertSame('1235', $room->getIdentifier());
         $this->assertSame('TECHN. TEST NORD', $room->getAdditionalInfo());
         $this->assertSame('Testgasse 4, 1.Obergeschoß', $room->getAddress());
@@ -84,11 +84,11 @@ class RoomApiTest extends TestCase
         ]);
 
         // partial pagination of all items
-        $paginator = $this->api->Room()->getRooms(['partialPagination' => true]);
-        $this->assertTrue($paginator instanceof PartialPaginator);
-        $this->assertCount(2, $paginator->getItems());
+        $page = $this->api->Room()->getRooms(['partialPagination' => true]);
+        $this->assertInstanceOf(Page::class, $page);
+        $this->assertCount(2, $page->getItems());
 
-        $room = $paginator->getItems()[0];
+        $room = $page->getItems()[0];
         $this->assertSame('1234', $room->getIdentifier());
         $this->assertSame('Unit Test Projekt', $room->getAdditionalInfo());
         $this->assertSame('Teststraße 24, Erdgeschoß', $room->getAddress());
@@ -97,7 +97,7 @@ class RoomApiTest extends TestCase
         $this->assertSame(42.42, $room->getFloorSize());
         $this->assertSame('https://online.tugraz.at/tug_online/ris.einzelraum?raumkey=1234', $room->getUrl());
 
-        $room = $paginator->getItems()[1];
+        $room = $page->getItems()[1];
         $this->assertSame('1235', $room->getIdentifier());
         $this->assertSame('TECHN. TEST NORD', $room->getAdditionalInfo());
         $this->assertSame('Testgasse 4, 1.Obergeschoß', $room->getAddress());
@@ -117,14 +117,13 @@ class RoomApiTest extends TestCase
         ]);
 
         // full pagination of a page 1 with 1 item
-        $paginator = $this->api->Room()->getRooms(['partialPagination' => false, 'perPage' => 1, 'page' => 1]);
-        $this->assertTrue($paginator instanceof FullPaginator);
-        $this->assertSame($paginator->getTotalNumItems(), 2);
-        $this->assertSame($paginator->getCurrentPageNumber(), 1);
-        $this->assertSame($paginator->getMaxNumItemsPerPage(), 1);
-        $this->assertCount(1, $paginator->getItems());
+        $page = $this->api->Room()->getRooms(['perPage' => 1, 'page' => 1]);
+        $this->assertInstanceOf(Page::class, $page);
+        $this->assertSame($page->getCurrentPageNumber(), 1);
+        $this->assertSame($page->getMaxNumItemsPerPage(), 1);
+        $this->assertCount(1, $page->getItems());
 
-        $room = $paginator->getItems()[0];
+        $room = $page->getItems()[0];
         $this->assertSame('1234', $room->getIdentifier());
         $this->assertSame('Unit Test Projekt', $room->getAdditionalInfo());
         $this->assertSame('Teststraße 24, Erdgeschoß', $room->getAddress());
@@ -138,14 +137,13 @@ class RoomApiTest extends TestCase
         ]);
 
         // explicit full pagination of a page 2 with 1 item
-        $paginator = $this->api->Room()->getRooms(['partialPagination' => false, 'perPage' => 1, 'page' => 2]);
-        $this->assertTrue($paginator instanceof FullPaginator);
-        $this->assertSame($paginator->getTotalNumItems(), 2);
-        $this->assertSame($paginator->getCurrentPageNumber(), 2);
-        $this->assertSame($paginator->getMaxNumItemsPerPage(), 1);
-        $this->assertCount(1, $paginator->getItems());
+        $page = $this->api->Room()->getRooms(['perPage' => 1, 'page' => 2]);
+        $this->assertInstanceOf(Page::class, $page);
+        $this->assertSame($page->getCurrentPageNumber(), 2);
+        $this->assertSame($page->getMaxNumItemsPerPage(), 1);
+        $this->assertCount(1, $page->getItems());
 
-        $room = $paginator->getItems()[0];
+        $room = $page->getItems()[0];
         $this->assertSame('1235', $room->getIdentifier());
         $this->assertSame('TECHN. TEST NORD', $room->getAdditionalInfo());
         $this->assertSame('Testgasse 4, 1.Obergeschoß', $room->getAddress());
@@ -165,13 +163,13 @@ class RoomApiTest extends TestCase
         ]);
 
         // partial pagination of a page 1 with 1 item
-        $paginator = $this->api->Room()->getRooms(['partialPagination' => true, 'perPage' => 1, 'page' => 1]);
-        $this->assertInstanceOf(PartialPaginator::class, $paginator);
-        $this->assertSame($paginator->getCurrentPageNumber(), 1);
-        $this->assertSame($paginator->getMaxNumItemsPerPage(), 1);
-        $this->assertCount(1, $paginator->getItems());
+        $page = $this->api->Room()->getRooms(['perPage' => 1, 'page' => 1]);
+        $this->assertInstanceOf(Page::class, $page);
+        $this->assertSame($page->getCurrentPageNumber(), 1);
+        $this->assertSame($page->getMaxNumItemsPerPage(), 1);
+        $this->assertCount(1, $page->getItems());
 
-        $room = $paginator->getItems()[0];
+        $room = $page->getItems()[0];
         $this->assertSame('1234', $room->getIdentifier());
         $this->assertSame('Unit Test Projekt', $room->getAdditionalInfo());
         $this->assertSame('Teststraße 24, Erdgeschoß', $room->getAddress());
@@ -185,13 +183,13 @@ class RoomApiTest extends TestCase
         ]);
 
         // partial pagination of a page 2 with 1 item
-        $paginator = $this->api->Room()->getRooms(['partialPagination' => true, 'perPage' => 1, 'page' => 2]);
-        $this->assertTrue($paginator instanceof PartialPaginator);
-        $this->assertSame($paginator->getCurrentPageNumber(), 2);
-        $this->assertSame($paginator->getMaxNumItemsPerPage(), 1);
-        $this->assertCount(1, $paginator->getItems());
+        $page = $this->api->Room()->getRooms(['perPage' => 1, 'page' => 2]);
+        $this->assertInstanceOf(Page::class, $page);
+        $this->assertSame($page->getCurrentPageNumber(), 2);
+        $this->assertSame($page->getMaxNumItemsPerPage(), 1);
+        $this->assertCount(1, $page->getItems());
 
-        $room = $paginator->getItems()[0];
+        $room = $page->getItems()[0];
         $this->assertSame('1235', $room->getIdentifier());
         $this->assertSame('TECHN. TEST NORD', $room->getAdditionalInfo());
         $this->assertSame('Testgasse 4, 1.Obergeschoß', $room->getAddress());
@@ -213,12 +211,11 @@ class RoomApiTest extends TestCase
         ]);
 
         // name search filter only with 1 match => 1 result
-        $paginator = $this->api->Room()->getRooms(['partialPagination' => false, 'nameSearchFilter' => 'iee']);
-        $this->assertTrue($paginator instanceof FullPaginator);
-        $this->assertSame($paginator->getTotalNumItems(), 1);
-        $this->assertCount(1, $paginator->getItems());
+        $page = $this->api->Room()->getRooms(['nameSearchFilter' => 'iee']);
+        $this->assertInstanceOf(Page::class, $page);
+        $this->assertCount(1, $page->getItems());
 
-        $room = $paginator->getItems()[0];
+        $room = $page->getItems()[0];
         $this->assertSame('1234', $room->getIdentifier());
         $this->assertSame('Unit Test Projekt', $room->getAdditionalInfo());
         $this->assertSame('Teststraße 24, Erdgeschoß', $room->getAddress());
@@ -232,11 +229,11 @@ class RoomApiTest extends TestCase
         ]);
 
         // additional info search filter only with 1 match => 1 result
-        $paginator = $this->api->Room()->getRooms(['partialPagination' => true, 'additionalInfoSearchFilter' => 'NORD']);
-        $this->assertTrue($paginator instanceof PartialPaginator);
-        $this->assertCount(1, $paginator->getItems());
+        $page = $this->api->Room()->getRooms(['additionalInfoSearchFilter' => 'NORD']);
+        $this->assertInstanceOf(Page::class, $page);
+        $this->assertCount(1, $page->getItems());
 
-        $room = $paginator->getItems()[0];
+        $room = $page->getItems()[0];
         $this->assertSame('1235', $room->getIdentifier());
         $this->assertSame('TECHN. TEST NORD', $room->getAdditionalInfo());
         $this->assertSame('Testgasse 4, 1.Obergeschoß', $room->getAddress());
@@ -250,30 +247,27 @@ class RoomApiTest extends TestCase
         ]);
 
         // name filter only with no match => no results
-        $paginator = $this->api->Room()->getRooms(['partialPagination' => false, 'nameSearchFilter' => 'not to be found']);
-        $this->assertTrue($paginator instanceof FullPaginator);
-        $this->assertSame($paginator->getTotalNumItems(), 0);
-        $this->assertCount(0, $paginator->getItems());
+        $page = $this->api->Room()->getRooms(['nameSearchFilter' => 'not to be found']);
+        $this->assertInstanceOf(Page::class, $page);
+        $this->assertCount(0, $page->getItems());
 
         $this->mockResponses([
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/rooms_response_1.xml')),
         ]);
 
         // no search filters => all results
-        $paginator = $this->api->Room()->getRooms(['partialPagination' => false, 'nameSearchFilter' => '', 'additionalInfoSearchFilter' => '']);
-        $this->assertTrue($paginator instanceof FullPaginator);
-        $this->assertSame($paginator->getTotalNumItems(), 2);
-        $this->assertCount(2, $paginator->getItems());
+        $page = $this->api->Room()->getRooms(['nameSearchFilter' => '', 'additionalInfoSearchFilter' => '']);
+        $this->assertInstanceOf(Page::class, $page);
+        $this->assertCount(2, $page->getItems());
 
         $this->mockResponses([
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/rooms_response_1.xml')),
         ]);
 
         // name search filter with no match, additional info search filter with 1 match => 1 result
-        $paginator = $this->api->Room()->getRooms(['partialPagination' => false, 'nameSearchFilter' => 'not to be found', 'additionalInfoSearchFilter' => 'NORD']);
-        $this->assertTrue($paginator instanceof FullPaginator);
-        $this->assertSame($paginator->getTotalNumItems(), 1);
-        $this->assertCount(1, $paginator->getItems());
+        $page = $this->api->Room()->getRooms(['nameSearchFilter' => 'not to be found', 'additionalInfoSearchFilter' => 'NORD']);
+        $this->assertInstanceOf(Page::class, $page);
+        $this->assertCount(1, $page->getItems());
     }
 
     /**
@@ -319,6 +313,14 @@ class RoomApiTest extends TestCase
         $this->assertSame('14', $room->getPurposeID());
         $this->assertSame(51.59, $room->getFloorSize());
         $this->assertSame('https://online.tugraz.at/tug_online/ris.einzelraum?raumkey=1235', $room->getUrl());
+
+        $this->assertSame('1235', $room->getData()[ResourceData::IDENTIFIER_ATTRIBUTE]);
+        $this->assertSame('TECHN. TEST NORD', $room->getData()[RoomData::ADDITIONAL_INFO_ATTRIBUTE]);
+        $this->assertSame('Testgasse 4, 1.Obergeschoß', $room->getData()[RoomData::ADDRESS_ATTRIBUTE]);
+        $this->assertSame('IE01234', $room->getData()[ResourceData::NAME_ATTRIBUTE]);
+        $this->assertSame('14', $room->getData()[RoomData::PURPOSE_ID_ATTRIBUTE]);
+        $this->assertSame(51.59, $room->getData()[RoomData::FLOOR_SIZE_ATTRIBUTE]);
+        $this->assertSame('https://online.tugraz.at/tug_online/ris.einzelraum?raumkey=1235', $room->getData()[RoomData::URL_ATTRIBUTE]);
     }
 
     /**

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\LegacyWebService\Person;
 
+use Dbp\CampusonlineApi\Helpers\Page;
 use Dbp\CampusonlineApi\Helpers\Pagination;
-use Dbp\CampusonlineApi\Helpers\Paginator;
 use Dbp\CampusonlineApi\LegacyWebService\ApiException;
 use Dbp\CampusonlineApi\LegacyWebService\Connection;
 use Dbp\CampusonlineApi\LegacyWebService\ResourceApi;
@@ -40,10 +40,10 @@ class PersonApi extends ResourceApi implements LoggerAwareInterface
     /**
      * @throws ApiException
      */
-    public function getStudentsByCourse(string $courseId, array $options = []): Paginator
+    public function getStudentsByCourse(string $courseId, array $options = []): Page
     {
         if (strlen($courseId) === 0) {
-            return Pagination::createEmptyPaginator($options);
+            return Pagination::createEmptyPage($options);
         }
 
         $parameters = [];
@@ -56,38 +56,6 @@ class PersonApi extends ResourceApi implements LoggerAwareInterface
     {
         return self::createPersonResourceInternal($node, self::getResourcePropertyOrEmptyString($node, self::PERSON_IDENTIFIER_XML_PATH));
     }
-
-//    /**
-//     * @throws ApiException
-//     */
-//    private function parseStudentsResponse(string $responseBody, array $options): Paginator
-//    {
-//        $students = [];
-//
-//        try {
-//            $xml = new SimpleXMLElement($responseBody);
-//        } catch (\Exception $e) {
-//            throw new ApiException('response body is not in valid XML format');
-//        }
-//        $nodes = $xml->xpath('.//person');
-//
-//        $currentPageStartIndex = Pagination::getCurrentPageStartIndex($options);
-//
-//        $totalNumItems = count($nodes);
-//        $maxNumItemsPerPage = Pagination::getMaxNumItemsPerPage($options, $totalNumItems);
-//        $currentPageBreakIndex = min($currentPageStartIndex + $maxNumItemsPerPage, $totalNumItems);
-//
-//        for ($nodeIndex = $currentPageStartIndex; $nodeIndex < $currentPageBreakIndex; ++$nodeIndex) {
-//            $node = $nodes[$nodeIndex];
-//            $students[] = $this->createPerson($node);
-//        }
-//
-//        if (Pagination::isPartial($options)) {
-//            return Pagination::createPartialPaginator($students, $options);
-//        } else {
-//            return Pagination::createFullPaginator($students, count($students), $options);
-//        }
-//    }
 
     protected function createResource(SimpleXMLElement $node, string $identifier): object
     {

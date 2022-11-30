@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\LegacyWebService;
 
 use Dbp\CampusonlineApi\Helpers\Filters;
+use Dbp\CampusonlineApi\Helpers\Page;
 use Dbp\CampusonlineApi\Helpers\Pagination;
-use Dbp\CampusonlineApi\Helpers\Paginator;
 use SimpleXMLElement;
 
 abstract class ResourceApi
@@ -53,7 +53,7 @@ abstract class ResourceApi
     /**
      * @throws ApiException
      */
-    protected function getResourcesInternal(string $uri, array $parameters, array $options): Paginator
+    protected function getResourcesInternal(string $uri, array $parameters, array $options): Page
     {
         $responseBody = $this->connection->get(
             $uri, $options[Api::LANGUAGE_PARAMETER_NAME] ?? '', $parameters);
@@ -64,7 +64,7 @@ abstract class ResourceApi
     /**
      * @throws ApiException
      */
-    protected function parseResponse(string $responseBody, array $options): Paginator
+    protected function parseResponse(string $responseBody, array $options): Page
     {
         $resources = [];
 
@@ -83,12 +83,10 @@ abstract class ResourceApi
         $nodes = $xml->xpath($this->resourceXmlPath);
 
         $firstMatchingItemsIndex = 0;
-        $isPartialPagination = false;
         $isSearchFilterActive = false;
 
         if (!$isIdFilterActive) {
             $firstMatchingItemsIndex = Pagination::getCurrentPageStartIndex($options);
-            $isPartialPagination = Pagination::isPartial($options);
             $isSearchFilterActive = $this->isSearchFilterActive($options);
         }
 
@@ -117,15 +115,9 @@ abstract class ResourceApi
                     $resources[] = $this->createResource($node, $this->getResourceIdentifier($node, $identifier));
 
                     $done = false;
-                    if ($isIdFilterActive && empty($requestedIdentifiers)) {
+                    if ((count($resources) === $numItemsPerPage) ||
+                        ($isIdFilterActive && empty($requestedIdentifiers))) {
                         $done = true;
-                    } elseif (count($resources) === $numItemsPerPage) {
-                        if ($isPartialPagination) {
-                            $done = true;
-                        } elseif (!$isSearchFilterActive) {
-                            $done = true;
-                            $matchingItemCount = $totalNumItems;
-                        }
                     }
                     if ($done) {
                         break;
@@ -134,14 +126,10 @@ abstract class ResourceApi
             }
         }
 
-        if ($isPartialPagination) {
-            return Pagination::createPartialPaginator($resources, $options);
-        } else {
-            return Pagination::createFullPaginator($resources, $matchingItemCount, $options);
-        }
+        return Pagination::createPage($resources, $options);
     }
 
-    abstract protected function createResource(SimpleXMLElement $node, string $identifier): object;
+    abstract protected function createResource(SimpleXMLElement $node, string $identifier);
 
     protected function isSearchFilterActive(array $options): bool
     {

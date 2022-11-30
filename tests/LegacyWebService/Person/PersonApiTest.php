@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\Tests\LegacyWebService\Person;
 
-use Dbp\CampusonlineApi\Helpers\FullPaginator;
-use Dbp\CampusonlineApi\Helpers\PartialPaginator;
+use Dbp\CampusonlineApi\Helpers\Page;
 use Dbp\CampusonlineApi\LegacyWebService\Api;
 use Dbp\CampusonlineApi\LegacyWebService\ApiException;
 use GuzzleHttp\Handler\MockHandler;
@@ -54,13 +53,12 @@ class PersonApiTest extends TestCase
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/co_students_by_course_response.xml')),
         ]);
 
-        $paginator = $this->api->Person()->getStudentsByCourse('276525', ['partialPagination' => false]);
-        $this->assertInstanceOf(FullPaginator::class, $paginator);
-        $this->assertSame(3, $paginator->getTotalNumItems());
-        $this->assertSame(3, $paginator->getMaxNumItemsPerPage());
-        $this->assertSame(1, $paginator->getCurrentPageNumber());
+        $page = $this->api->Person()->getStudentsByCourse('276525');
+        $this->assertInstanceOf(Page::class, $page);
+        $this->assertSame(3, $page->getMaxNumItemsPerPage());
+        $this->assertSame(1, $page->getCurrentPageNumber());
 
-        $students = $paginator->getItems();
+        $students = $page->getItems();
         $this->assertCount(3, $students);
 
         $student = $students[0];
@@ -79,13 +77,12 @@ class PersonApiTest extends TestCase
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/co_students_by_course_response.xml')),
         ]);
 
-        $paginator = $this->api->Person()->getStudentsByCourse('276525', ['partialPagination' => false, 'perPage' => 1, 'page' => 2]);
-        $this->assertInstanceOf(FullPaginator::class, $paginator);
-        $this->assertSame(3, $paginator->getTotalNumItems());
-        $this->assertSame(1, $paginator->getMaxNumItemsPerPage());
-        $this->assertSame(2, $paginator->getCurrentPageNumber());
+        $page = $this->api->Person()->getStudentsByCourse('276525', ['perPage' => 1, 'page' => 2]);
+        $this->assertInstanceOf(Page::class, $page);
+        $this->assertSame(1, $page->getMaxNumItemsPerPage());
+        $this->assertSame(2, $page->getCurrentPageNumber());
 
-        $students = $paginator->getItems();
+        $students = $page->getItems();
         $this->assertCount(1, $students);
 
         $student = $students[0];
@@ -104,12 +101,12 @@ class PersonApiTest extends TestCase
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/co_students_by_course_response.xml')),
         ]);
 
-        $paginator = $this->api->Person()->getStudentsByCourse('276525', ['partialPagination' => true, 'perPage' => 2, 'page' => 2]);
-        $this->assertInstanceOf(PartialPaginator::class, $paginator);
-        $this->assertSame(2, $paginator->getMaxNumItemsPerPage());
-        $this->assertSame(2, $paginator->getCurrentPageNumber());
+        $page = $this->api->Person()->getStudentsByCourse('276525', ['perPage' => 2, 'page' => 2]);
+        $this->assertInstanceOf(Page::class, $page);
+        $this->assertSame(2, $page->getMaxNumItemsPerPage());
+        $this->assertSame(2, $page->getCurrentPageNumber());
 
-        $students = $paginator->getItems();
+        $students = $page->getItems();
         $this->assertCount(1, $students);
 
         $student = $students[0];

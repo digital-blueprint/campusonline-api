@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\LegacyWebService\Organization;
 
 use Dbp\CampusonlineApi\Helpers\Filters;
-use Dbp\CampusonlineApi\Helpers\Paginator;
-use Dbp\CampusonlineApi\LegacyWebService\Address\AddressData;
+use Dbp\CampusonlineApi\Helpers\Page;
 use Dbp\CampusonlineApi\LegacyWebService\ApiException;
 use Dbp\CampusonlineApi\LegacyWebService\Connection;
 use Dbp\CampusonlineApi\LegacyWebService\ResourceApi;
@@ -65,7 +64,7 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
     }
 
     /**
-     * Returns a Paginator of OrganizationUnitData for the passed identifiers.
+     * Returns a Paginator of organization units for the passed identifiers.
      * The order of the response is undefined and might not match the order of
      * the passed in identifiers.
      *
@@ -73,7 +72,7 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
      *
      * @throws ApiException
      */
-    public function getOrganizationUnitsById(array $identifiers, array $options = []): Paginator
+    public function getOrganizationUnitsById(array $identifiers, array $options = []): Page
     {
         foreach ($identifiers as $identifier) {
             if (strlen($identifier) === 0) {
@@ -95,7 +94,7 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
     /**
      * @throws ApiException
      */
-    public function getOrganizationUnits(array $options = []): Paginator
+    public function getOrganizationUnits(array $options = []): Page
     {
         return $this->getOrganizationUnitsInternal($options);
     }
@@ -103,7 +102,7 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
     /**
      * @throws ApiException
      */
-    private function getOrganizationUnitsInternal(array $options): Paginator
+    private function getOrganizationUnitsInternal(array $options): Page
     {
         $parameters = [];
         $requestedIdentifiers = $options[Filters::IDENTIFIERS_FILTER] ?? [];
@@ -128,10 +127,10 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
         $orgUnit->setUrl($url);
 
         $addressNode = $node->xpath('./contacts/contactData/adr')[0] ?? null;
-        $addressData = $addressNode !== null ? AddressData::fromSimpleXmlElement($addressNode) : null;
-        if ($addressData !== null) {
-            $orgUnit->setAddress($addressData);
-        }
+        $orgUnit->setStreet($addressNode ? ResourceApi::getResourcePropertyOrEmptyString($addressNode, './street') : '');
+        $orgUnit->setLocality($addressNode ? ResourceApi::getResourcePropertyOrEmptyString($addressNode, './locality') : '');
+        $orgUnit->setPostalCode($addressNode ? ResourceApi::getResourcePropertyOrEmptyString($addressNode, './pcode') : '');
+        $orgUnit->setCountry($addressNode ? ResourceApi::getResourcePropertyOrEmptyString($addressNode, './country') : '');
 
         return $orgUnit;
     }
