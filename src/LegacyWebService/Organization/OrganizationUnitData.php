@@ -8,6 +8,11 @@ use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
 
 class OrganizationUnitData extends ResourceData
 {
+    /** Search filters: Pass, if ANY of the given search filters passes or if NONE is given */
+    /** @var string Partial, case-insensitive text search on the 'name' attribute. Passes if filter is empty. */
+    public const NAME_SEARCH_FILTER_NAME = 'nameSearchFilter';
+
+    public const NAME_ATTRIBUTE = 'name';
     public const CODE_ATTRIBUTE = 'code';
     public const TYPE_ATTRIBUTE = 'type';
     public const URL_ATTRIBUTE = 'url';
@@ -17,6 +22,16 @@ class OrganizationUnitData extends ResourceData
     public const COUNTRY_ATTRIBUTE = 'addressCountry';
     public const KIND_NAME_ATTRIBUTE = 'kindName';
     public const KIND_CODE_ATTRIBUTE = 'kindCode';
+
+    public function getName(): string
+    {
+        return $this->data[self::NAME_ATTRIBUTE];
+    }
+
+    public function setName(string $name): void
+    {
+        $this->data[self::NAME_ATTRIBUTE] = $name;
+    }
 
     public function getCode(): string
     {

@@ -9,9 +9,9 @@ use Dbp\CampusonlineApi\Helpers\Page;
 use Dbp\CampusonlineApi\LegacyWebService\ApiException;
 use Dbp\CampusonlineApi\LegacyWebService\Connection;
 use Dbp\CampusonlineApi\LegacyWebService\ResourceApi;
+use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use SimpleXMLElement;
 
 class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
 {
@@ -25,10 +25,22 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
     private const ORG_UNIT_IDENTIFIER_XML_PATH = './orgUnitID';
     private const ORG_UNIT_NAME_XML_PATH = './orgUnitName/text';
 
+    private const ATTRIBUTE_NAME_TO_XPATH_MAPPING = [
+        ResourceData::IDENTIFIER_ATTRIBUTE => self::ORG_UNIT_IDENTIFIER_XML_PATH,
+        OrganizationUnitData::NAME_ATTRIBUTE => self::ORG_UNIT_NAME_XML_PATH,
+        OrganizationUnitData::CODE_ATTRIBUTE => './orgUnitCode',
+        OrganizationUnitData::KIND_NAME_ATTRIBUTE => './orgUnitKind/subBlock[@userDefined="name"]',
+        OrganizationUnitData::KIND_CODE_ATTRIBUTE => './orgUnitKind/subBlock[@userDefined="codeDesignation"]',
+        OrganizationUnitData::URL_ATTRIBUTE => './infoBlock/webLink/href',
+        OrganizationUnitData::STREET_ATTRIBUTE => './contacts/contactData/adr/street',
+        OrganizationUnitData::LOCALITY_ATTRIBUTE => './contacts/contactData/adr/locality',
+        OrganizationUnitData::POSTAL_CODE_ATTRIBUTE => './contacts/contactData/adr/pcode',
+        OrganizationUnitData::COUNTRY_ATTRIBUTE => './contacts/contactData/adr/country',
+    ];
+
     public function __construct(Connection $connection, string $rootOrgUnitId)
     {
-        parent::__construct($connection, $rootOrgUnitId,
-            self::ORG_UNIT_RESOURCE_XML_PATH, self::ORG_UNIT_IDENTIFIER_XML_PATH);
+        parent::__construct($connection, $rootOrgUnitId, self::ORG_UNIT_RESOURCE_XML_PATH);
     }
 
     public function checkConnection()
@@ -46,13 +58,13 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
      */
     public function getOrganizationUnitById(string $identifier, array $options = []): OrganizationUnitData
     {
-        if (strlen($identifier) === 0) {
+        if ($identifier === '') {
             throw new ApiException("identifier mustn't be empty");
         }
 
-        $options[Filters::IDENTIFIERS_FILTER] = [$identifier];
+        ResourceApi::addIdFilter($options, $identifier);
 
-        $paginator = $this->getOrganizationUnitsInternal($options);
+        $paginator = $this->getOrganizationUnitsInternal($options, $identifier);
 
         $orgUnitItems = $paginator->getItems();
         if (empty($orgUnitItems)) {
@@ -75,12 +87,12 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
     public function getOrganizationUnitsById(array $identifiers, array $options = []): Page
     {
         foreach ($identifiers as $identifier) {
-            if (strlen($identifier) === 0) {
+            if ($identifier === '') {
                 throw new ApiException("identifier mustn't be empty");
             }
         }
 
-        $options[Filters::IDENTIFIERS_FILTER] = $identifiers;
+        ResourceApi::addFilter($options, ResourceData::IDENTIFIER_ATTRIBUTE, Filters::IN_OPERATOR, $identifiers);
 
         $paginator = $this->getOrganizationUnitsInternal($options);
         $orgUnitItems = $paginator->getItems();
@@ -99,42 +111,24 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
         return $this->getOrganizationUnitsInternal($options);
     }
 
+    protected function createResource(\SimpleXMLElement $node): ResourceData
+    {
+        return new OrganizationUnitData();
+    }
+
+    protected function getAttributeNameToXpathExpressionMapping(): array
+    {
+        return self::ATTRIBUTE_NAME_TO_XPATH_MAPPING;
+    }
+
     /**
      * @throws ApiException
      */
-    private function getOrganizationUnitsInternal(array $options): Page
+    private function getOrganizationUnitsInternal(array $options, string $identifier = null): Page
     {
         $parameters = [];
-        $requestedIdentifiers = $options[Filters::IDENTIFIERS_FILTER] ?? [];
-        $parameters[self::ORG_UNIT_ID_PARAMETER_NAME] =
-            count($requestedIdentifiers) === 1 ? $requestedIdentifiers[0] : $this->rootOrgUnitId;
+        $parameters[self::ORG_UNIT_ID_PARAMETER_NAME] = $identifier ?? $this->rootOrgUnitId;
 
         return $this->getResourcesInternal(self::URI, $parameters, $options);
-    }
-
-    protected function createResource(SimpleXMLElement $node, string $identifier): object
-    {
-        $orgUnit = new OrganizationUnitData();
-        $orgUnit->setIdentifier($identifier);
-
-        $name = $this->getResourceName($node);
-        $orgUnit->setName($name);
-        $orgUnit->setCode(ResourceApi::getResourcePropertyOrEmptyString($node, './orgUnitCode'));
-        $orgUnit->setKindName(ResourceApi::getResourcePropertyOrEmptyString($node, './orgUnitKind/subBlock[@userDefined="name"]'));
-        $orgUnit->setKindCode(ResourceApi::getResourcePropertyOrEmptyString($node, './orgUnitKind/subBlock[@userDefined="codeDesignation"]'));
-        $orgUnit->setUrl(ResourceApi::getResourcePropertyOrEmptyString($node, './infoBlock/webLink/href'));
-
-        $addressNode = $node->xpath('./contacts/contactData/adr')[0] ?? null;
-        $orgUnit->setStreet($addressNode ? ResourceApi::getResourcePropertyOrEmptyString($addressNode, './street') : '');
-        $orgUnit->setLocality($addressNode ? ResourceApi::getResourcePropertyOrEmptyString($addressNode, './locality') : '');
-        $orgUnit->setPostalCode($addressNode ? ResourceApi::getResourcePropertyOrEmptyString($addressNode, './pcode') : '');
-        $orgUnit->setCountry($addressNode ? ResourceApi::getResourcePropertyOrEmptyString($addressNode, './country') : '');
-
-        return $orgUnit;
-    }
-
-    protected function getResourceName(SimpleXMLElement $node): string
-    {
-        return self::getResourcePropertyOrEmptyString($node, self::ORG_UNIT_NAME_XML_PATH);
     }
 }

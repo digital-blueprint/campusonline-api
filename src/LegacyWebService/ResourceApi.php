@@ -11,16 +11,88 @@ use SimpleXMLElement;
 
 abstract class ResourceApi
 {
-    private $resourceXmlPath;
-    private $identifierXmlPath;
+    public const FILTERS_OPTION = 'filters';
 
-    protected $connection;
+    private const FILTER_ATTRIBUTE_OPERATOR = 'operator';
+    private const FILTER_ATTRIBUTE_FILTER_VALUE = 'filterValue';
+    private const FILTER_ATTRIBUTE_LOGICAL_OPERATOR = 'logical';
+
+    /** @var string */
     protected $rootOrgUnitId;
 
-    protected function __construct(Connection $connection, string $rootOrgUnitId, string $resourceXmlPath, string $identifierXmlPath)
+    /** @var string */
+    private $resourceXmlPath;
+
+    /** @var Connection */
+    private $connection;
+
+    public static function addIdFilter(array &$targetOptions, string $identifier)
+    {
+        self::addFilter($targetOptions, ResourceData::IDENTIFIER_ATTRIBUTE, Filters::EQUALS_OPERATOR, $identifier);
+    }
+
+    public static function addFilter(array &$targetOptions, string $fieldName, string $operator, $filterValue, string $logicalOperator = Filters::LOGICAL_AND_OPERATOR)
+    {
+        if (isset($targetOptions[self::FILTERS_OPTION]) === false) {
+            $targetOptions[self::FILTERS_OPTION] = [];
+        }
+
+        $targetOptions[self::FILTERS_OPTION][$fieldName] = [
+            self::FILTER_ATTRIBUTE_OPERATOR => $operator,
+            self::FILTER_ATTRIBUTE_FILTER_VALUE => $filterValue,
+            self::FILTER_ATTRIBUTE_LOGICAL_OPERATOR => $logicalOperator,
+        ];
+    }
+
+    public static function getResourcePropertyOrEmptyString(SimpleXMLElement $node, string $xmlPath): string
+    {
+        return trim((string) ($node->xpath($xmlPath)[0] ?? ''));
+    }
+
+    /**
+     * @return array|false The resource data in case it passes all given filters; false otherwise
+     */
+    protected static function getResourceDataFromXmlIfPassesFiltersStatic(SimpleXMLElement $node, array $attributeNameToXpathExpressionMapping, array $filters = [])
+    {
+        $data = [];
+        // tri-state: null (no 'or' filter applied), true (at least one 'or' filter passed), false (none of the 'or' filters passed)
+        $didAnyLogicalOrFilterPass = null;
+
+        foreach ($attributeNameToXpathExpressionMapping as $attributeName => $xpathExpression) {
+            $stringValue = self::getResourcePropertyOrEmptyString($node, $xpathExpression);
+            if (($filter = $filters[$attributeName] ?? null) !== null) {
+                $logicalOperator = $filter[self::FILTER_ATTRIBUTE_LOGICAL_OPERATOR];
+                if ($logicalOperator === Filters::LOGICAL_AND_OPERATOR || $didAnyLogicalOrFilterPass !== true) {
+                    if (Filters::passesFilter($stringValue, $filter[self::FILTER_ATTRIBUTE_OPERATOR], $filter[self::FILTER_ATTRIBUTE_FILTER_VALUE])) {
+                        if ($logicalOperator === Filters::LOGICAL_OR_OPERATOR) {
+                            $didAnyLogicalOrFilterPass = true;
+                        }
+                    } elseif ($logicalOperator === Filters::LOGICAL_AND_OPERATOR) {
+                        return false;
+                    } else {
+                        $didAnyLogicalOrFilterPass = false;
+                    }
+                }
+            }
+            $data[$attributeName] = $stringValue;
+        }
+
+        if ($didAnyLogicalOrFilterPass === false) {
+            return false;
+        }
+
+        return $data;
+    }
+
+    /**
+     * Tries to check if the service is reachable and the authorization works in a reasonable time.
+     * Will throw if the service isn't responding as expected.
+     */
+    abstract public function checkConnection(); // make sure this doesn't take long with lots of data provided by the API
+
+    protected function __construct(Connection $connection, string $rootOrgUnitId, string $resourceXmlPath)
     {
         $this->resourceXmlPath = $resourceXmlPath;
-        $this->identifierXmlPath = $identifierXmlPath;
 
         $this->connection = $connection;
         $this->rootOrgUnitId = $rootOrgUnitId;
@@ -45,12 +117,6 @@ abstract class ResourceApi
     }
 
     /**
-     * Tries to check if the service is reachable and the authorization works in a reasonable time.
-     * Will throw if the service isn't responding as expected.
-     */
-    abstract public function checkConnection(); // make sure this doesn't take long with lots of data provided by the API
-
-    /**
      * @throws ApiException
      */
     protected function getResourcesInternal(string $uri, array $parameters, array $options): Page
@@ -66,15 +132,6 @@ abstract class ResourceApi
      */
     protected function parseResponse(string $responseBody, array $options): Page
     {
-        $resources = [];
-
-        $isIdFilterActive = false;
-        $requestedIdentifiers = $options[Filters::IDENTIFIERS_FILTER] ?? [];
-        if (!empty($requestedIdentifiers)) {
-            $isIdFilterActive = true;
-            $requestedIdentifiers = array_unique($requestedIdentifiers);
-        }
-
         try {
             $xml = new SimpleXMLElement($responseBody);
         } catch (\Exception $e) {
@@ -82,44 +139,25 @@ abstract class ResourceApi
         }
         $nodes = $xml->xpath($this->resourceXmlPath);
 
-        $firstMatchingItemsIndex = 0;
-        $isSearchFilterActive = false;
-
-        if (!$isIdFilterActive) {
-            $firstMatchingItemsIndex = Pagination::getCurrentPageStartIndex($options);
-            $isSearchFilterActive = $this->isSearchFilterActive($options);
-        }
-
         $totalNumItems = count($nodes);
         $numItemsPerPage = Pagination::getMaxNumItemsPerPage($options, $totalNumItems);
+        $firstMatchingItemsIndex = Pagination::getCurrentPageStartIndex($options);
         $matchingItemCount = 0;
+        $filters = $options[self::FILTERS_OPTION] ?? [];
 
+        $resources = [];
         for ($nodeIndex = 0; $nodeIndex < $totalNumItems; ++$nodeIndex) {
             $node = $nodes[$nodeIndex];
 
-            $identifier = null;
-            $isMatch = false;
-
-            if ($isIdFilterActive) {
-                if (($key = array_search($this->getResourceIdentifier($node, $identifier), $requestedIdentifiers, true)) !== false) {
-                    unset($requestedIdentifiers[$key]);
-                    $isMatch = true;
-                }
-            } else {
-                $isMatch = !$isSearchFilterActive || $this->passesSearchFilter($node, $options);
-            }
-
-            if ($isMatch) {
+            if (($resourceData = $this->getResourceDataFromXmlIfPassesFilters($node,
+                    $this->getAttributeNameToXpathExpressionMapping(), $filters)) !== false) {
                 ++$matchingItemCount;
-                if ($isIdFilterActive || ($matchingItemCount > $firstMatchingItemsIndex && ($numItemsPerPage === $totalNumItems || count($resources) < $numItemsPerPage))) {
-                    $resources[] = $this->createResource($node, $this->getResourceIdentifier($node, $identifier));
+                if ($matchingItemCount > $firstMatchingItemsIndex && ($numItemsPerPage === $totalNumItems || count($resources) < $numItemsPerPage)) {
+                    $resource = $this->createResource($node);
+                    $resource->setData($resourceData);
+                    $resources[] = $resource;
 
-                    $done = false;
-                    if ((count($resources) === $numItemsPerPage) ||
-                        ($isIdFilterActive && empty($requestedIdentifiers))) {
-                        $done = true;
-                    }
-                    if ($done) {
+                    if (count($resources) === $numItemsPerPage) {
                         break;
                     }
                 }
@@ -129,47 +167,15 @@ abstract class ResourceApi
         return Pagination::createPage($resources, $options);
     }
 
-    abstract protected function createResource(SimpleXMLElement $node, string $identifier);
-
-    protected function isSearchFilterActive(array $options): bool
-    {
-        $nameSearchFilter = $options[ResourceData::NAME_SEARCH_FILTER_NAME] ?? '';
-
-        return $nameSearchFilter !== '';
-    }
-
     /**
-     * Checks whether the resource passes the given search filters. Performs a partial, case-insensitive text search.
-     * Passes if ANY of the given search filters passes.
+     * @return array|false The resource data in case it passes all given filters; false otherwise
      */
-    protected function passesSearchFilter(SimpleXMLElement $node, array $options): bool
+    protected function getResourceDataFromXmlIfPassesFilters(SimpleXMLElement $node, array $attributeNameToXpathExpressionMapping, array $filters = [])
     {
-        $nameSearchFilter = $options[ResourceData::NAME_SEARCH_FILTER_NAME] ?? '';
-
-        return $nameSearchFilter !== '' &&
-            stripos($this->getResourceName($node), $nameSearchFilter) !== false;
+        return self::getResourceDataFromXmlIfPassesFiltersStatic($node, $attributeNameToXpathExpressionMapping, $filters);
     }
 
-    protected function getResourceName(SimpleXMLElement $node): string
-    {
-        return '';
-    }
+    abstract protected function createResource(SimpleXMLElement $node): ResourceData;
 
-    /**
-     * @throws ApiException
-     */
-    protected function getResourceIdentifier(SimpleXMLElement $node, ?string $identifier): string
-    {
-        $identifier = $identifier ?? self::getResourcePropertyOrEmptyString($node, $this->identifierXmlPath);
-        if ($identifier === '') {
-            throw new ApiException('ID missing in Campusonline resource');
-        }
-
-        return $identifier;
-    }
-
-    public static function getResourcePropertyOrEmptyString(SimpleXMLElement $node, string $xmlPath): string
-    {
-        return trim((string) ($node->xpath($xmlPath)[0] ?? ''));
-    }
+    abstract protected function getAttributeNameToXpathExpressionMapping(): array;
 }

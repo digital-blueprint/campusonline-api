@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\Tests\LegacyWebService\Room;
 
+use Dbp\CampusonlineApi\Helpers\Filters;
 use Dbp\CampusonlineApi\Helpers\Page;
 use Dbp\CampusonlineApi\LegacyWebService\Api;
 use Dbp\CampusonlineApi\LegacyWebService\ApiException;
+use Dbp\CampusonlineApi\LegacyWebService\ResourceApi;
 use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
 use Dbp\CampusonlineApi\LegacyWebService\Room\RoomData;
 use GuzzleHttp\Handler\MockHandler;
@@ -204,14 +206,16 @@ class RoomApiTest extends TestCase
      *
      * @throws ApiException
      */
-    public function testGetRoomsSearchFilter()
+    public function testGetRoomsFilters()
     {
         $this->mockResponses([
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/rooms_response_1.xml')),
         ]);
 
-        // name search filter only with 1 match => 1 result
-        $page = $this->api->Room()->getRooms(['nameSearchFilter' => 'iee']);
+        // case-insensitive name search filter only with 1 case-insensitive match => 1 result
+        $options = [];
+        ResourceApi::addFilter($options, RoomData::NAME_ATTRIBUTE, Filters::CONTAINS_CI_OPERATOR, 'iee', Filters::LOGICAL_OR_OPERATOR);
+        $page = $this->api->Room()->getRooms($options);
         $this->assertInstanceOf(Page::class, $page);
         $this->assertCount(1, $page->getItems());
 
@@ -228,8 +232,21 @@ class RoomApiTest extends TestCase
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/rooms_response_1.xml')),
         ]);
 
+        /// case-sensitive name search filter only with 1 case-insensitive match => 0 result
+        $options = [];
+        ResourceApi::addFilter($options, RoomData::NAME_ATTRIBUTE, Filters::CONTAINS_OPERATOR, 'iee', Filters::LOGICAL_OR_OPERATOR);
+        $page = $this->api->Room()->getRooms($options);
+        $this->assertInstanceOf(Page::class, $page);
+        $this->assertCount(0, $page->getItems());
+
+        $this->mockResponses([
+            new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/rooms_response_1.xml')),
+        ]);
+
         // additional info search filter only with 1 match => 1 result
-        $page = $this->api->Room()->getRooms(['additionalInfoSearchFilter' => 'NORD']);
+        $options = [];
+        ResourceApi::addFilter($options, RoomData::ADDITIONAL_INFO_ATTRIBUTE, Filters::CONTAINS_OPERATOR, 'NORD', Filters::LOGICAL_OR_OPERATOR);
+        $page = $this->api->Room()->getRooms($options);
         $this->assertInstanceOf(Page::class, $page);
         $this->assertCount(1, $page->getItems());
 
@@ -247,7 +264,9 @@ class RoomApiTest extends TestCase
         ]);
 
         // name filter only with no match => no results
-        $page = $this->api->Room()->getRooms(['nameSearchFilter' => 'not to be found']);
+        $options = [];
+        ResourceApi::addFilter($options, RoomData::NAME_ATTRIBUTE, Filters::CONTAINS_OPERATOR, '_not_to_be_found_', Filters::LOGICAL_OR_OPERATOR);
+        $page = $this->api->Room()->getRooms($options);
         $this->assertInstanceOf(Page::class, $page);
         $this->assertCount(0, $page->getItems());
 
@@ -256,7 +275,10 @@ class RoomApiTest extends TestCase
         ]);
 
         // no search filters => all results
-        $page = $this->api->Room()->getRooms(['nameSearchFilter' => '', 'additionalInfoSearchFilter' => '']);
+        $options = [];
+        ResourceApi::addFilter($options, RoomData::NAME_ATTRIBUTE, Filters::CONTAINS_OPERATOR, '', Filters::LOGICAL_OR_OPERATOR);
+        ResourceApi::addFilter($options, RoomData::ADDITIONAL_INFO_ATTRIBUTE, Filters::CONTAINS_OPERATOR, '', Filters::LOGICAL_OR_OPERATOR);
+        $page = $this->api->Room()->getRooms($options);
         $this->assertInstanceOf(Page::class, $page);
         $this->assertCount(2, $page->getItems());
 
@@ -265,7 +287,10 @@ class RoomApiTest extends TestCase
         ]);
 
         // name search filter with no match, additional info search filter with 1 match => 1 result
-        $page = $this->api->Room()->getRooms(['nameSearchFilter' => 'not to be found', 'additionalInfoSearchFilter' => 'NORD']);
+        $options = [];
+        ResourceApi::addFilter($options, RoomData::NAME_ATTRIBUTE, Filters::CONTAINS_OPERATOR, 'not to be found', Filters::LOGICAL_OR_OPERATOR);
+        ResourceApi::addFilter($options, RoomData::ADDITIONAL_INFO_ATTRIBUTE, Filters::CONTAINS_OPERATOR, 'NORD', Filters::LOGICAL_OR_OPERATOR);
+        $page = $this->api->Room()->getRooms($options);
         $this->assertInstanceOf(Page::class, $page);
         $this->assertCount(1, $page->getItems());
     }
@@ -317,9 +342,9 @@ class RoomApiTest extends TestCase
         $this->assertSame('1235', $room->getData()[ResourceData::IDENTIFIER_ATTRIBUTE]);
         $this->assertSame('TECHN. TEST NORD', $room->getData()[RoomData::ADDITIONAL_INFO_ATTRIBUTE]);
         $this->assertSame('Testgasse 4, 1.Obergeschoß', $room->getData()[RoomData::ADDRESS_ATTRIBUTE]);
-        $this->assertSame('IE01234', $room->getData()[ResourceData::NAME_ATTRIBUTE]);
+        $this->assertSame('IE01234', $room->getData()[RoomData::NAME_ATTRIBUTE]);
         $this->assertSame('14', $room->getData()[RoomData::PURPOSE_ID_ATTRIBUTE]);
-        $this->assertSame(51.59, $room->getData()[RoomData::FLOOR_SIZE_ATTRIBUTE]);
+        $this->assertSame('51.59', $room->getData()[RoomData::FLOOR_SIZE_ATTRIBUTE]);
         $this->assertSame('https://online.tugraz.at/tug_online/ris.einzelraum?raumkey=1235', $room->getData()[RoomData::URL_ATTRIBUTE]);
     }
 

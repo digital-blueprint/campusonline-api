@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\Tests\LegacyWebService\Organization;
 
+use Dbp\CampusonlineApi\Helpers\Filters;
 use Dbp\CampusonlineApi\Helpers\Page;
 use Dbp\CampusonlineApi\LegacyWebService\Api;
 use Dbp\CampusonlineApi\LegacyWebService\ApiException;
 use Dbp\CampusonlineApi\LegacyWebService\Organization\OrganizationUnitApi;
 use Dbp\CampusonlineApi\LegacyWebService\Organization\OrganizationUnitData;
+use Dbp\CampusonlineApi\LegacyWebService\ResourceApi;
 use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -61,7 +63,7 @@ class OrganizationUnitApiTest extends TestCase
         $this->assertSame('Institute', $org->getKindName());
 
         $this->assertSame('2322', $org->getData()[ResourceData::IDENTIFIER_ATTRIBUTE]);
-        $this->assertSame('Institute of Fundamentals and Theory in Electrical  Engineering', $org->getData()[ResourceData::NAME_ATTRIBUTE]);
+        $this->assertSame('Institute of Fundamentals and Theory in Electrical  Engineering', $org->getData()[OrganizationUnitData::NAME_ATTRIBUTE]);
         $this->assertSame('4370', $org->getData()[OrganizationUnitData::CODE_ATTRIBUTE]);
         $this->assertSame('https://online.tugraz.at/tug_online/wborg.display?pOrgNr=2322', $org->getData()[OrganizationUnitData::URL_ATTRIBUTE]);
         $this->assertSame('Inffeldgasse 18/I', $org->getData()[OrganizationUnitData::STREET_ATTRIBUTE]);
@@ -111,13 +113,43 @@ class OrganizationUnitApiTest extends TestCase
         $orgUnits = $page->getItems();
         $this->assertCount(3, $orgUnits);
 
-        $this->assertCount(3, $orgUnits);
         $this->assertSame('2391', $orgUnits[0]->getIdentifier());
         $this->assertSame('6350', $orgUnits[0]->getCode());
         $this->assertSame('18454', $orgUnits[1]->getIdentifier());
         $this->assertSame('6352', $orgUnits[1]->getCode());
         $this->assertSame('18452', $orgUnits[2]->getIdentifier());
         $this->assertSame('6351', $orgUnits[2]->getCode());
+    }
+
+    /**
+     * @throws ApiException
+     */
+    public function testGetOrganizationFilters()
+    {
+        $this->mockResponses([
+            new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/co_orgunit_response_nested.xml')),
+        ]);
+
+        // case-insensitive name filter -> match
+        $options = [];
+        ResourceApi::addFilter($options, OrganizationUnitData::NAME_ATTRIBUTE, Filters::CONTAINS_CI_OPERATOR, 'working', Filters::LOGICAL_OR_OPERATOR);
+        $page = $this->getOrgUnitApi()->getOrganizationUnits($options);
+        $orgUnits = $page->getItems();
+        $this->assertCount(2, $orgUnits);
+
+        $this->assertSame('Working Group Spectroscopy and Electrochemistry', $orgUnits[0]->getName());
+        $this->assertSame('Working Group Structure Science', $orgUnits[1]->getName());
+
+        $this->mockResponses([
+            new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/co_orgunit_response_nested.xml')),
+        ]);
+
+        // case-sensitive name filter -> no match
+        $options = [];
+        ResourceApi::addFilter($options, OrganizationUnitData::NAME_ATTRIBUTE, Filters::CONTAINS_OPERATOR, 'working', Filters::LOGICAL_OR_OPERATOR);
+        $page = $this->getOrgUnitApi()->getOrganizationUnits($options);
+        $orgUnits = $page->getItems();
+        $this->assertCount(0, $orgUnits);
     }
 
     public function testGetSomeOrganizations()

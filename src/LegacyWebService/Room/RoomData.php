@@ -9,15 +9,30 @@ use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
 class RoomData extends ResourceData
 {
     /** Search filters: Pass, if ANY of the given search filters passes or if NONE is given */
+    /** @var string Partial, case-insensitive text search on the 'name' attribute. Passes if filter is empty. */
+    public const NAME_SEARCH_FILTER_NAME = 'nameSearchFilter';
+
+    /** Search filters: Pass, if ANY of the given search filters passes or if NONE is given */
     /** @var string Partial, case-insensitive text search on the 'additionalInfo' attribute. Passes if filter is empty. */
     public const ADDITIONAL_INFO_SEARCH_FILTER_NAME = 'additionalInfoSearchFilter';
 
+    public const NAME_ATTRIBUTE = 'name';
     public const ADDRESS_ATTRIBUTE = 'address';
     public const URL_ATTRIBUTE = 'url';
     public const FLOOR_SIZE_ATTRIBUTE = 'floorSize';
     public const PURPOSE_ATTRIBUTE = 'purpose';
     public const PURPOSE_ID_ATTRIBUTE = 'purposeId';
     public const ADDITIONAL_INFO_ATTRIBUTE = 'additionalInfo';
+
+    public function getName(): string
+    {
+        return $this->data[self::NAME_ATTRIBUTE];
+    }
+
+    public function setName(string $name): void
+    {
+        $this->data[self::NAME_ATTRIBUTE] = $name;
+    }
 
     public function getAddress(): string
     {
@@ -41,7 +56,7 @@ class RoomData extends ResourceData
 
     public function getFloorSize(): float
     {
-        return $this->data[self::FLOOR_SIZE_ATTRIBUTE];
+        return (float) $this->data[self::FLOOR_SIZE_ATTRIBUTE];
     }
 
     public function setFloorSize(float $floorSize): void

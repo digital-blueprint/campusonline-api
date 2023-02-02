@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\LegacyWebService\Course;
 
-use Dbp\CampusonlineApi\Helpers\Filters;
 use Dbp\CampusonlineApi\Helpers\Page;
 use Dbp\CampusonlineApi\Helpers\Pagination;
 use Dbp\CampusonlineApi\LegacyWebService\ApiException;
@@ -12,6 +11,7 @@ use Dbp\CampusonlineApi\LegacyWebService\Connection;
 use Dbp\CampusonlineApi\LegacyWebService\Organization\OrganizationUnitApi;
 use Dbp\CampusonlineApi\LegacyWebService\Person\PersonApi;
 use Dbp\CampusonlineApi\LegacyWebService\ResourceApi;
+use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use SimpleXMLElement;
@@ -35,11 +35,28 @@ class CourseApi extends ResourceApi implements LoggerAwareInterface
     private const COURSE_RESOURCE_XML_PATH = '//course';
     private const COURSE_IDENTIFIER_XML_PATH = './courseID';
     private const COURSE_NAME_XML_PATH = './courseName/text';
+    private const COURSE_CONTACTS_PERSON_XML_PATH = './contacts/person';
+
+    private const ATTRIBUTE_NAME_TO_XPATH_MAPPING = [
+        ResourceData::IDENTIFIER_ATTRIBUTE => self::COURSE_IDENTIFIER_XML_PATH,
+        CourseData::NAME_ATTRIBUTE => self::COURSE_NAME_XML_PATH,
+        CourseData::LANGUAGE_ATTRIBUTE => './@language',
+        CourseData::TYPE_ATTRIBUTE => './teachingActivity/teachingActivityID',
+        CourseData::TYPE_NAME_ATTRIBUTE => './teachingActivity/teachingActivityName/text',
+        CourseData::CODE_ATTRIBUTE => './courseCode',
+        CourseData::DESCRIPTION_ATTRIBUTE => './courseDescription',
+        CourseData::TEACHING_TERM_ATTRIBUTE => './teachingTerm',
+        CourseData::NUMBER_OF_CREDITS_ATTRIBUTE => './credits/@hoursPerWeek',
+        CourseData::LEVEL_URL_ATTRIBUTE => './level/webLink/href',
+        CourseData::ADMISSION_URL_ATTRIBUTE => './admissionInfo/admissionDescription/webLink/href',
+        CourseData::SYLLABUS_URL_ATTRIBUTE => './syllabus/webLink/href',
+        CourseData::EXAMS_URL_ATTRIBUTE => './exam/infoBlock/webLink/href',
+        CourseData::DATES_URL_ATTRIBUTE => './teachingActivity/infoBlock/webLink/href',
+        ];
 
     public function __construct(Connection $connection, string $rootOrgUnitId)
     {
-        parent::__construct($connection, $rootOrgUnitId,
-            self::COURSE_RESOURCE_XML_PATH, self::COURSE_IDENTIFIER_XML_PATH);
+        parent::__construct($connection, $rootOrgUnitId, self::COURSE_RESOURCE_XML_PATH);
     }
 
     public function checkConnection()
@@ -59,7 +76,7 @@ class CourseApi extends ResourceApi implements LoggerAwareInterface
             throw new ApiException("identifier mustn't be empty");
         }
 
-        $options[Filters::IDENTIFIERS_FILTER] = [$identifier];
+        ResourceApi::addIdFilter($options, $identifier);
 
         $parameters = [];
         $parameters[self::COURSE_ID_PARAMETER_NAME] = $identifier;
@@ -133,51 +150,27 @@ class CourseApi extends ResourceApi implements LoggerAwareInterface
         return $this->getResourcesInternal($uri, $parameters, $options);
     }
 
-    protected function createResource(SimpleXMLElement $node, string $identifier): object
+    protected function createResource(SimpleXMLElement $node): ResourceData
     {
-        $name = $this->getResourceName($node);
-        $language = self::getResourcePropertyOrEmptyString($node, './@language');
-        $type = self::getResourcePropertyOrEmptyString($node, './teachingActivity/teachingActivityID');
-        $typeName = self::getResourcePropertyOrEmptyString($node, './teachingActivity/teachingActivityName/text');
-        $code = self::getResourcePropertyOrEmptyString($node, './courseCode');
-        $description = self::getResourcePropertyOrEmptyString($node, './courseDescription');
-        $teachingTerm = self::getResourcePropertyOrEmptyString($node, './teachingTerm');
-        $numberOfCredits = self::getResourcePropertyOrEmptyString($node, './credits/@hoursPerWeek');
-        $levelUrl = self::getResourcePropertyOrEmptyString($node, './level/webLink/href');
-        $admissionUrl = self::getResourcePropertyOrEmptyString($node, './admissionInfo/admissionDescription/webLink/href');
-        $syllabusUrl = self::getResourcePropertyOrEmptyString($node, './syllabus/webLink/href');
-        $examsUrl = self::getResourcePropertyOrEmptyString($node, './exam/infoBlock/webLink/href');
-        $datesUrl = self::getResourcePropertyOrEmptyString($node, './teachingActivity/infoBlock/webLink/href');
-
-        $course = new CourseData();
-        $course->setIdentifier($identifier);
-        $course->setName($name);
-        $course->setLanguage($language);
-        $course->setType($type);
-        $course->setTypeName($typeName);
-        $course->setCode($code);
-        $course->setDescription($description);
-        $course->setTeachingTerm($teachingTerm);
-        $course->setNumberOfCredits(floatval($numberOfCredits));
-        $course->setLevelUrl($levelUrl);
-        $course->setAdmissionUrl($admissionUrl);
-        $course->setSyllabusUrl($syllabusUrl);
-        $course->setExamsUrl($examsUrl);
-        $course->setDatesUrl($datesUrl);
-
-        $contacts = [];
-        $personNodes = $node->xpath('./contacts/person');
-
-        foreach ($personNodes as $personNode) {
-            $contacts[] = PersonApi::createPersonResource($personNode);
-        }
-        $course->setContacts($contacts);
-
-        return $course;
+        return new CourseData();
     }
 
-    protected function getResourceName(SimpleXMLElement $node): string
+    protected function getResourceDataFromXmlIfPassesFilters(SimpleXMLElement $node, array $attributeNameToXpathExpressionMapping, array $filters = [])
     {
-        return self::getResourcePropertyOrEmptyString($node, self::COURSE_NAME_XML_PATH);
+        $resourceData = parent::getResourceDataFromXmlIfPassesFilters($node, $attributeNameToXpathExpressionMapping, $filters);
+        if (is_array($resourceData)) {
+            $contacts = [];
+            foreach ($node->xpath(self::COURSE_CONTACTS_PERSON_XML_PATH) as $personNode) {
+                $contacts[] = PersonApi::createPersonResource($personNode);
+            }
+            $resourceData[CourseData::CONTACTS_ATTRIBUTE] = $contacts;
+        }
+
+        return $resourceData;
+    }
+
+    protected function getAttributeNameToXpathExpressionMapping(): array
+    {
+        return self::ATTRIBUTE_NAME_TO_XPATH_MAPPING;
     }
 }

@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\LegacyWebService\Room;
 
-use Dbp\CampusonlineApi\Helpers\Filters;
 use Dbp\CampusonlineApi\Helpers\Page;
 use Dbp\CampusonlineApi\LegacyWebService\ApiException;
 use Dbp\CampusonlineApi\LegacyWebService\Connection;
 use Dbp\CampusonlineApi\LegacyWebService\Organization\OrganizationUnitApi;
 use Dbp\CampusonlineApi\LegacyWebService\ResourceApi;
+use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use SimpleXMLElement;
 
 class RoomApi extends ResourceApi implements LoggerAwareInterface
 {
@@ -28,10 +27,20 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
     private const ROOM_IDENTIFIER_XML_PATH = './cor:description/cor:attribute[@cor:attrID="roomID"]';
     private const ROOM_NAME_XML_PATH = './cor:description/cor:attribute[@cor:attrID="roomCode"]';
 
+    private const ATTRIBUTE_NAME_TO_XPATH_MAPPING = [
+        ResourceData::IDENTIFIER_ATTRIBUTE => self::ROOM_IDENTIFIER_XML_PATH,
+        RoomData::NAME_ATTRIBUTE => self::ROOM_NAME_XML_PATH,
+        RoomData::ADDITIONAL_INFO_ATTRIBUTE => './cor:description/cor:attribute[@cor:attrID="additionalInformation"]',
+        RoomData::ADDRESS_ATTRIBUTE => './cor:description/cor:attribute[@cor:attrID="address"]',
+        RoomData::URL_ATTRIBUTE => './cor:description/cor:attribute[@cor:attrID="address"]/@cor:attrAltUrl',
+        RoomData::FLOOR_SIZE_ATTRIBUTE => './cor:description/cor:attribute[@cor:attrID="area"]',
+        RoomData::PURPOSE_ID_ATTRIBUTE => './cor:description/cor:attribute[@cor:attrID="purposeID"]',
+        RoomData::PURPOSE_ATTRIBUTE => './cor:description/cor:attribute[@cor:attrID="purpose"]',
+    ];
+
     public function __construct(Connection $connection, string $rootOrgUnitId)
     {
-        parent::__construct($connection, $rootOrgUnitId,
-            self::ROOM_RESOURCE_XML_PATH, self::ROOM_IDENTIFIER_XML_PATH);
+        parent::__construct($connection, $rootOrgUnitId, self::ROOM_RESOURCE_XML_PATH);
     }
 
     public function checkConnection()
@@ -48,11 +57,11 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
      */
     public function getRoomById(string $identifier, array $options = []): RoomData
     {
-        if (strlen($identifier) === 0) {
+        if ($identifier === '') {
             throw new ApiException("identifier mustn't be empty");
         }
 
-        $options[Filters::IDENTIFIERS_FILTER] = [$identifier];
+        ResourceApi::addIdFilter($options, $identifier);
 
         $paginator = $this->getRoomsInternal($options);
 
@@ -86,55 +95,13 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
         return $this->getResourcesInternal(self::COLLECTION_URI, $parameters, $options);
     }
 
-    protected function createResource(SimpleXMLElement $node, string $identifier): object
+    protected function createResource(\SimpleXMLElement $node): ResourceData
     {
-        $name = $this->getResourceName($node);
-        $additionalInfo = self::getRoomAdditionalInfo($node);
-        $address = self::getResourcePropertyOrEmptyString($node, './cor:description/cor:attribute[@cor:attrID="address"]');
-        $url = self::getResourcePropertyOrEmptyString($node, './cor:description/cor:attribute[@cor:attrID="address"]/@cor:attrAltUrl');
-        $floorSize = self::getResourcePropertyOrEmptyString($node, './cor:description/cor:attribute[@cor:attrID="area"]');
-        $purposeID = self::getResourcePropertyOrEmptyString($node, './cor:description/cor:attribute[@cor:attrID="purposeID"]');
-        $purpose = self::getResourcePropertyOrEmptyString($node, './cor:description/cor:attribute[@cor:attrID="purpose"]');
-
-        $room = new RoomData();
-        $room->setIdentifier($identifier);
-        $room->setName($name);
-        $room->setAddress($address);
-        $room->setUrl($url);
-        $room->setFloorSize(floatval($floorSize));
-        $room->setPurposeId($purposeID);
-        $room->setPurpose($purpose);
-        $room->setAdditionalInfo($additionalInfo);
-
-        return $room;
+        return new RoomData();
     }
 
-    /**
-     * Checks whether the room passes the given search filters. Performs a partial, case-insensitive text search.
-     * Passes if ANY of the given search filters passes or if NONE is given.
-     */
-    protected function passesSearchFilter(SimpleXMLElement $node, array $options): bool
+    protected function getAttributeNameToXpathExpressionMapping(): array
     {
-        $additionalInfoSearchFilter = $options[RoomData::ADDITIONAL_INFO_SEARCH_FILTER_NAME] ?? '';
-
-        return parent::passesSearchFilter($node, $options) ||
-            ($additionalInfoSearchFilter !== '' && stripos(self::getRoomAdditionalInfo($node), $additionalInfoSearchFilter) !== false);
-    }
-
-    protected function isSearchFilterActive(array $options): bool
-    {
-        $additionalInfoSearchFilter = $options[RoomData::ADDITIONAL_INFO_SEARCH_FILTER_NAME] ?? '';
-
-        return parent::isSearchFilterActive($options) || $additionalInfoSearchFilter !== '';
-    }
-
-    protected function getResourceName(SimpleXMLElement $node): string
-    {
-        return self::getResourcePropertyOrEmptyString($node, self::ROOM_NAME_XML_PATH);
-    }
-
-    private static function getRoomAdditionalInfo(SimpleXMLElement $node): string
-    {
-        return self::getResourcePropertyOrEmptyString($node, './cor:description/cor:attribute[@cor:attrID="additionalInformation"]');
+        return self::ATTRIBUTE_NAME_TO_XPATH_MAPPING;
     }
 }

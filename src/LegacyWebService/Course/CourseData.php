@@ -8,6 +8,11 @@ use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
 
 class CourseData extends ResourceData
 {
+    /** Search filters: Pass, if ANY of the given search filters passes or if NONE is given */
+    /** @var string Partial, case-insensitive text search on the 'name' attribute. Passes if filter is empty. */
+    public const NAME_SEARCH_FILTER_NAME = 'nameSearchFilter';
+
+    public const NAME_ATTRIBUTE = 'name';
     public const LANGUAGE_ATTRIBUTE = 'language';
     public const CODE_ATTRIBUTE = 'code';
     public const TYPE_ATTRIBUTE = 'type';
@@ -21,6 +26,16 @@ class CourseData extends ResourceData
     public const EXAMS_URL_ATTRIBUTE = 'examsUrl';
     public const DATES_URL_ATTRIBUTE = 'datesUrl';
     public const CONTACTS_ATTRIBUTE = 'contacts';
+
+    public function getName(): string
+    {
+        return $this->data[self::NAME_ATTRIBUTE];
+    }
+
+    public function setName(string $name): void
+    {
+        $this->data[self::NAME_ATTRIBUTE] = $name;
+    }
 
     public function getLanguage(): string
     {
@@ -84,7 +99,7 @@ class CourseData extends ResourceData
 
     public function getNumberOfCredits(): float
     {
-        return $this->data[self::NUMBER_OF_CREDITS_ATTRIBUTE];
+        return (float) $this->data[self::NUMBER_OF_CREDITS_ATTRIBUTE];
     }
 
     public function setNumberOfCredits(float $numberOfCredits): void

@@ -6,34 +6,11 @@ namespace Dbp\CampusonlineApi\LegacyWebService\Person;
 
 use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
 
-class PersonData
+class PersonData extends ResourceData
 {
     public const GIVEN_NAME_ATTRIBUTE = 'givenName';
     public const FAMILY_NAME_ATTRIBUTE = 'familyName';
     public const EMAIL_ATTRIBUTE = 'email';
-
-    /** @var array */
-    private $data;
-
-    public function __construct()
-    {
-        $this->data = [];
-    }
-
-    public function getData(): array
-    {
-        return $this->data;
-    }
-
-    public function setIdentifier(string $identifier): void
-    {
-        $this->data[ResourceData::IDENTIFIER_ATTRIBUTE] = $identifier;
-    }
-
-    public function getIdentifier(): string
-    {
-        return $this->data[ResourceData::IDENTIFIER_ATTRIBUTE];
-    }
 
     public function getGivenName(): string
     {
