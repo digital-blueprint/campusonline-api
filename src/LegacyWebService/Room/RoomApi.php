@@ -61,7 +61,7 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
             throw new ApiException("identifier mustn't be empty");
         }
 
-        ResourceApi::addIdFilter($options, $identifier);
+        ResourceApi::addEqualsIdFilter($options, $identifier);
 
         $paginator = $this->getRoomsInternal($options);
 

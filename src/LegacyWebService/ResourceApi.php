@@ -26,9 +26,22 @@ abstract class ResourceApi
     /** @var Connection */
     private $connection;
 
-    public static function addIdFilter(array &$targetOptions, string $identifier)
+    protected static function addEqualsIdFilter(array &$targetOptions, string $identifier)
     {
-        self::addFilter($targetOptions, ResourceData::IDENTIFIER_ATTRIBUTE, Filters::EQUALS_OPERATOR, $identifier);
+        self::addFilter($targetOptions, ResourceData::IDENTIFIER_ATTRIBUTE, Filters::EQUALS_OPERATOR, $identifier, Filters::LOGICAL_AND_OPERATOR);
+    }
+
+    protected static function hasEqualsIdFilter(array $options): bool
+    {
+        if (($filters = $options[self::FILTERS_OPTION] ?? null) !== null) {
+            if (($idFilter = $filters[ResourceData::IDENTIFIER_ATTRIBUTE] ?? null) !== null) {
+                return
+                    ($idFilter[self::FILTER_ATTRIBUTE_OPERATOR] ?? null) === Filters::EQUALS_OPERATOR &&
+                    ($idFilter[self::FILTER_ATTRIBUTE_LOGICAL_OPERATOR] ?? null) === Filters::LOGICAL_AND_OPERATOR;
+            }
+        }
+
+        return false;
     }
 
     public static function addFilter(array &$targetOptions, string $fieldName, string $operator, $filterValue, string $logicalOperator = Filters::LOGICAL_AND_OPERATOR)
@@ -144,6 +157,7 @@ abstract class ResourceApi
         $firstMatchingItemsIndex = Pagination::getCurrentPageStartIndex($options);
         $matchingItemCount = 0;
         $filters = $options[self::FILTERS_OPTION] ?? [];
+        $hasIdFilter = self::hasEqualsIdFilter($options);
 
         $resources = [];
         for ($nodeIndex = 0; $nodeIndex < $totalNumItems; ++$nodeIndex) {
@@ -152,12 +166,13 @@ abstract class ResourceApi
             if (($resourceData = $this->getResourceDataFromXmlIfPassesFilters($node,
                     $this->getAttributeNameToXpathExpressionMapping(), $filters)) !== false) {
                 ++$matchingItemCount;
+
                 if ($matchingItemCount > $firstMatchingItemsIndex && ($numItemsPerPage === $totalNumItems || count($resources) < $numItemsPerPage)) {
                     $resource = $this->createResource($node);
                     $resource->setData($resourceData);
                     $resources[] = $resource;
 
-                    if (count($resources) === $numItemsPerPage) {
+                    if ($hasIdFilter || count($resources) === $numItemsPerPage) {
                         break;
                     }
                 }
