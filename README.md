@@ -3,6 +3,8 @@
 [GitHub](https://github.com/digital-blueprint/campusonline-api) |
 [Packagist](https://packagist.org/packages/dbp/campusonline-api)
 
+[![Test](https://github.com/digital-blueprint/campusonline-api/actions/workflows/test.yml/badge.svg)](https://github.com/digital-blueprint/campusonline-api/actions/workflows/test.yml)
+
 The goal of this package is to provide a PHP API for the various web services
 provided by [CAMPUSonline](https://www.campusonline.tugraz.at).
 
