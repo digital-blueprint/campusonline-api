@@ -1,5 +1,8 @@
 # CAMPUSonline API Client
 
+[GitHub](https://github.com/digital-blueprint/campusonline-api) |
+[Packagist](https://packagist.org/packages/dbp/campusonline-api)
+
 The goal of this package is to provide a PHP API for the various web services
 provided by [CAMPUSonline](https://www.campusonline.tugraz.at).
 
