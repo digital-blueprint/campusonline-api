@@ -1,0 +1,60 @@
+name: Test
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+env:
+  COMPOSER_CACHE_DIR: /tmp/_composer_cache
+
+jobs:
+  unit-tests:
+    name: Tests for php${{ matrix.php-versions }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: ['7.3', '7.4', '8.0', '8.1', '8.2']
+    steps:
+    - name: Set up php${{ matrix.php-versions }}
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-versions }}
+        extensions: ctype,curl,dom,gd,iconv,intl,json,mbstring,openssl,posix,sqlite,xml,zip,gmp
+        coverage: xdebug
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Cache composer cache directory
+      uses: actions/cache@v3
+      with:
+        path: ${{ env.COMPOSER_CACHE_DIR }}
+        key: composer-cache
+    - name: Unit tests
+      run: |
+        composer install
+        composer test
+  linting:
+    name: Linting
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set up php${{ matrix.php-versions }}
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 7.4
+        extensions: ctype,curl,dom,gd,iconv,intl,json,mbstring,openssl,posix,sqlite,xml,zip,gmp
+        coverage: xdebug
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Cache composer cache directory
+      uses: actions/cache@v3
+      with:
+        path: ${{ env.COMPOSER_CACHE_DIR }}
+        key: composer-cache
+    - name: Unit tests
+      run: |
+        composer install
+        result=0
+        composer run cs || result=1
+        composer run phpstan || result=1
+        composer run psalm || result=1
+        exit $result
