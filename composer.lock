@@ -333,16 +333,16 @@
         },
         {
             "name": "kevinrob/guzzle-cache-middleware",
-            "version": "v4.1.0",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Kevinrob/guzzle-cache-middleware.git",
-                "reference": "8528f8c040c333480cbf885ef669dfb33a21f1e8"
+                "reference": "0e12dccf3c811a18bb2f6c93882c5b5727e1b859"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kevinrob/guzzle-cache-middleware/zipball/8528f8c040c333480cbf885ef669dfb33a21f1e8",
-                "reference": "8528f8c040c333480cbf885ef669dfb33a21f1e8",
+                "url": "https://api.github.com/repos/Kevinrob/guzzle-cache-middleware/zipball/0e12dccf3c811a18bb2f6c93882c5b5727e1b859",
+                "reference": "0e12dccf3c811a18bb2f6c93882c5b5727e1b859",
                 "shasum": ""
             },
             "require": {
@@ -412,9 +412,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Kevinrob/guzzle-cache-middleware/issues",
-                "source": "https://github.com/Kevinrob/guzzle-cache-middleware/tree/v4.1.0"
+                "source": "https://github.com/Kevinrob/guzzle-cache-middleware/tree/v4.1.1"
             },
-            "time": "2023-05-26T10:54:58+00:00"
+            "time": "2023-05-31T07:04:24+00:00"
         },
         {
             "name": "league/uri",
