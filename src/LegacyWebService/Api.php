@@ -17,20 +17,28 @@ class Api implements LoggerAwareInterface
     public const HTTP_STATUS_NOT_FOUND = 404;
     public const LANGUAGE_PARAMETER_NAME = 'lang';
 
+    /** @var Connection */
     private $connection;
+
+    /** @var string */
     private $rootOrgUnitId;
 
-    public function __construct($baseUrl, $accessToken, $rootOrgUnitId = '',
-                                $logger = null, $cache = null, $cacheTTL = 0, $clientHandler = null)
+    /** @var CacheItemPoolInterface|null */
+    private $cache;
+
+    /** @var int */
+    private $cacheTtl;
+
+    public function __construct(string $baseUrl, string $accessToken, string $rootOrgUnitId = '',
+                                 LoggerInterface $logger = null, CacheItemPoolInterface $cache = null, int $cacheTTL = 0, $clientHandler = null)
     {
-        $this->rootOrgUnitId = $rootOrgUnitId;
         $this->connection = new Connection($baseUrl, $accessToken);
+        $this->rootOrgUnitId = $rootOrgUnitId;
+        $this->cache = $cache;
+        $this->cacheTtl = $cacheTTL;
 
         if ($logger !== null) {
             $this->connection->setLogger($logger);
-        }
-        if ($cache !== null) {
-            $this->connection->setCache($cache, $cacheTTL);
         }
         if ($clientHandler !== null) {
             $this->connection->setClientHandler($clientHandler);
@@ -42,11 +50,6 @@ class Api implements LoggerAwareInterface
         $this->connection->setLogger($logger);
     }
 
-    public function setCache(?CacheItemPoolInterface $cachePool, int $ttl)
-    {
-        $this->connection->setCache($cachePool, $ttl);
-    }
-
     public function setClientHandler(?object $handler)
     {
         $this->connection->setClientHandler($handler);
@@ -54,21 +57,41 @@ class Api implements LoggerAwareInterface
 
     public function Room(): RoomApi
     {
-        return new RoomApi($this->connection, $this->rootOrgUnitId);
+        $roomApi = new RoomApi($this->connection, $this->rootOrgUnitId);
+        if ($this->cache !== null) {
+            $roomApi->setCache($this->cache, $this->cacheTtl);
+        }
+
+        return $roomApi;
     }
 
     public function OrganizationUnit(): OrganizationUnitApi
     {
-        return new OrganizationUnitApi($this->connection, $this->rootOrgUnitId);
+        $orgUnitApi = new OrganizationUnitApi($this->connection, $this->rootOrgUnitId);
+        if ($this->cache !== null) {
+            $orgUnitApi->setCache($this->cache, $this->cacheTtl);
+        }
+
+        return $orgUnitApi;
     }
 
     public function Course(): CourseApi
     {
-        return new CourseApi($this->connection, $this->rootOrgUnitId);
+        $courseApi = new CourseApi($this->connection, $this->rootOrgUnitId);
+        if ($this->cache !== null) {
+            $courseApi->setCache($this->cache, $this->cacheTtl);
+        }
+
+        return $courseApi;
     }
 
     public function Person(): PersonApi
     {
-        return new PersonApi($this->connection, $this->rootOrgUnitId);
+        $personApi = new PersonApi($this->connection, $this->rootOrgUnitId);
+        if ($this->cache !== null) {
+            $personApi->setCache($this->cache, $this->cacheTtl);
+        }
+
+        return $personApi;
     }
 }

@@ -56,14 +56,14 @@ class Connection implements LoggerAwareInterface
     }
 
     /**
-     * @param array $parameters Array of <param name> - <param value> pairs
+     * @param array $uriParameters Array of <param name> - <param value> pairs
      *
      * @throws ApiException
      */
-    public function get(string $uri, string $lang = '', array $parameters = [], bool $cache = true): string
+    public function get(string $uri, array $uriParameters = [], array $options = [], bool $cache = true): string
     {
         try {
-            $uri = $this->makeUri($uri, $lang, $parameters);
+            $uri = self::makeUri($uri, $uriParameters, $options, $this->accessToken);
         } catch (UriException $e) {
             throw new ApiException('invalid uri or parameters: '.$uri);
         }
@@ -109,9 +109,9 @@ class Connection implements LoggerAwareInterface
         return new Client($client_options);
     }
 
-    private static function getLanguageParameter(string $language): string
+    private static function getLanguageParameter(array $options): string
     {
-        switch ($language) {
+        switch ($options[Api::LANGUAGE_PARAMETER_NAME] ?? '') {
             case self::LANGUAGE_EN:
                 return self::LANGUAGE_EN;
             case self::LANGUAGE_DE:
@@ -124,14 +124,14 @@ class Connection implements LoggerAwareInterface
     /**
      * @throws UriException
      */
-    private function makeUri(string $uri, string $lang, array $parameters): string
+    public static function makeUri(string $uri, array $uriParameters = [], array $options = [], string $accessToken = ''): string
     {
-        $parameters[self::ACCESS_TOKEN_PARAMETER_NAME] = $this->accessToken;
-        $parameters[self::LANGUAGE_PARAMETER_NAME] = self::getLanguageParameter($lang);
+        $uriParameters[self::ACCESS_TOKEN_PARAMETER_NAME] = $accessToken;
+        $uriParameters[self::LANGUAGE_PARAMETER_NAME] = self::getLanguageParameter($options);
 
         $uri = $uri.'?';
-        foreach ($parameters as $param_key => $param_value) {
-            if ($param_key !== array_key_first($parameters)) {
+        foreach ($uriParameters as $param_key => $param_value) {
+            if ($param_key !== array_key_first($uriParameters)) {
                 $uri .= '&';
             }
             $uri .= $param_key.'={'.$param_key.'}';
@@ -139,7 +139,7 @@ class Connection implements LoggerAwareInterface
 
         $uriTemplate = new UriTemplate($uri);
 
-        return (string) $uriTemplate->expand($parameters);
+        return (string) $uriTemplate->expand($uriParameters);
     }
 
     private static function hideToken(string $message): string

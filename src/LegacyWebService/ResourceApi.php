@@ -7,11 +7,18 @@ namespace Dbp\CampusonlineApi\LegacyWebService;
 use Dbp\CampusonlineApi\Helpers\Filters;
 use Dbp\CampusonlineApi\Helpers\Page;
 use Dbp\CampusonlineApi\Helpers\Pagination;
+use League\Uri\Contracts\UriException;
+use Psr\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemPoolInterface;
+use Psr\Cache\InvalidArgumentException;
 use SimpleXMLElement;
+use SimpleXMLIterator;
 
 abstract class ResourceApi
 {
     public const FILTERS_OPTION = 'filters';
+
+    protected const GET_CHILD_IDS_OPTION_KEY = 'get_child_ids';
 
     private const FILTER_ATTRIBUTE_OPERATOR = 'operator';
     private const FILTER_ATTRIBUTE_FILTER_VALUE = 'filterValue';
@@ -20,29 +27,20 @@ abstract class ResourceApi
     /** @var string */
     protected $rootOrgUnitId;
 
-    /** @var string */
-    private $resourceXmlPath;
+    /** @var string[] */
+    private $attributeNameToXpathMap;
+
+    /** @var string|null */
+    private $resourceXpathExpression;
 
     /** @var Connection */
     private $connection;
 
-    protected static function addEqualsIdFilter(array &$targetOptions, string $identifier)
-    {
-        self::addFilter($targetOptions, ResourceData::IDENTIFIER_ATTRIBUTE, Filters::EQUALS_OPERATOR, $identifier, Filters::LOGICAL_AND_OPERATOR);
-    }
+    /** @var CacheItemPoolInterface */
+    private $cache;
 
-    protected static function hasEqualsIdFilter(array $options): bool
-    {
-        if (($filters = $options[self::FILTERS_OPTION] ?? null) !== null) {
-            if (($idFilter = $filters[ResourceData::IDENTIFIER_ATTRIBUTE] ?? null) !== null) {
-                return
-                    ($idFilter[self::FILTER_ATTRIBUTE_OPERATOR] ?? null) === Filters::EQUALS_OPERATOR &&
-                    ($idFilter[self::FILTER_ATTRIBUTE_LOGICAL_OPERATOR] ?? null) === Filters::LOGICAL_AND_OPERATOR;
-            }
-        }
-
-        return false;
-    }
+    /** @var int */
+    private $cacheTtl = 0;
 
     public static function addFilter(array &$targetOptions, string $fieldName, string $operator, $filterValue, string $logicalOperator = Filters::LOGICAL_AND_OPERATOR)
     {
@@ -62,39 +60,62 @@ abstract class ResourceApi
         return trim((string) ($node->xpath($xmlPath)[0] ?? ''));
     }
 
-    /**
-     * @return array|false The resource data in case it passes all given filters; false otherwise
-     */
-    protected static function getResourceDataFromXmlIfPassesFiltersStatic(SimpleXMLElement $node, array $attributeNameToXpathExpressionMapping, array $filters = [])
+    protected static function addEqualsIdFilter(array &$targetOptions, string $identifier)
     {
-        $data = [];
-        // tri-state: null (no 'or' filter applied), true (at least one 'or' filter passed), false (none of the 'or' filters passed)
-        $didAnyLogicalOrFilterPass = null;
+        self::addFilter($targetOptions, ResourceData::IDENTIFIER_ATTRIBUTE, Filters::EQUALS_OPERATOR, $identifier, Filters::LOGICAL_AND_OPERATOR);
+    }
 
-        foreach ($attributeNameToXpathExpressionMapping as $attributeName => $xpathExpression) {
-            $stringValue = self::getResourcePropertyOrEmptyString($node, $xpathExpression);
-            if (($filter = $filters[$attributeName] ?? null) !== null) {
-                $logicalOperator = $filter[self::FILTER_ATTRIBUTE_LOGICAL_OPERATOR];
-                if ($logicalOperator === Filters::LOGICAL_AND_OPERATOR || $didAnyLogicalOrFilterPass !== true) {
-                    if (Filters::passesFilter($stringValue, $filter[self::FILTER_ATTRIBUTE_OPERATOR], $filter[self::FILTER_ATTRIBUTE_FILTER_VALUE])) {
-                        if ($logicalOperator === Filters::LOGICAL_OR_OPERATOR) {
-                            $didAnyLogicalOrFilterPass = true;
-                        }
-                    } elseif ($logicalOperator === Filters::LOGICAL_AND_OPERATOR) {
-                        return false;
-                    } else {
-                        $didAnyLogicalOrFilterPass = false;
-                    }
-                }
+    protected static function hasEqualsIdFilter(array $options): bool
+    {
+        if (($filters = $options[self::FILTERS_OPTION] ?? null) !== null) {
+            if (($idFilter = $filters[ResourceData::IDENTIFIER_ATTRIBUTE] ?? null) !== null) {
+                return
+                    ($idFilter[self::FILTER_ATTRIBUTE_OPERATOR] ?? null) === Filters::EQUALS_OPERATOR &&
+                    ($idFilter[self::FILTER_ATTRIBUTE_LOGICAL_OPERATOR] ?? null) === Filters::LOGICAL_AND_OPERATOR;
             }
-            $data[$attributeName] = $stringValue;
         }
 
-        if ($didAnyLogicalOrFilterPass === false) {
-            return false;
+        return false;
+    }
+
+    protected static function getResourceDataFromXmlStatic(SimpleXMLElement $node, array $attributeNameToXpathMap): array
+    {
+        $data = [];
+        foreach ($attributeNameToXpathMap as $attributeName => $xpathExpression) {
+            $data[$attributeName] = self::getResourcePropertyOrEmptyString($node, $xpathExpression);
         }
 
         return $data;
+    }
+
+    private static function passesFilters(ResourceData $currentResourceItem, array $filters): bool
+    {
+        // tri-state: null (no 'or' filter applied), true (at least one 'or' filter passed), false (none of the 'or' filters passed)
+        $didAnyLogicalOrFilterPass = null;
+
+        foreach ($filters as $attributeName => $filter) {
+            $stringValue = $currentResourceItem->getData()[$attributeName];
+            $logicalOperator = $filter[self::FILTER_ATTRIBUTE_LOGICAL_OPERATOR];
+            if ($logicalOperator === Filters::LOGICAL_AND_OPERATOR || $didAnyLogicalOrFilterPass !== true) {
+                if (Filters::passesFilter($stringValue, $filter[self::FILTER_ATTRIBUTE_OPERATOR], $filter[self::FILTER_ATTRIBUTE_FILTER_VALUE])) {
+                    if ($logicalOperator === Filters::LOGICAL_OR_OPERATOR) {
+                        $didAnyLogicalOrFilterPass = true;
+                    }
+                } elseif ($logicalOperator === Filters::LOGICAL_AND_OPERATOR) {
+                    return false;
+                } else {
+                    $didAnyLogicalOrFilterPass = false;
+                }
+            }
+        }
+
+        return !($didAnyLogicalOrFilterPass === false);
+    }
+
+    public function setCache(CacheItemPoolInterface $cache, int $cacheTtl)
+    {
+        $this->cache = $cache;
+        $this->cacheTtl = $cacheTtl;
     }
 
     /**
@@ -103,12 +124,12 @@ abstract class ResourceApi
      */
     abstract public function checkConnection(); // make sure this doesn't take long with lots of data provided by the API
 
-    protected function __construct(Connection $connection, string $rootOrgUnitId, string $resourceXmlPath)
+    protected function __construct(Connection $connection, string $rootOrgUnitId, array $attributeNameToXpathMap, string $resourceXpathExpression = null)
     {
-        $this->resourceXmlPath = $resourceXmlPath;
-
         $this->connection = $connection;
         $this->rootOrgUnitId = $rootOrgUnitId;
+        $this->attributeNameToXpathMap = $attributeNameToXpathMap;
+        $this->resourceXpathExpression = $resourceXpathExpression;
     }
 
     /**
@@ -119,7 +140,7 @@ abstract class ResourceApi
     {
         try {
             // disable caching, so we don't get a stale response
-            $this->connection->get($uri, '', $parameters, false);
+            $this->connection->get($uri, $parameters, [], false);
         } catch (ApiException $e) {
             if ($e->isHttpResponseCode() && $e->getCode() === $statusCode) {
                 return;
@@ -132,65 +153,183 @@ abstract class ResourceApi
     /**
      * @throws ApiException
      */
-    protected function getResourcesInternal(string $uri, array $parameters, array $options): Page
+    protected function getItem(string $identifier, string $uri, array $uriParameters, array $options): ?ResourceData
     {
-        $responseBody = $this->connection->get(
-            $uri, $options[Api::LANGUAGE_PARAMETER_NAME] ?? '', $parameters);
+        $this->getResultIdentifiersCached($uri, $uriParameters, $options);
+        $resourceCacheItem = $this->getCacheItem($identifier);
 
-        return $this->parseResponse($responseBody, $options);
+        return $resourceCacheItem->isHit() ? $resourceCacheItem->get() : null;
+    }
+
+    protected function getPage(string $uri, array $uriParameters, array $options): Page
+    {
+        $resourceIdentifiers = $this->getResultIdentifiersCached($uri, $uriParameters, $options);
+
+        return $this->filterResources($resourceIdentifiers, $options);
+    }
+
+    protected function getResourceDataFromXml(SimpleXMLElement $node): array
+    {
+        return self::getResourceDataFromXmlStatic($node, $this->attributeNameToXpathMap);
+    }
+
+    private function filterResources(array $resourceIdentifiers, array $options): Page
+    {
+        $filteredResourceItems = [];
+
+        $numItemsPerPage = Pagination::getMaxNumItemsPerPage($options);
+        $firstMatchingItemsIndex = Pagination::getCurrentPageStartIndex($options);
+        $matchingItemCount = 0;
+        $filters = $options[self::FILTERS_OPTION] ?? [];
+
+        foreach ($resourceIdentifiers as $resourceIdentifier) {
+            $currentResourceCacheItem = $this->getCacheItem($resourceIdentifier);
+            assert($currentResourceCacheItem->isHit());
+            $currentResourceItem = $currentResourceCacheItem->get();
+
+            if (self::passesFilters($currentResourceItem, $filters)) {
+                ++$matchingItemCount;
+
+                if ($matchingItemCount > $firstMatchingItemsIndex && ($numItemsPerPage === Pagination::ALL_ITEMS || count($filteredResourceItems) < $numItemsPerPage)) {
+                    $filteredResourceItems[] = $currentResourceItem;
+                }
+            }
+        }
+
+        return Pagination::createPage($filteredResourceItems, $options);
+    }
+
+    protected function isResourceNode(SimpleXMLElement $node): bool
+    {
+        return false;
+    }
+
+    abstract protected function createResource(): ResourceData;
+
+    /**
+     * @throws ApiException
+     */
+    private function getResultIdentifiersCached(string $uri, array $uriParameters, array $options): array
+    {
+        if ($this->cache === null) {
+            throw new ApiException('cache is not available');
+        }
+
+        try {
+            $uriCacheKey = Connection::makeUri($uri, $uriParameters, $options);
+        } catch (UriException $e) {
+            throw new ApiException('invalid uri or parameters: '.$uri);
+        }
+
+        $resultIdentifiersCacheItem = $this->getCacheItem($uriCacheKey);
+        if ($resultIdentifiersCacheItem->isHit() === false) {
+            $resultIdentifiers = [];
+            foreach ($this->getResources($uri, $uriParameters, $options) as $resourceItem) {
+                $resourceCacheItem = $this->getCacheItem($resourceItem->getIdentifier());
+                $this->saveCacheItem($resourceCacheItem, $resourceItem);
+                $resultIdentifiers[] = $resourceItem->getIdentifier();
+            }
+            $this->saveCacheItem($resultIdentifiersCacheItem, $resultIdentifiers);
+        }
+
+        return $resultIdentifiersCacheItem->get();
     }
 
     /**
      * @throws ApiException
      */
-    protected function parseResponse(string $responseBody, array $options): Page
+    private function getResources(string $uri, array $uriParameters = [], array $options = []): array
+    {
+        $responseBody = $this->connection->get($uri, $uriParameters, $options);
+
+        if ($options[self::GET_CHILD_IDS_OPTION_KEY] ?? false) {
+            return $this->getResourceItemsRecursive($responseBody);
+        } else {
+            return $this->getResourceItems($responseBody);
+        }
+    }
+
+    private function getResourceItems(string $responseBody): array
     {
         try {
             $xml = new SimpleXMLElement($responseBody);
         } catch (\Exception $e) {
             throw new ApiException('response body is not in valid XML format');
         }
-        $nodes = $xml->xpath($this->resourceXmlPath);
 
-        $totalNumItems = count($nodes);
-        $numItemsPerPage = Pagination::getMaxNumItemsPerPage($options, $totalNumItems);
-        $firstMatchingItemsIndex = Pagination::getCurrentPageStartIndex($options);
-        $matchingItemCount = 0;
-        $filters = $options[self::FILTERS_OPTION] ?? [];
-        $hasIdFilter = self::hasEqualsIdFilter($options);
-
-        $resources = [];
-        for ($nodeIndex = 0; $nodeIndex < $totalNumItems; ++$nodeIndex) {
-            $node = $nodes[$nodeIndex];
-
-            if (($resourceData = $this->getResourceDataFromXmlIfPassesFilters($node,
-                    $this->getAttributeNameToXpathExpressionMapping(), $filters)) !== false) {
-                ++$matchingItemCount;
-
-                if ($matchingItemCount > $firstMatchingItemsIndex && ($numItemsPerPage === $totalNumItems || count($resources) < $numItemsPerPage)) {
-                    $resource = $this->createResource($node);
-                    $resource->setData($resourceData);
-                    $resources[] = $resource;
-
-                    if ($hasIdFilter || count($resources) === $numItemsPerPage) {
-                        break;
-                    }
+        $resourceItems = [];
+        if ($this->resourceXpathExpression !== null) {
+            $resourceNodes = $xml->xpath($this->resourceXpathExpression);
+            if (count($resourceNodes) > 0) {
+                foreach ($resourceNodes as $resourceNode) {
+                    $resourceItem = $this->createResource();
+                    $resourceItem->setData($this->getResourceDataFromXml($resourceNode));
+                    $resourceItems[] = $resourceItem;
                 }
             }
         }
 
-        return Pagination::createPage($resources, $options);
+        return $resourceItems;
+    }
+
+    private function getResourceItemsRecursive(string $responseBody): array
+    {
+        try {
+            $xml = new SimpleXMLIterator($responseBody);
+        } catch (\Exception $e) {
+            throw new ApiException('response body is not in valid XML format');
+        }
+
+        $resourceItems = [];
+        $childIds = [];
+        $this->addChildResourceItems($xml, $resourceItems, $childIds);
+
+        return $resourceItems;
+    }
+
+    private function addChildResourceItems(SimpleXMLIterator $iterator, array &$resultItems, array &$childIds)
+    {
+        for ($iterator->rewind(); $iterator->valid(); $iterator->next()) {
+            $child = $iterator->current();
+            if ($this->isResourceNode($child)) {
+                $resultItem = $this->createResource();
+                $resultItem->setData($this->getResourceDataFromXml($child));
+                $resultItems[] = $resultItem;
+                $childIds[] = $resultItem->getIdentifier();
+
+                if ($child instanceof SimpleXMLIterator) {
+                    $grandChildIds = [];
+                    $this->addChildResourceItems($child, $resultItems, $grandChildIds);
+                    $resultItem->setChildIds($grandChildIds);
+                }
+            }
+        }
     }
 
     /**
-     * @return array|false The resource data in case it passes all given filters; false otherwise
+     * @throws ApiException
      */
-    protected function getResourceDataFromXmlIfPassesFilters(SimpleXMLElement $node, array $attributeNameToXpathExpressionMapping, array $filters = [])
+    private function getCacheItem(string $rawKey): CacheItemInterface
     {
-        return self::getResourceDataFromXmlIfPassesFiltersStatic($node, $attributeNameToXpathExpressionMapping, $filters);
+        if ($this->cache === null) {
+            throw new ApiException('cache is not set');
+        }
+
+        try {
+            return $this->cache->getItem(urlencode($rawKey));
+        } catch (InvalidArgumentException $e) {
+            throw new ApiException('invalid cache key');
+        }
     }
 
-    abstract protected function createResource(SimpleXMLElement $node): ResourceData;
+    private function saveCacheItem(CacheItemInterface $resourceCacheItem, $resourceItem)
+    {
+        if ($this->cache === null) {
+            throw new ApiException('cache is not set');
+        }
 
-    abstract protected function getAttributeNameToXpathExpressionMapping(): array;
+        $resourceCacheItem->set($resourceItem);
+        $resourceCacheItem->expiresAfter($this->cacheTtl);
+        $this->cache->save($resourceCacheItem);
+    }
 }

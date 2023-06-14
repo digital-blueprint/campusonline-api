@@ -11,6 +11,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 class PersonApiTest extends TestCase
 {
@@ -23,7 +24,8 @@ class PersonApiTest extends TestCase
     {
         parent::setUp();
 
-        $this->api = new Api('http://localhost', 'token', '1');
+        $this->api = new Api('http://localhost', 'token', '0', null,
+            new ArrayAdapter(3600, true, 3600, 356), 3600);
         $this->mockResponses([]);
     }
 

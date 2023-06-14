@@ -9,6 +9,8 @@ class Pagination
     public const CURRENT_PAGE_NUMBER_PARAMETER_NAME = 'page';
     public const MAX_NUM_ITEMS_PER_PAGE_PARAMETER_NAME = 'perPage';
 
+    public const ALL_ITEMS = -1;
+
     public static function getPageStartIndex(int $pageNumber, int $maxNumItemsPerPage)
     {
         return ($pageNumber - 1) * $maxNumItemsPerPage;
@@ -38,7 +40,7 @@ class Pagination
         return $numItemsPerPage ? self::getPageStartIndex($page, $numItemsPerPage) : 0;
     }
 
-    public static function getMaxNumItemsPerPage(array $options, int $default): int
+    public static function getMaxNumItemsPerPage(array $options, int $default = self::ALL_ITEMS): int
     {
         return self::getMaxNumItemsPerPageInternal($options) ?? $default;
     }

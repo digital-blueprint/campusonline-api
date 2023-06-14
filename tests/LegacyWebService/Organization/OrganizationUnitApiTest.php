@@ -16,6 +16,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 class OrganizationUnitApiTest extends TestCase
 {
@@ -26,7 +27,8 @@ class OrganizationUnitApiTest extends TestCase
     {
         parent::setUp();
 
-        $this->api = new Api('http://localhost', 'token', '0');
+        $this->api = new Api('http://localhost', 'token', '0', null,
+            new ArrayAdapter(3600, true, 3600, 356), 3600);
         $this->mockResponses([]);
     }
 
@@ -150,19 +152,6 @@ class OrganizationUnitApiTest extends TestCase
         $page = $this->getOrgUnitApi()->getOrganizationUnits($options);
         $orgUnits = $page->getItems();
         $this->assertCount(0, $orgUnits);
-    }
-
-    public function testGetSomeOrganizations()
-    {
-        $this->mockResponses([
-            new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/co_orgunit_response_nested.xml')),
-        ]);
-        $api = $this->getOrgUnitApi();
-        $result = $api->getOrganizationUnitsById(['18452', '18454']);
-        $items = $result->getItems();
-        $this->assertCount(2, $items);
-        $this->assertSame($items[0]->getIdentifier(), '18454');
-        $this->assertSame($items[1]->getIdentifier(), '18452');
     }
 
     /**

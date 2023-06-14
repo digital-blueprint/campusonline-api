@@ -56,7 +56,7 @@ class CourseApi extends ResourceApi implements LoggerAwareInterface
 
     public function __construct(Connection $connection, string $rootOrgUnitId)
     {
-        parent::__construct($connection, $rootOrgUnitId, self::COURSE_RESOURCE_XML_PATH);
+        parent::__construct($connection, $rootOrgUnitId, self::ATTRIBUTE_NAME_TO_XPATH_MAPPING, self::COURSE_RESOURCE_XML_PATH);
     }
 
     public function checkConnection()
@@ -76,19 +76,20 @@ class CourseApi extends ResourceApi implements LoggerAwareInterface
             throw new ApiException("identifier mustn't be empty");
         }
 
-        ResourceApi::addEqualsIdFilter($options, $identifier);
+        $uriParameters = [];
+        $uriParameters[OrganizationUnitApi::ORG_UNIT_ID_PARAMETER_NAME] = $identifier;
 
-        $parameters = [];
-        $parameters[self::COURSE_ID_PARAMETER_NAME] = $identifier;
+        $courseData = $this->getItem($identifier, self::COURSES_BY_ORGANIZATION_URI, $uriParameters, $options);
 
-        $coursePaginator = $this->getCoursesInternal(self::COURSE_BY_ID_URI, $parameters, $options);
-        $courseItems = $coursePaginator->getItems();
-        if (empty($courseItems)) {
-            throw new ApiException("response doesn't contain course with ID ".$identifier, 404, true);
+        if ($courseData === null) {
+            throw new ApiException('course with ID not found: '.$identifier, 404, true);
         }
-        assert(count($courseItems) === 1);
 
-        return $courseItems[0];
+        if ($courseData instanceof CourseData === false) {
+            throw new ApiException('internal error');
+        }
+
+        return $courseData;
     }
 
     /**
@@ -147,30 +148,24 @@ class CourseApi extends ResourceApi implements LoggerAwareInterface
             $parameters[self::TEACHING_TERM_PARAMETER_NAME] = $teachingTerm;
         }
 
-        return $this->getResourcesInternal($uri, $parameters, $options);
+        return $this->getPage($uri, $parameters, $options);
     }
 
-    protected function createResource(SimpleXMLElement $node): ResourceData
+    protected function createResource(): ResourceData
     {
         return new CourseData();
     }
 
-    protected function getResourceDataFromXmlIfPassesFilters(SimpleXMLElement $node, array $attributeNameToXpathExpressionMapping, array $filters = [])
+    protected function getResourceDataFromXml(SimpleXMLElement $node): array
     {
-        $resourceData = parent::getResourceDataFromXmlIfPassesFilters($node, $attributeNameToXpathExpressionMapping, $filters);
-        if (is_array($resourceData)) {
-            $contacts = [];
-            foreach ($node->xpath(self::COURSE_CONTACTS_PERSON_XML_PATH) as $personNode) {
-                $contacts[] = PersonApi::createPersonResource($personNode);
-            }
-            $resourceData[CourseData::CONTACTS_ATTRIBUTE] = $contacts;
+        $resourceData = parent::getResourceDataFromXml($node);
+
+        $contacts = [];
+        foreach ($node->xpath(self::COURSE_CONTACTS_PERSON_XML_PATH) as $personNode) {
+            $contacts[] = PersonApi::createPersonResource($personNode);
         }
+        $resourceData[CourseData::CONTACTS_ATTRIBUTE] = $contacts;
 
         return $resourceData;
-    }
-
-    protected function getAttributeNameToXpathExpressionMapping(): array
-    {
-        return self::ATTRIBUTE_NAME_TO_XPATH_MAPPING;
     }
 }

@@ -33,7 +33,7 @@ class PersonApi extends ResourceApi implements LoggerAwareInterface
 
     public function __construct(Connection $connection, string $rootOrgUnitId)
     {
-        parent::__construct($connection, $rootOrgUnitId, self::PERSON_RESOURCE_XML_PATH);
+        parent::__construct($connection, $rootOrgUnitId, self::ATTRIBUTE_NAME_TO_XPATH_MAPPING, self::PERSON_RESOURCE_XML_PATH);
     }
 
     public function checkConnection()
@@ -53,32 +53,22 @@ class PersonApi extends ResourceApi implements LoggerAwareInterface
             return Pagination::createEmptyPage($options);
         }
 
-        $parameters = [];
-        $parameters[self::COURSE_ID_PARAMETER_NAME] = $courseId;
+        $uriParameters = [];
+        $uriParameters[self::COURSE_ID_PARAMETER_NAME] = $courseId;
 
-        return $this->getResourcesInternal(self::STUDENTS_BY_COURSE_URI, $parameters, $options);
+        return $this->getPage(self::STUDENTS_BY_COURSE_URI, $uriParameters, $options);
     }
 
     public static function createPersonResource(SimpleXMLElement $node): PersonData
     {
-        $returnValue = self::getResourceDataFromXmlIfPassesFiltersStatic($node, self::ATTRIBUTE_NAME_TO_XPATH_MAPPING);
-        if (is_array($returnValue) === false) {
-            throw new ApiException('internal error');
-        }
-
         $personData = new PersonData();
-        $personData->setData($returnValue);
+        $personData->setData(self::getResourceDataFromXmlStatic($node, self::ATTRIBUTE_NAME_TO_XPATH_MAPPING));
 
         return $personData;
     }
 
-    protected function createResource(SimpleXMLElement $node): ResourceData
+    protected function createResource(): ResourceData
     {
         return new PersonData();
-    }
-
-    protected function getAttributeNameToXpathExpressionMapping(): array
-    {
-        return self::ATTRIBUTE_NAME_TO_XPATH_MAPPING;
     }
 }

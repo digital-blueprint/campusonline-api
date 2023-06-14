@@ -40,7 +40,7 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
 
     public function __construct(Connection $connection, string $rootOrgUnitId)
     {
-        parent::__construct($connection, $rootOrgUnitId, self::ROOM_RESOURCE_XML_PATH);
+        parent::__construct($connection, $rootOrgUnitId, self::ATTRIBUTE_NAME_TO_XPATH_MAPPING, self::ROOM_RESOURCE_XML_PATH);
     }
 
     public function checkConnection()
@@ -61,17 +61,20 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
             throw new ApiException("identifier mustn't be empty");
         }
 
-        ResourceApi::addEqualsIdFilter($options, $identifier);
+        $uriParameters = [];
+        $uriParameters[OrganizationUnitApi::ORG_UNIT_ID_PARAMETER_NAME] = $this->rootOrgUnitId;
 
-        $paginator = $this->getRoomsInternal($options);
+        $roomData = $this->getItem($identifier, self::COLLECTION_URI, $uriParameters, $options);
 
-        $roomItems = $paginator->getItems();
-        if (empty($roomItems)) {
-            throw new ApiException("response doesn't contain room with ID ".$identifier, 404, true);
+        if ($roomData === null) {
+            throw new ApiException('response doesn\'t contain organization unit with ID '.$identifier, 404, true);
         }
-        assert(count($roomItems) === 1);
 
-        return $roomItems[0];
+        if ($roomData instanceof RoomData === false) {
+            throw new ApiException('internal error');
+        }
+
+        return $roomData;
     }
 
     /**
@@ -79,29 +82,14 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
      */
     public function getRooms(array $options = []): Page
     {
-        return $this->getRoomsInternal($options);
+        $uriParameters = [];
+        $uriParameters[OrganizationUnitApi::ORG_UNIT_ID_PARAMETER_NAME] = $this->rootOrgUnitId;
+
+        return $this->getPage(self::COLLECTION_URI, $uriParameters, $options);
     }
 
-    /**
-     * Currently all rooms are requested and cached. Requested rooms are then fetched from the XML response.
-     *
-     * @throws ApiException
-     */
-    private function getRoomsInternal(array $options): Page
-    {
-        $parameters = [];
-        $parameters[OrganizationUnitApi::ORG_UNIT_ID_PARAMETER_NAME] = $this->rootOrgUnitId;
-
-        return $this->getResourcesInternal(self::COLLECTION_URI, $parameters, $options);
-    }
-
-    protected function createResource(\SimpleXMLElement $node): ResourceData
+    protected function createResource(): ResourceData
     {
         return new RoomData();
-    }
-
-    protected function getAttributeNameToXpathExpressionMapping(): array
-    {
-        return self::ATTRIBUTE_NAME_TO_XPATH_MAPPING;
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\LegacyWebService\Organization;
 
-use Dbp\CampusonlineApi\Helpers\Filters;
 use Dbp\CampusonlineApi\Helpers\Page;
 use Dbp\CampusonlineApi\LegacyWebService\ApiException;
 use Dbp\CampusonlineApi\LegacyWebService\Connection;
@@ -12,6 +11,7 @@ use Dbp\CampusonlineApi\LegacyWebService\ResourceApi;
 use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
+use SimpleXMLElement;
 
 class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
 {
@@ -21,7 +21,7 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
 
     private const URI = 'ws/webservice_v1.0/cdm/organization/xml';
 
-    private const ORG_UNIT_RESOURCE_XML_PATH = './/orgUnit';
+    private const ORG_UNIT_RESOURCE_XML_NAME = 'orgUnit'; // './/orgUnit';
     private const ORG_UNIT_IDENTIFIER_XML_PATH = './orgUnitID';
     private const ORG_UNIT_NAME_XML_PATH = './orgUnitName/text';
 
@@ -40,7 +40,7 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
 
     public function __construct(Connection $connection, string $rootOrgUnitId)
     {
-        parent::__construct($connection, $rootOrgUnitId, self::ORG_UNIT_RESOURCE_XML_PATH);
+        parent::__construct($connection, $rootOrgUnitId, self::ATTRIBUTE_NAME_TO_XPATH_MAPPING);
     }
 
     public function checkConnection()
@@ -62,45 +62,21 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
             throw new ApiException("identifier mustn't be empty");
         }
 
-        ResourceApi::addEqualsIdFilter($options, $identifier);
+        $uriParameters = [];
+        $uriParameters[self::ORG_UNIT_ID_PARAMETER_NAME] = $this->rootOrgUnitId;
+        $options[ResourceApi::GET_CHILD_IDS_OPTION_KEY] = true;
 
-        $paginator = $this->getOrganizationUnitsInternal($options, $identifier);
+        $orgUnitData = $this->getItem($identifier, self::URI, $uriParameters, $options);
 
-        $orgUnitItems = $paginator->getItems();
-        if (empty($orgUnitItems)) {
-            throw new ApiException("response doesn't contain organization unit with ID ".$identifier, 404, true);
-        }
-        assert(count($orgUnitItems) === 1);
-
-        return $orgUnitItems[0];
-    }
-
-    /**
-     * Returns a Paginator of organization units for the passed identifiers.
-     * The order of the response is undefined and might not match the order of
-     * the passed in identifiers.
-     *
-     * @param string[] $identifiers
-     *
-     * @throws ApiException
-     */
-    public function getOrganizationUnitsById(array $identifiers, array $options = []): Page
-    {
-        foreach ($identifiers as $identifier) {
-            if ($identifier === '') {
-                throw new ApiException("identifier mustn't be empty");
-            }
+        if ($orgUnitData === null) {
+            throw new ApiException('organization unit with ID not found: '.$identifier, 404, true);
         }
 
-        ResourceApi::addFilter($options, ResourceData::IDENTIFIER_ATTRIBUTE, Filters::IN_OPERATOR, $identifiers);
-
-        $paginator = $this->getOrganizationUnitsInternal($options);
-        $orgUnitItems = $paginator->getItems();
-        if (count($orgUnitItems) !== count($identifiers)) {
-            throw new ApiException("response doesn't contain all requested organization units", 404, true);
+        if ($orgUnitData instanceof OrganizationUnitData === false) {
+            throw new ApiException('internal error');
         }
 
-        return $paginator;
+        return $orgUnitData;
     }
 
     /**
@@ -108,27 +84,20 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
      */
     public function getOrganizationUnits(array $options = []): Page
     {
-        return $this->getOrganizationUnitsInternal($options);
+        $uriParameters = [];
+        $uriParameters[self::ORG_UNIT_ID_PARAMETER_NAME] = $this->rootOrgUnitId;
+        $options[ResourceApi::GET_CHILD_IDS_OPTION_KEY] = true;
+
+        return $this->getPage(self::URI, $uriParameters, $options);
     }
 
-    protected function createResource(\SimpleXMLElement $node): ResourceData
+    protected function createResource(): ResourceData
     {
         return new OrganizationUnitData();
     }
 
-    protected function getAttributeNameToXpathExpressionMapping(): array
+    protected function isResourceNode(SimpleXMLElement $node): bool
     {
-        return self::ATTRIBUTE_NAME_TO_XPATH_MAPPING;
-    }
-
-    /**
-     * @throws ApiException
-     */
-    private function getOrganizationUnitsInternal(array $options, string $identifier = null): Page
-    {
-        $parameters = [];
-        $parameters[self::ORG_UNIT_ID_PARAMETER_NAME] = $identifier ?? $this->rootOrgUnitId;
-
-        return $this->getResourcesInternal(self::URI, $parameters, $options);
+        return $node->getName() === self::ORG_UNIT_RESOURCE_XML_NAME;
     }
 }
