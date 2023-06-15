@@ -7,7 +7,8 @@ namespace Dbp\CampusonlineApi\LegacyWebService;
 class ResourceData
 {
     public const IDENTIFIER_ATTRIBUTE = 'identifier';
-    public const CHILD_IDS_ATTRIBUTE = 'childIds';
+    public const CHILD_IDENTIFIERS_ATTRIBUTE = 'childIds';
+    public const PARENT_IDENTIFIER_ATTRIBUTE = 'parentId';
 
     /** @var array */
     protected $data;
@@ -42,13 +43,23 @@ class ResourceData
         $this->data[self::IDENTIFIER_ATTRIBUTE] = $identifier;
     }
 
-    public function getChildIds(): array
+    public function getChildIdentifiers(): array
     {
-        return $this->data[self::CHILD_IDS_ATTRIBUTE];
+        return $this->data[self::CHILD_IDENTIFIERS_ATTRIBUTE];
     }
 
-    public function setChildIds(array $childIds): void
+    public function setChildIdentifiers(array $childIds): void
     {
-        $this->data[self::CHILD_IDS_ATTRIBUTE] = $childIds;
+        $this->data[self::CHILD_IDENTIFIERS_ATTRIBUTE] = $childIds;
+    }
+
+    public function setParentIdentifier(?string $parentIdentifier)
+    {
+        $this->data[self::PARENT_IDENTIFIER_ATTRIBUTE] = $parentIdentifier;
+    }
+
+    public function getParentIdentifier(): string
+    {
+        return $this->data[self::PARENT_IDENTIFIER_ATTRIBUTE];
     }
 }

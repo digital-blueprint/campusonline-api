@@ -282,24 +282,26 @@ abstract class ResourceApi
 
         $resourceItems = [];
         $childIds = [];
-        $this->addChildResourceItems($xml, $resourceItems, $childIds);
+        $this->addChildResourceItems($xml, null, $resourceItems, $childIds);
 
         return $resourceItems;
     }
 
-    private function addChildResourceItems(SimpleXMLIterator $iterator, array &$resultItems, array &$childIds)
+    private function addChildResourceItems(SimpleXMLIterator $iterator, ?string $parentIdentifier, array &$resultItems, array &$childIdentifiers)
     {
         for ($iterator->rewind(); $iterator->valid(); $iterator->next()) {
             $child = $iterator->current();
             if ($child !== null && $this->isResourceNode($child)) {
                 $resultItem = $this->createResource();
                 $resultItem->setData($this->getResourceDataFromXml($child));
+                $resultItem->setParentIdentifier($parentIdentifier);
                 $resultItems[] = $resultItem;
-                $childIds[] = $resultItem->getIdentifier();
+                $resultItemIdentifier = $resultItem->getIdentifier();
+                $childIdentifiers[] = $resultItemIdentifier;
 
-                $grandChildIds = [];
-                $this->addChildResourceItems($child, $resultItems, $grandChildIds);
-                $resultItem->setChildIds($grandChildIds);
+                $grandChildIdentifiers = [];
+                $this->addChildResourceItems($child, $resultItemIdentifier, $resultItems, $grandChildIdentifiers);
+                $resultItem->setChildIdentifiers($grandChildIdentifiers);
             }
         }
     }
