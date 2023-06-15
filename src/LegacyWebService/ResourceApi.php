@@ -291,17 +291,15 @@ abstract class ResourceApi
     {
         for ($iterator->rewind(); $iterator->valid(); $iterator->next()) {
             $child = $iterator->current();
-            if ($this->isResourceNode($child)) {
+            if ($child !== null && $this->isResourceNode($child)) {
                 $resultItem = $this->createResource();
                 $resultItem->setData($this->getResourceDataFromXml($child));
                 $resultItems[] = $resultItem;
                 $childIds[] = $resultItem->getIdentifier();
 
-                if ($child instanceof SimpleXMLIterator) {
-                    $grandChildIds = [];
-                    $this->addChildResourceItems($child, $resultItems, $grandChildIds);
-                    $resultItem->setChildIds($grandChildIds);
-                }
+                $grandChildIds = [];
+                $this->addChildResourceItems($child, $resultItems, $grandChildIds);
+                $resultItem->setChildIds($grandChildIds);
             }
         }
     }
