@@ -112,6 +112,11 @@ abstract class ResourceApi
         return !($didAnyLogicalOrFilterPass === false);
     }
 
+    private static function getResourceItemCacheKey(string $resourceItemIdentifier, array $options): string
+    {
+        return $resourceItemIdentifier.':'.Connection::getLanguageParameter($options);
+    }
+
     public function setCache(CacheItemPoolInterface $cache, int $cacheTtl)
     {
         $this->cache = $cache;
@@ -156,7 +161,8 @@ abstract class ResourceApi
     protected function getItem(string $identifier, string $uri, array $uriParameters, array $options): ?ResourceData
     {
         $this->getResultIdentifiersCached($uri, $uriParameters, $options);
-        $resourceCacheItem = $this->getCacheItem($identifier);
+        $resourceCacheItem = $this->getCacheItem(
+            self::getResourceItemCacheKey($identifier, $options));
 
         return $resourceCacheItem->isHit() ? $resourceCacheItem->get() : null;
     }
@@ -183,7 +189,8 @@ abstract class ResourceApi
         $filters = $options[self::FILTERS_OPTION] ?? [];
 
         foreach ($resourceIdentifiers as $resourceIdentifier) {
-            $currentResourceCacheItem = $this->getCacheItem($resourceIdentifier);
+            $currentResourceCacheItem = $this->getCacheItem(
+                self::getResourceItemCacheKey($resourceIdentifier, $options));
             assert($currentResourceCacheItem->isHit());
             $currentResourceItem = $currentResourceCacheItem->get();
 
@@ -225,7 +232,8 @@ abstract class ResourceApi
         if ($resultIdentifiersCacheItem->isHit() === false) {
             $resultIdentifiers = [];
             foreach ($this->getResources($uri, $uriParameters, $options) as $resourceItem) {
-                $resourceCacheItem = $this->getCacheItem($resourceItem->getIdentifier());
+                $resourceCacheItem = $this->getCacheItem(
+                    self::getResourceItemCacheKey($resourceItem->getIdentifier(), $options));
                 $this->saveCacheItem($resourceCacheItem, $resourceItem);
                 $resultIdentifiers[] = $resourceItem->getIdentifier();
             }
@@ -309,14 +317,14 @@ abstract class ResourceApi
     /**
      * @throws ApiException
      */
-    private function getCacheItem(string $rawKey): CacheItemInterface
+    private function getCacheItem(string $key): CacheItemInterface
     {
         if ($this->cache === null) {
             throw new ApiException('cache is not set');
         }
 
         try {
-            return $this->cache->getItem(urlencode($rawKey));
+            return $this->cache->getItem(urlencode($key));
         } catch (InvalidArgumentException $e) {
             throw new ApiException('invalid cache key');
         }

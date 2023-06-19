@@ -109,7 +109,7 @@ class Connection implements LoggerAwareInterface
         return new Client($client_options);
     }
 
-    private static function getLanguageParameter(array $options): string
+    public static function getLanguageParameter(array $options): string
     {
         switch ($options[Api::LANGUAGE_PARAMETER_NAME] ?? '') {
             case self::LANGUAGE_EN:
