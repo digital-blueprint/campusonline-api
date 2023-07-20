@@ -21,6 +21,27 @@ class Tools
     }
 
     /**
+     * Throws in case a value is not suitable as a filter field name.
+     *
+     * @throws \ValueError
+     */
+    public static function validateFilterName(string $input): string
+    {
+        // Filter names are separated by '-' to the operator
+        if (str_contains($input, '-')) {
+            throw new \ValueError('filter name not allowed to contain "-"');
+        }
+
+        // XXX: Filter names are delimited by ";" and I don't know how
+        // to escape them, which could lead to filter injections, so throw.
+        if (str_contains($input, ';')) {
+            throw new \ValueError('filter name not allowed to contain ";"');
+        }
+
+        return $input;
+    }
+
+    /**
      * @param mixed $input
      *
      * @return mixed

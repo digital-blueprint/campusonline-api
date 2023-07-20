@@ -25,4 +25,22 @@ class ToolsTest extends TestCase
         $this->expectException(\ValueError::class);
         Tools::validateFilterValue('adad;saf');
     }
+
+    public function testValidateFilterName()
+    {
+        $this->assertSame('ok', Tools::validateFilterName('ok'));
+        $this->assertSame('', Tools::validateFilterName(''));
+    }
+
+    public function testValidateFilterNameSemicolon()
+    {
+        $this->expectException(\ValueError::class);
+        Tools::validateFilterName('adad;saf');
+    }
+
+    public function testValidateFilterNameMinus()
+    {
+        $this->expectException(\ValueError::class);
+        Tools::validateFilterName('adad-eq');
+    }
 }

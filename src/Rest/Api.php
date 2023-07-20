@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\Rest;
 
 use Dbp\CampusonlineApi\Helpers\ApiException;
+use Dbp\CampusonlineApi\Rest\Generic\GenericApi;
 use Dbp\CampusonlineApi\Rest\ResearchProject\ResearchProjectApi;
 use Dbp\CampusonlineApi\Rest\Student\StudentApi;
 use Dbp\CampusonlineApi\Rest\UCard\UCardApi;
@@ -60,6 +61,15 @@ class Api implements LoggerAwareInterface
     }
 
     /**
+     * @param string $dataService The name of the exported data service. In case the endpoint is located at something
+     *                            like `pl/rest/loc_apiMyExport` then the data service name is `loc_apiMyExport`
+     */
+    public function Generic(string $dataService): GenericApi
+    {
+        return new GenericApi($this->connection, $dataService);
+    }
+
+    /**
      * @param mixed $filterValue
      *
      * @throws ApiException
@@ -77,7 +87,7 @@ class Api implements LoggerAwareInterface
                 throw new ApiException('unknown filter operator '.$operator);
         }
 
-        return $filterName.$operatorString.Tools::validateFilterValue($filterValue);
+        return Tools::validateFilterName($filterName).$operatorString.Tools::validateFilterValue($filterValue);
     }
 
     /**
