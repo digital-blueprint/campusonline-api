@@ -15,6 +15,9 @@ use League\Uri\Contracts\UriException;
 use League\Uri\UriTemplate;
 use Psr\Http\Message\ResponseInterface;
 
+/**
+ * @deprecated Use GenericApi instead
+ */
 class ResearchProjectApi
 {
     /**
