@@ -1,3 +1,7 @@
+# v0.3.7
+
+* Added a new FilterBuilder class for building filter expressions. Deprecated the old filter code.
+
 # v0.3.6
 
 * Added a new GenericApi class for generic data exports.
