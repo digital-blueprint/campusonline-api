@@ -9,9 +9,33 @@ use PHPUnit\Framework\TestCase;
 
 class ToolsTest extends TestCase
 {
-    public function testValidateFilterValue()
+    public function testValidateFilterValueOK()
     {
-        $this->assertSame('ok', Tools::validateFilterValue('ok'));
+        // This list was gathered by testing various inputs
+        $OK = ['ℭ', 'Привет', 'öäüß', 'ok', 'OK', '0', '1234567890', '-_,', 'ⅲ', '.'];
+        foreach ($OK as $value) {
+            $this->assertSame($value, Tools::validateFilterValue($value));
+        }
+    }
+
+    /**
+     * @dataProvider providerInvalidValues
+     */
+    public function testValidateFilterValueInvalid($value)
+    {
+        $this->expectException(\ValueError::class);
+        Tools::validateFilterValue($value);
+    }
+
+    public function providerInvalidValues()
+    {
+        $arguments = [['']];
+        // This list is not complete... just based on manual testing
+        foreach (mb_str_split(' !#$&\'*+/:;=?@[]"<>\^`{}|~£+') as $char) {
+            $arguments[] = [$char];
+        }
+
+        return $arguments;
     }
 
     public function testValidateFilterValueEmpty()
@@ -20,22 +44,21 @@ class ToolsTest extends TestCase
         Tools::validateFilterValue('');
     }
 
-    public function testValidateFilterValueSemicolon()
-    {
-        $this->expectException(\ValueError::class);
-        Tools::validateFilterValue('adad;saf');
-    }
-
     public function testValidateFilterName()
     {
-        $this->assertSame('ok', Tools::validateFilterName('ok'));
-        $this->assertSame('', Tools::validateFilterName(''));
+        $this->assertSame('OK', Tools::validateFilterName('OK'));
     }
 
     public function testValidateFilterNameSemicolon()
     {
         $this->expectException(\ValueError::class);
         Tools::validateFilterName('adad;saf');
+    }
+
+    public function testValidateFilterNameEmpty()
+    {
+        $this->expectException(\ValueError::class);
+        Tools::validateFilterName('');
     }
 
     public function testValidateFilterNameMinus()

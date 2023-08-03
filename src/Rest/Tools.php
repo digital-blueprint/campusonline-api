@@ -30,15 +30,13 @@ class Tools
      */
     public static function validateFilterName(string $input): string
     {
-        // Filter names are separated by '-' to the operator
-        if (str_contains($input, '-')) {
-            throw new \ValueError('filter name not allowed to contain "-"');
+        if (strlen($input) === 0) {
+            throw new \ValueError('Column name can\'t be empty');
         }
 
-        // XXX: Filter names are delimited by ";" and I don't know how
-        // to escape them, which could lead to filter injections, so throw.
-        if (str_contains($input, ';')) {
-            throw new \ValueError('filter name not allowed to contain ";"');
+        // XXX: Unclear what is really allowed
+        if (preg_match('/[^A-Z_]/', $input)) {
+            throw new \ValueError('Column name contains invalid characters');
         }
 
         return $input;
@@ -70,15 +68,9 @@ class Tools
             throw new \ValueError('empty filter value not allowed');
         }
 
-        // Filtering breaks if the value contains a whitespace, so don't allow
-        if (str_contains($input, ' ')) {
-            throw new \ValueError('filter value not allowed to contain whitespaces');
-        }
-
-        // XXX: Filter expressions are delimited by ";" and I don't know how
-        // to escape them, which could lead to filter injections, so throw.
-        if (str_contains($input, ';')) {
-            throw new \ValueError('filter value not allowed to contain ";"');
+        // XXX: Unclear what is really allowed
+        if (preg_match('/[ !#$&\'*+\/:;=?@\[\]"><>\\\^`{}|~£+]/', $input)) {
+            throw new \ValueError('Contains invalid characters');
         }
 
         return $input;
