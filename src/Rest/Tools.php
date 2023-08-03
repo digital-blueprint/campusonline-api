@@ -60,31 +60,22 @@ class Tools
         return implode(',', $input);
     }
 
-    /**
-     * @param mixed $input
-     *
-     * @return mixed
-     *
-     * @throws \ValueError
-     */
-    public static function validateFilterValue($input)
+    public static function validateFilterValue(string $input): string
     {
-        if (is_string($input)) {
-            // Filtering breaks if the value is empty, so don't allow
-            if (strlen($input) === 0) {
-                throw new \ValueError('empty filter value not allowed');
-            }
+        // Filtering breaks if the value is empty, so don't allow
+        if (strlen($input) === 0) {
+            throw new \ValueError('empty filter value not allowed');
+        }
 
-            // Filtering breaks if the value contains a whitespace, so don't allow
-            if (str_contains($input, ' ')) {
-                throw new \ValueError('filter value not allowed to contain whitespaces');
-            }
+        // Filtering breaks if the value contains a whitespace, so don't allow
+        if (str_contains($input, ' ')) {
+            throw new \ValueError('filter value not allowed to contain whitespaces');
+        }
 
-            // XXX: Filter expressions are delimited by ";" and I don't know how
-            // to escape them, which could lead to filter injections, so throw.
-            if (str_contains($input, ';')) {
-                throw new \ValueError('filter value not allowed to contain ";"');
-            }
+        // XXX: Filter expressions are delimited by ";" and I don't know how
+        // to escape them, which could lead to filter injections, so throw.
+        if (str_contains($input, ';')) {
+            throw new \ValueError('filter value not allowed to contain ";"');
         }
 
         return $input;
