@@ -6,8 +6,8 @@ namespace Dbp\CampusonlineApi\Rest\ResearchProject;
 
 use Dbp\CampusonlineApi\Helpers\ApiException;
 use Dbp\CampusonlineApi\Helpers\Pagination;
-use Dbp\CampusonlineApi\Rest\Api;
 use Dbp\CampusonlineApi\Rest\Connection;
+use Dbp\CampusonlineApi\Rest\FilterBuilder;
 use Dbp\CampusonlineApi\Rest\Tools;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
@@ -68,9 +68,7 @@ class ResearchProjectApi
      */
     public function getResearchProject(string $identifier, array $options = []): ?ResearchProjectData
     {
-        $filters = [];
-        $filters[] = Api::getFilter(self::ID_FILTER_NAME, Api::EQUALS_FILTER_OPERATOR, $identifier);
-
+        $filters = (new FilterBuilder())->eq(self::ID_FILTER_NAME, $identifier)->getFilters();
         $projectDataList = $this->getProjectDataList(1, 2, $filters, $options);
 
         assert(count($projectDataList) === 0 || count($projectDataList) === 1);
@@ -87,7 +85,7 @@ class ResearchProjectApi
 
         if (($titleFilterValue = $filters[ResearchProjectData::TITLE_SEARCH_FILTER_NAME] ?? '') !== '') {
             $titleFilterValue = trim($titleFilterValue);
-            $apiFilters[] = Api::getFilter(self::TITLE_FILTER_NAME, Api::LIKE_CASE_INSENSITIVE_FILTER_OPERATOR, $titleFilterValue);
+            $apiFilters = (new FilterBuilder())->likeI(self::TITLE_FILTER_NAME, $titleFilterValue)->getFilters();
         }
 
         return $this->getProjectDataList($currentPageNumber, $maxNumItemsPerPage, $apiFilters, $options);
@@ -184,6 +182,6 @@ class ResearchProjectApi
         $lang = $options['lang'] ?? 'de';
         $langFilterValue = $lang === 'en' ? self::LANG_EN : self::LANG_DE;
 
-        return Api::getFilter(self::LANGUAGE_FILTER_NAME, Api::EQUALS_FILTER_OPERATOR, $langFilterValue);
+        return (new FilterBuilder())->eq(self::LANGUAGE_FILTER_NAME, $langFilterValue)->getFilter();
     }
 }

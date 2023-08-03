@@ -8,6 +8,7 @@ use Dbp\CampusonlineApi\Helpers\ApiException;
 use Dbp\CampusonlineApi\Helpers\Pagination;
 use Dbp\CampusonlineApi\Rest\Api;
 use Dbp\CampusonlineApi\Rest\Connection;
+use Dbp\CampusonlineApi\Rest\FilterBuilder;
 use Dbp\CampusonlineApi\Rest\Tools;
 use GuzzleHttp\Exception\RequestException;
 use League\Uri\UriTemplate;
@@ -44,9 +45,7 @@ class GenericApi
      */
     public function getResource(string $field, string $value): ?ApiResource
     {
-        $filters = [];
-        $filters[] = Api::getFilter($field, Api::EQUALS_FILTER_OPERATOR, $value);
-
+        $filters = (new FilterBuilder())->eq($field, $value)->getFilters();
         $collection = $this->getResourceCollection($filters, 0, -1);
         if (count($collection) === 0) {
             return null;

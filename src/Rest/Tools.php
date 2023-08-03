@@ -42,6 +42,25 @@ class Tools
     }
 
     /**
+     * @param string[] $input
+     */
+    public static function validateFilterValueList(array $input): string
+    {
+        if (count($input) === 0) {
+            throw new \ValueError('Value list can\'t be empty');
+        }
+
+        foreach ($input as $item) {
+            self::validateFilterValue($item);
+            if (str_contains($item, ',')) {
+                throw new \ValueError('filter value not allowed to contain ","');
+            }
+        }
+
+        return implode(',', $input);
+    }
+
+    /**
      * @param mixed $input
      *
      * @return mixed

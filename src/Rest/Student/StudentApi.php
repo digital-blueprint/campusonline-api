@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\Rest\Student;
 
 use Dbp\CampusonlineApi\Helpers\ApiException;
-use Dbp\CampusonlineApi\Rest\Api;
 use Dbp\CampusonlineApi\Rest\Connection;
+use Dbp\CampusonlineApi\Rest\FilterBuilder;
 use Dbp\CampusonlineApi\Rest\Tools;
 use GuzzleHttp\Exception\RequestException;
 use League\Uri\UriTemplate;
@@ -40,8 +40,7 @@ class StudentApi implements LoggerAwareInterface
      */
     public function getStudentDataByPersonId(string $personId): array
     {
-        $filters = [];
-        $filters[] = Api::getFilter(self::FIELD_PERSON_ID, Api::EQUALS_FILTER_OPERATOR, Tools::validateFilterValue($personId));
+        $filters = (new FilterBuilder())->eq(self::FIELD_PERSON_ID, $personId)->getFilters();
 
         return $this->getStudentDataList($filters);
     }
@@ -53,8 +52,7 @@ class StudentApi implements LoggerAwareInterface
      */
     public function getStudentDataByIdentId(string $identId): array
     {
-        $filters = [];
-        $filters[] = Api::getFilter(self::FIELD_IDENT_ID, Api::EQUALS_FILTER_OPERATOR, Tools::validateFilterValue($identId));
+        $filters = (new FilterBuilder())->eq(self::FIELD_IDENT_ID, $identId)->getFilters();
 
         return $this->getStudentDataList($filters);
     }

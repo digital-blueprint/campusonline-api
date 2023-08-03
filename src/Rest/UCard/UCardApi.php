@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\Rest\UCard;
 
 use Dbp\CampusonlineApi\Helpers\ApiException;
-use Dbp\CampusonlineApi\Rest\Api;
 use Dbp\CampusonlineApi\Rest\Connection;
+use Dbp\CampusonlineApi\Rest\FilterBuilder;
 use Dbp\CampusonlineApi\Rest\Tools;
 use GuzzleHttp\Exception\RequestException;
 use League\Uri\Uri;
@@ -37,13 +37,12 @@ class UCardApi implements LoggerAwareInterface
 
         // In theory we could fetch all cards, but it seems to be limited to 500, so don't expose
         // this functionality for now
-        $identIdObfuscated = Tools::validateFilterValue($identIdObfuscated);
-        $filters = [];
-        $filters[] = Api::getFilter('IDENT_NR_OBFUSCATED', Api::EQUALS_FILTER_OPERATOR, $identIdObfuscated);
+        $builder = new FilterBuilder();
+        $builder->eq('IDENT_NR_OBFUSCATED', $identIdObfuscated);
         if ($cardType !== null) {
-            $cardType = Tools::validateFilterValue($cardType);
-            $filters[] = Api::getFilter('CARD_TYPE', Api::EQUALS_FILTER_OPERATOR, $cardType);
+            $builder->eq('CARD_TYPE', $cardType);
         }
+        $filters = $builder->getFilters();
 
         $dataService = $connection->getDataServiceId(self::DATA_SERVICE);
         $uriTemplate = new UriTemplate('pl/rest/{service}/{?%24filter,%24format,%24ctx,%24top}');

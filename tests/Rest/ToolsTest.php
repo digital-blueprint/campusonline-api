@@ -43,4 +43,9 @@ class ToolsTest extends TestCase
         $this->expectException(\ValueError::class);
         Tools::validateFilterName('adad-eq');
     }
+
+    public function testValidateFilterValueList()
+    {
+        $this->assertSame('foo,bar', Tools::validateFilterValueList(['foo', 'bar']));
+    }
 }

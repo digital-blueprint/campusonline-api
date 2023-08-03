@@ -70,9 +70,7 @@ class Api implements LoggerAwareInterface
     }
 
     /**
-     * @param mixed $filterValue
-     *
-     * @throws ApiException
+     * @deprecated Use FilterBuilder instead
      */
     public static function getFilter(string $filterName, int $operator, $filterValue): string
     {
