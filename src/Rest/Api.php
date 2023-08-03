@@ -14,7 +14,14 @@ use Psr\Log\LoggerInterface;
 
 class Api implements LoggerAwareInterface
 {
+    /**
+     * @deprecated Use FilterBuilder instead
+     */
     public const EQUALS_FILTER_OPERATOR = 1;
+
+    /**
+     * @deprecated Use FilterBuilder instead
+     */
     public const LIKE_CASE_INSENSITIVE_FILTER_OPERATOR = 2;
 
     /** @var Connection */
