@@ -10,6 +10,9 @@ use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Middleware;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @internal
+ */
 class Tools
 {
     public static function createLoggerMiddleware(LoggerInterface $logger): callable
