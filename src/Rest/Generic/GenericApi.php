@@ -46,14 +46,23 @@ class GenericApi
     public function getResource(string $field, string $value): ?ApiResource
     {
         $filters = (new FilterBuilder())->eq($field, $value)->getFilters();
-        $collection = $this->getResourceCollection($filters, 0, -1);
-        if (count($collection) === 0) {
+        $collection = $this->getResourceCollection($filters, 0, 2);
+
+        if (count($collection) >= 1) {
+            if ((string) $collection[0]->content[$field] === $value) {
+                // we got one correct result, yay
+                if (count($collection) === 1) {
+                    return $collection[0];
+                }
+                // we got correct results, but too many
+                throw new ApiException("Filter on '$field' with '$value' returned multiple results while only <=1 is allowed");
+            }
+            // we got bogus results because the field type didn't match, so likely the backend tried to return everything
             return null;
-        } elseif (count($collection) === 1) {
-            return $collection[0];
-        } else {
-            throw new ApiException("Filter on '$field' with '$value' returned multiple results while only <=1 is allowed");
         }
+
+        // we got no results
+        return null;
     }
 
     /**

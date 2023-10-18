@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\Tests\Rest;
 
+use Dbp\CampusonlineApi\Helpers\ApiException;
 use Dbp\CampusonlineApi\Rest\Api;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -72,6 +73,71 @@ class GenericTest extends TestCase
         $this->assertSame('EN', $item->content['SPRACHE']);
     }
 
+    public function testGetSingleInteger()
+    {
+        $RESPONSE = '
+{
+    "type": "resources",
+    "link": [],
+    "resource": [
+        {
+            "link": [],
+            "content": {
+                "type": "model-CO_LOC_DS.API_PROJEKTE",
+                "API_PROJEKTE": {
+                    "ID": 42
+                }
+            }
+        }
+    ]
+}';
+
+        $this->mockResponses([
+            new Response(200, ['Content-Type' => 'application/json'], $RESPONSE),
+        ]);
+
+        $generic = $this->api->Generic('loc_apiProjekte');
+        $item = $generic->getResource('ID', '42');
+        $this->assertNotNull($item);
+        $this->assertSame(42, $item->content['ID']);
+    }
+
+    public function testGetSingleNonUniqueField()
+    {
+        $RESPONSE = '
+{
+    "type": "resources",
+    "link": [],
+    "resource": [
+        {
+            "link": [],
+            "content": {
+                "type": "model-CO_LOC_DS.API_PROJEKTE",
+                "API_PROJEKTE": {
+                    "ID": 42
+                }
+            }
+        },
+        {
+            "link": [],
+            "content": {
+                "type": "model-CO_LOC_DS.API_PROJEKTE",
+                "API_PROJEKTE": {
+                    "ID": 42
+                }
+            }
+    ]
+}';
+
+        $this->mockResponses([
+            new Response(200, ['Content-Type' => 'application/json'], $RESPONSE),
+        ]);
+
+        $generic = $this->api->Generic('loc_apiProjekte');
+        $this->expectException(ApiException::class);
+        $generic->getResource('ID', '42');
+    }
+
     public function testGetSingleNotFound()
     {
         $RESPONSE = '
@@ -88,6 +154,70 @@ class GenericTest extends TestCase
 
         $generic = $this->api->Generic('loc_apiProjekte');
         $item = $generic->getResource('ID', 'F123');
+        $this->assertNull($item);
+    }
+
+    public function testGetSingleFieldTypeMismatch()
+    {
+        // In case the API only has one resource over all, and returns it because the requested field value was invalid
+        $WRONG_RESPONSE = '
+{
+    "type": "resources",
+    "link": [],
+    "resource": [
+        {
+            "link": [],
+            "content": {
+                "type": "model-CO_LOC_DS.API_PROJEKTE",
+                "API_PROJEKTE": {
+                    "ID": 1
+                }
+            }
+        }
+    ]
+}';
+
+        $this->mockResponses([
+            new Response(200, ['Content-Type' => 'application/json'], $WRONG_RESPONSE),
+        ]);
+
+        $generic = $this->api->Generic('loc_apiProjekte');
+        $item = $generic->getResource('ID', 'foobar');
+        $this->assertNull($item);
+
+        // In case the API returns all resources because the requested field value was invalid
+        $MULTIPLE_WRONG_RESPONSE = '
+{
+    "type": "resources",
+    "link": [],
+    "resource": [
+        {
+            "link": [],
+            "content": {
+                "type": "model-CO_LOC_DS.API_PROJEKTE",
+                "API_PROJEKTE": {
+                    "ID": 1
+                }
+            }
+        },
+        {
+            "link": [],
+            "content": {
+                "type": "model-CO_LOC_DS.API_PROJEKTE",
+                "API_PROJEKTE": {
+                    "ID": 2
+                }
+            }
+        }
+    ]
+}';
+
+        $this->mockResponses([
+            new Response(200, ['Content-Type' => 'application/json'], $MULTIPLE_WRONG_RESPONSE),
+        ]);
+
+        $generic = $this->api->Generic('loc_apiProjekte');
+        $item = $generic->getResource('ID', 'foobar');
         $this->assertNull($item);
     }
 
