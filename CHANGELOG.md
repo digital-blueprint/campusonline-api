@@ -1,3 +1,7 @@
+# v0.3.9
+
+* Support kevinrob/guzzle-cache-middleware v5
+
 # v0.3.8
 
 * Deprecate ResearchProject in favor of GenericAPI
