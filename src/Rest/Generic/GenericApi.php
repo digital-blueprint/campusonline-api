@@ -6,11 +6,10 @@ namespace Dbp\CampusonlineApi\Rest\Generic;
 
 use Dbp\CampusonlineApi\Helpers\ApiException;
 use Dbp\CampusonlineApi\Helpers\Pagination;
-use Dbp\CampusonlineApi\Rest\Api;
 use Dbp\CampusonlineApi\Rest\Connection;
 use Dbp\CampusonlineApi\Rest\FilterBuilder;
 use Dbp\CampusonlineApi\Rest\Tools;
-use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\GuzzleException;
 use League\Uri\UriTemplate;
 use Psr\Http\Message\ResponseInterface;
 
@@ -92,8 +91,8 @@ class GenericApi
         $client = $connection->getClient();
         try {
             $response = $client->get($uri);
-        } catch (RequestException $e) {
-            throw Tools::createResponseError($e);
+        } catch (GuzzleException $guzzleException) {
+            throw ApiException::fromGuzzleException($guzzleException);
         }
 
         return $this->parseResourceList($response);

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\Rest\ResearchProject;
 
 /**
- * @deprecated Use GenericApi instead
+ * @deprecated Use Dbp\CampusonlineApi\Rest\Generic\ApiResource instead
  */
 class ResearchProjectData
 {

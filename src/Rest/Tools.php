@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\Rest;
 
 use Dbp\CampusonlineApi\Helpers\ApiException;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Middleware;
@@ -88,26 +89,36 @@ class Tools
         return json_decode($json, $assoc, 512, JSON_THROW_ON_ERROR);
     }
 
+    /**
+     * @deprecated Since v0.3.10. Use Tools::createApiExceptionFromJsonResponse instead
+     */
     public static function createResponseError(RequestException $e): ApiException
     {
-        $response = $e->getResponse();
-        if ($response === null) {
-            return new ApiException('Unknown error');
-        }
-        $data = (string) $response->getBody();
-        $json = [];
-        try {
-            $json = Tools::decodeJSON($data, true);
-        } catch (\JsonException $exception) {
+        return self::createApiExceptionFromJsonResponse($e);
+    }
+
+    public static function createApiExceptionFromJsonResponse(GuzzleException $guzzleException): ApiException
+    {
+        $response = null;
+        if ($guzzleException instanceof RequestException) {
+            $response = $guzzleException->getResponse();
+            if ($response !== null) {
+                $data = (string) $response->getBody();
+                $json = [];
+                try {
+                    $json = Tools::decodeJSON($data, true);
+                } catch (\Exception $exception) {
+                }
+
+                if (($json['type'] ?? null) === 'resources') {
+                    $coErrorDto = $json['resource'][0]['content']['coErrorDto'];
+                    $message = $coErrorDto['errorType'].'['.$coErrorDto['httpCode'].']: '.$coErrorDto['message'];
+
+                    return new ApiException($message, intval($coErrorDto['httpCode']), true);
+                }
+            }
         }
 
-        if (($json['type'] ?? '') === 'resources') {
-            $coErrorDto = $json['resource'][0]['content']['coErrorDto'];
-            $message = $coErrorDto['errorType'].'['.$coErrorDto['httpCode'].']: '.$coErrorDto['message'];
-
-            return new ApiException($message, intval($coErrorDto['httpCode']), true);
-        } else {
-            return new ApiException($json['type']);
-        }
+        return new ApiException($guzzleException->getMessage(), $guzzleException->getCode(), $response !== null);
     }
 }

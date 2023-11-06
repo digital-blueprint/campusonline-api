@@ -8,12 +8,15 @@ use Dbp\CampusonlineApi\Helpers\ApiException;
 use Dbp\CampusonlineApi\Rest\Connection;
 use Dbp\CampusonlineApi\Rest\FilterBuilder;
 use Dbp\CampusonlineApi\Rest\Tools;
-use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\GuzzleException;
 use League\Uri\UriTemplate;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
+/**
+ * @deprecated Use GenericApi instead
+ */
 class StudentApi implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
@@ -71,8 +74,8 @@ class StudentApi implements LoggerAwareInterface
         $client = $this->connection->getClient();
         try {
             $response = $client->get($uri);
-        } catch (RequestException $e) {
-            throw Tools::createResponseError($e);
+        } catch (GuzzleException $guzzleException) {
+            throw Tools::createApiExceptionFromJsonResponse($guzzleException);
         }
 
         return $this->parseStudentDataResponse($response);

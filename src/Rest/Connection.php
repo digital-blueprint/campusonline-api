@@ -110,8 +110,8 @@ class Connection implements LoggerAwareInterface
                     'grant_type' => 'client_credentials',
                 ],
             ]);
-        } catch (GuzzleException $exception) {
-            throw new ApiException($exception->getMessage());
+        } catch (GuzzleException $guzzleException) {
+            throw ApiException::fromGuzzleException($guzzleException);
         }
         $data = $response->getBody()->getContents();
 

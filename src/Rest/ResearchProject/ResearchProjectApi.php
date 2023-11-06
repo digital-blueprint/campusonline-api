@@ -10,7 +10,6 @@ use Dbp\CampusonlineApi\Rest\Connection;
 use Dbp\CampusonlineApi\Rest\FilterBuilder;
 use Dbp\CampusonlineApi\Rest\Tools;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Exception\RequestException;
 use League\Uri\Contracts\UriException;
 use League\Uri\UriTemplate;
 use Psr\Http\Message\ResponseInterface;
@@ -124,12 +123,8 @@ class ResearchProjectApi
             $client = $this->connection->getClient();
             try {
                 $response = $client->get($uri);
-            } catch (GuzzleException $exception) {
-                if ($exception instanceof RequestException) {
-                    throw Tools::createResponseError($exception);
-                } else {
-                    throw new ApiException('http client error: '.$exception->getMessage());
-                }
+            } catch (GuzzleException $guzzleException) {
+                throw Tools::createApiExceptionFromJsonResponse($guzzleException);
             }
 
             $currentProjectDataList = $this->parseStudentDataResponse($response);

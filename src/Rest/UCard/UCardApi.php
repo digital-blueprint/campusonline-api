@@ -8,6 +8,7 @@ use Dbp\CampusonlineApi\Helpers\ApiException;
 use Dbp\CampusonlineApi\Rest\Connection;
 use Dbp\CampusonlineApi\Rest\FilterBuilder;
 use Dbp\CampusonlineApi\Rest\Tools;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use League\Uri\Uri;
 use League\Uri\UriTemplate;
@@ -15,6 +16,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
+/**
+ * @deprecated Use GenericApi instead
+ */
 class UCardApi implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
@@ -57,8 +61,8 @@ class UCardApi implements LoggerAwareInterface
         $client = $connection->getClient();
         try {
             $response = $client->get($uri);
-        } catch (RequestException $e) {
-            throw Tools::createResponseError($e);
+        } catch (GuzzleException $guzzleException) {
+            throw Tools::createApiExceptionFromJsonResponse($guzzleException);
         }
 
         return $this->parseGetResponse($response);
@@ -82,8 +86,8 @@ class UCardApi implements LoggerAwareInterface
         $client = $connection->getClient();
         try {
             $response = $client->get($uri);
-        } catch (RequestException $e) {
-            throw Tools::createResponseError($e);
+        } catch (GuzzleException $guzzleException) {
+            throw Tools::createApiExceptionFromJsonResponse($guzzleException);
         }
 
         $pic = $this->parseGetContentResponse($response);
@@ -165,8 +169,8 @@ class UCardApi implements LoggerAwareInterface
                     'CARD_TYPE' => $cardType,
                 ],
             ]);
-        } catch (RequestException $e) {
-            throw Tools::createResponseError($e);
+        } catch (GuzzleException $guzzleException) {
+            throw Tools::createApiExceptionFromJsonResponse($guzzleException);
         }
 
         $content = (string) $response->getBody();
@@ -202,7 +206,7 @@ class UCardApi implements LoggerAwareInterface
                 ],
             ]);
         } catch (RequestException $e) {
-            throw Tools::createResponseError($e);
+            throw Tools::createApiExceptionFromJsonResponse($e);
         }
 
         $content = (string) $response->getBody();
