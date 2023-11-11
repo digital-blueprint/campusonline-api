@@ -4136,16 +4136,16 @@
         },
         {
             "name": "symfony/cache",
-            "version": "v5.4.30",
+            "version": "v5.4.31",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "2742d1b595927210546bb7a0887094cf1494de21"
+                "reference": "9c0a3a5d0718e51ff81e0605be38fe1acbee9eeb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/2742d1b595927210546bb7a0887094cf1494de21",
-                "reference": "2742d1b595927210546bb7a0887094cf1494de21",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/9c0a3a5d0718e51ff81e0605be38fe1acbee9eeb",
+                "reference": "9c0a3a5d0718e51ff81e0605be38fe1acbee9eeb",
                 "shasum": ""
             },
             "require": {
@@ -4213,7 +4213,7 @@
                 "psr6"
             ],
             "support": {
-                "source": "https://github.com/symfony/cache/tree/v5.4.30"
+                "source": "https://github.com/symfony/cache/tree/v5.4.31"
             },
             "funding": [
                 {
@@ -4229,7 +4229,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-17T14:17:25+00:00"
+            "time": "2023-11-06T17:37:55+00:00"
         },
         {
             "name": "symfony/cache-contracts",
@@ -4771,16 +4771,16 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v5.4.26",
+            "version": "v5.4.31",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "d04639b395e25efa4260fc5b12a9fa1eafb38a64"
+                "reference": "30656f441e1c59ea5688dfb11ab449a56dad2925"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/d04639b395e25efa4260fc5b12a9fa1eafb38a64",
-                "reference": "d04639b395e25efa4260fc5b12a9fa1eafb38a64",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/30656f441e1c59ea5688dfb11ab449a56dad2925",
+                "reference": "30656f441e1c59ea5688dfb11ab449a56dad2925",
                 "shasum": ""
             },
             "require": {
@@ -4834,7 +4834,7 @@
             "description": "Provides utilities for PHPUnit, especially user deprecation notices management",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/phpunit-bridge/tree/v5.4.26"
+                "source": "https://github.com/symfony/phpunit-bridge/tree/v5.4.31"
             },
             "funding": [
                 {
@@ -4850,7 +4850,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-07-12T15:44:31+00:00"
+            "time": "2023-10-31T07:58:33+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -5988,5 +5988,5 @@
     "platform-overrides": {
         "php": "7.3"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
