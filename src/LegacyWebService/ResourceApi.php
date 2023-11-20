@@ -42,6 +42,8 @@ abstract class ResourceApi
     /** @var int */
     private $cacheTtl = 0;
 
+    private $isResourceNodeCallback;
+
     public static function addFilter(array &$targetOptions, string $fieldName, string $operator, $filterValue, string $logicalOperator = Filters::LOGICAL_AND_OPERATOR)
     {
         if (isset($targetOptions[self::FILTERS_OPTION]) === false) {
@@ -129,6 +131,11 @@ abstract class ResourceApi
      */
     abstract public function checkConnection(); // make sure this doesn't take long with lots of data provided by the API
 
+    public function setIsResourceNodeCallback($isResourceNodeCallback): void
+    {
+        $this->isResourceNodeCallback = $isResourceNodeCallback;
+    }
+
     protected function __construct(Connection $connection, string $rootOrgUnitId, array $attributeNameToXpathMap, string $resourceXpathExpression = null)
     {
         $this->connection = $connection;
@@ -206,9 +213,31 @@ abstract class ResourceApi
         return Pagination::createPage($filteredResourceItems, $options);
     }
 
-    protected function isResourceNode(SimpleXMLElement $node): bool
+    /**
+     * @return array The first element tells whether to accept the given node (default: true).
+     *               The second element tells whether to check the given node's child nodes (default: true)
+     */
+    protected function isResourceNode(SimpleXMLElement $node): array
     {
-        return false;
+        $isResourceNode = true;
+        $checkChildNodes = true;
+
+        if ($this->isResourceNodeCallback !== null) {
+            $func = $this->isResourceNodeCallback;
+
+            $returnValue = $func($node);
+            if (!is_array($returnValue)) {
+                throw new ApiException('Return value of isResourceNodeCallback must be an array');
+            }
+            if (count($returnValue) > 0) {
+                $isResourceNode = $returnValue[0];
+            }
+            if (count($returnValue) > 1) {
+                $checkChildNodes = $returnValue[1];
+            }
+        }
+
+        return [$isResourceNode, $checkChildNodes];
     }
 
     abstract protected function createResource(): ResourceData;
@@ -267,9 +296,8 @@ abstract class ResourceApi
 
         $resourceItems = [];
         if ($this->resourceXpathExpression !== null) {
-            $resourceNodes = $xml->xpath($this->resourceXpathExpression);
-            if (count($resourceNodes) > 0) {
-                foreach ($resourceNodes as $resourceNode) {
+            foreach ($xml->xpath($this->resourceXpathExpression) as $resourceNode) {
+                if ($this->isResourceNode($resourceNode)[0]) {
                     $resourceItem = $this->createResource();
                     $resourceItem->setData($this->getResourceDataFromXml($resourceNode));
                     $resourceItems[] = $resourceItem;
@@ -295,21 +323,27 @@ abstract class ResourceApi
         return $resourceItems;
     }
 
-    private function addChildResourceItems(SimpleXMLIterator $iterator, ?string $parentIdentifier, array &$resultItems, array &$childIdentifiers)
+    private function addChildResourceItems(SimpleXMLIterator $iterator, ?string $parentIdentifier, array &$resourceItems, array &$childIdentifiers)
     {
         for ($iterator->rewind(); $iterator->valid(); $iterator->next()) {
             $child = $iterator->current();
-            if ($child !== null && $this->isResourceNode($child)) {
-                $resultItem = $this->createResource();
-                $resultItem->setData($this->getResourceDataFromXml($child));
-                $resultItem->setParentIdentifier($parentIdentifier);
-                $resultItems[] = $resultItem;
-                $resultItemIdentifier = $resultItem->getIdentifier();
-                $childIdentifiers[] = $resultItemIdentifier;
-
-                $grandChildIdentifiers = [];
-                $this->addChildResourceItems($child, $resultItemIdentifier, $resultItems, $grandChildIdentifiers);
-                $resultItem->setChildIdentifiers($grandChildIdentifiers);
+            if ($child !== null) {
+                [$isResourceNode, $checkChildren] = $this->isResourceNode($child);
+                if ($isResourceNode) {
+                    $childItem = $this->createResource();
+                    $childItem->setData($this->getResourceDataFromXml($child));
+                    $childItem->setParentIdentifier($parentIdentifier);
+                    $childId = $childItem->getIdentifier();
+                    $resourceItems[$childId] = $childItem;
+                    $childIdentifiers[] = $childId;
+                    $grandChildIdentifiers = [];
+                    if ($checkChildren) {
+                        $this->addChildResourceItems($child, $childId, $resourceItems, $grandChildIdentifiers);
+                    }
+                    $childItem->setChildIdentifiers($grandChildIdentifiers);
+                } elseif ($checkChildren) {
+                    $this->addChildResourceItems($child, $parentIdentifier, $resourceItems, $childIdentifiers);
+                }
             }
         }
     }

@@ -19,11 +19,11 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
 
     public const ORG_UNIT_ID_PARAMETER_NAME = 'orgUnitID';
 
-    private const URI = 'ws/webservice_v1.0/cdm/organization/xml';
+    public const ORG_UNIT_IDENTIFIER_XML_PATH = './orgUnitID';
+    public const ORG_UNIT_RESOURCE_XML_NAME = 'orgUnit';
+    public const ORG_UNIT_NAME_XML_PATH = './orgUnitName/text';
 
-    private const ORG_UNIT_RESOURCE_XML_NAME = 'orgUnit'; // './/orgUnit';
-    private const ORG_UNIT_IDENTIFIER_XML_PATH = './orgUnitID';
-    private const ORG_UNIT_NAME_XML_PATH = './orgUnitName/text';
+    private const URI = 'ws/webservice_v1.0/cdm/organization/xml';
 
     private const ATTRIBUTE_NAME_TO_XPATH_MAPPING = [
         ResourceData::IDENTIFIER_ATTRIBUTE => self::ORG_UNIT_IDENTIFIER_XML_PATH,
@@ -37,6 +37,38 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
         OrganizationUnitData::POSTAL_CODE_ATTRIBUTE => './contacts/contactData/adr/pcode',
         OrganizationUnitData::COUNTRY_ATTRIBUTE => './contacts/contactData/adr/country',
     ];
+
+    public static function getAttribute(SimpleXMLElement $element, string $attributeName): ?SimpleXMLElement
+    {
+        $xpathExpression = self::ATTRIBUTE_NAME_TO_XPATH_MAPPING[$attributeName] ?? null;
+        if ($xpathExpression === null) {
+            throw new ApiException(sprintf('attribute \'%s\'s not defined for %s node', $attributeName, self::ORG_UNIT_RESOURCE_XML_NAME));
+        }
+
+        return $element->xpath($xpathExpression)[0] ?? null;
+    }
+
+    public static function getAttributeXMLElement(SimpleXMLElement $element, string $attributeName): ?SimpleXMLElement
+    {
+        $xpathExpression = self::ATTRIBUTE_NAME_TO_XPATH_MAPPING[$attributeName] ?? null;
+        if ($xpathExpression === null) {
+            throw new ApiException(sprintf('attribute \'%s\'s not defined for %s node', $attributeName, self::ORG_UNIT_RESOURCE_XML_NAME));
+        }
+
+        return $element->xpath($xpathExpression)[0] ?? null;
+    }
+
+    public static function getAttributeString(SimpleXMLElement $element, string $attributeName): ?string
+    {
+        $attributeElement = self::getAttributeXMLElement($element, $attributeName);
+
+        return $attributeElement === null ? null : trim((string) $attributeElement);
+    }
+
+    public static function getParentElement(SimpleXMLElement $element): ?SimpleXMLElement
+    {
+        return $element->xpath('..')[0] ?? null;
+    }
 
     public function __construct(Connection $connection, string $rootOrgUnitId)
     {
@@ -96,8 +128,10 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
         return new OrganizationUnitData();
     }
 
-    protected function isResourceNode(SimpleXMLElement $node): bool
+    protected function isResourceNode(SimpleXMLElement $node): array
     {
-        return $node->getName() === self::ORG_UNIT_RESOURCE_XML_NAME;
+        [$isResourceNode, $checkChildren] = parent::isResourceNode($node);
+
+        return [$isResourceNode && $node->getName() === self::ORG_UNIT_RESOURCE_XML_NAME, $checkChildren];
     }
 }
