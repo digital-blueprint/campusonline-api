@@ -44,6 +44,8 @@ abstract class ResourceApi
 
     private $isResourceNodeCallback;
 
+    private $onRebuildingResourceCacheCallback;
+
     public static function addFilter(array &$targetOptions, string $fieldName, string $operator, $filterValue, string $logicalOperator = Filters::LOGICAL_AND_OPERATOR)
     {
         if (isset($targetOptions[self::FILTERS_OPTION]) === false) {
@@ -136,6 +138,11 @@ abstract class ResourceApi
         $this->isResourceNodeCallback = $isResourceNodeCallback;
     }
 
+    public function setOnRebuildingResourceCacheCallback($onRebuildingResourceCacheCallback): void
+    {
+        $this->onRebuildingResourceCacheCallback = $onRebuildingResourceCacheCallback;
+    }
+
     protected function __construct(Connection $connection, string $rootOrgUnitId, array $attributeNameToXpathMap, string $resourceXpathExpression = null)
     {
         $this->connection = $connection;
@@ -221,6 +228,7 @@ abstract class ResourceApi
     {
         $isResourceNode = true;
         $checkChildNodes = true;
+        $replacementParentId = null;
 
         if ($this->isResourceNodeCallback !== null) {
             $func = $this->isResourceNodeCallback;
@@ -235,9 +243,12 @@ abstract class ResourceApi
             if (count($returnValue) > 1) {
                 $checkChildNodes = $returnValue[1];
             }
+            if (count($returnValue) > 2) {
+                $replacementParentId = $returnValue[2];
+            }
         }
 
-        return [$isResourceNode, $checkChildNodes];
+        return [$isResourceNode, $checkChildNodes, $replacementParentId];
     }
 
     abstract protected function createResource(): ResourceData;
@@ -259,6 +270,11 @@ abstract class ResourceApi
 
         $resultIdentifiersCacheItem = $this->getCacheItem($uriCacheKey);
         if ($resultIdentifiersCacheItem->isHit() === false) {
+            if ($this->onRebuildingResourceCacheCallback !== null) {
+                $callback = $this->onRebuildingResourceCacheCallback;
+                $callback();
+            }
+
             $resultIdentifiers = [];
             foreach ($this->getResources($uri, $uriParameters, $options) as $resourceItem) {
                 $resourceCacheItem = $this->getCacheItem(
@@ -316,33 +332,49 @@ abstract class ResourceApi
             throw new ApiException('response body is not in valid XML format');
         }
 
-        $resourceItems = [];
         $childIds = [];
-        $this->addChildResourceItems($xml, null, $resourceItems, $childIds);
+        $allResourceItems = [];
+        $idToReplacementParentIdMap = [];
+        $this->addChildResourceItems($xml, null, $childIds, $allResourceItems, $idToReplacementParentIdMap);
 
-        return $resourceItems;
+        foreach ($idToReplacementParentIdMap as $resourceItemId => $replacementParentId) {
+            $parentItem = $allResourceItems[$replacementParentId];
+            $childIds = $parentItem->getChildIdentifiers();
+            $childIds[] = strval($resourceItemId);
+            $parentItem->setChildIdentifiers($childIds);
+        }
+
+        return $allResourceItems;
     }
 
-    private function addChildResourceItems(SimpleXMLIterator $iterator, ?string $parentIdentifier, array &$resourceItems, array &$childIdentifiers)
+    /**
+     * @psalm-suppress ArgumentTypeCoercion
+     */
+    private function addChildResourceItems(SimpleXMLIterator $iterator, ?string $parentIdentifier, array &$childIdentifiers, array &$allResourceItems, array &$idToReplacementParentIdMap)
     {
         for ($iterator->rewind(); $iterator->valid(); $iterator->next()) {
             $child = $iterator->current();
             if ($child !== null) {
-                [$isResourceNode, $checkChildren] = $this->isResourceNode($child);
+                [$isResourceNode, $checkChildren, $replacementParentId] = $this->isResourceNode($child);
                 if ($isResourceNode) {
                     $childItem = $this->createResource();
                     $childItem->setData($this->getResourceDataFromXml($child));
-                    $childItem->setParentIdentifier($parentIdentifier);
                     $childId = $childItem->getIdentifier();
-                    $resourceItems[$childId] = $childItem;
-                    $childIdentifiers[] = $childId;
+                    if ($replacementParentId !== null) {
+                        $childItem->setParentIdentifier($replacementParentId);
+                        $idToReplacementParentIdMap[$childId] = $replacementParentId;
+                    } else {
+                        $childItem->setParentIdentifier($parentIdentifier);
+                        $childIdentifiers[] = $childId;
+                    }
+                    $allResourceItems[$childId] = $childItem;
                     $grandChildIdentifiers = [];
                     if ($checkChildren) {
-                        $this->addChildResourceItems($child, $childId, $resourceItems, $grandChildIdentifiers);
+                        $this->addChildResourceItems($child, $childId, $grandChildIdentifiers, $allResourceItems, $idToReplacementParentIdMap);
                     }
                     $childItem->setChildIdentifiers($grandChildIdentifiers);
                 } elseif ($checkChildren) {
-                    $this->addChildResourceItems($child, $parentIdentifier, $resourceItems, $childIdentifiers);
+                    $this->addChildResourceItems($child, $parentIdentifier, $childIdentifiers, $allResourceItems, $idToReplacementParentIdMap);
                 }
             }
         }

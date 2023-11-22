@@ -22,17 +22,19 @@ class Filters
 
     public const IDENTIFIERS_FILTER = 'identifiers';
 
-    public static function passesFilter(string $value, string $filterOperator, $filterValue): bool
+    public static function passesFilter(?string $value, string $filterOperator, $filterValue): bool
     {
         switch ($filterOperator) {
             case Filters::EQUALS_OPERATOR:
                 return $value === $filterValue;
             case Filters::EQUALS_CI_OPERATOR:
-                return strtolower($value) === strtolower($filterValue);
-            case Filters::CONTAINS_OPERATOR:
-                return str_contains($value, $filterValue);
+                return $value === null ?
+                        $filterValue === null :
+                        $filterValue !== null && strtolower($value) === strtolower($filterValue);
+                case Filters::CONTAINS_OPERATOR:
+                return $value !== null && $filterValue !== null && str_contains($value, $filterValue);
             case Filters::CONTAINS_CI_OPERATOR:
-                return str_contains(strtolower($value), strtolower($filterValue));
+                return $value !== null && $filterValue !== null && str_contains(strtolower($value), strtolower($filterValue));
             case Filters::IN_OPERATOR:
                 // strictly require an array type filter value
                 return in_array($value, is_array($filterValue) ? $filterValue : [], true);

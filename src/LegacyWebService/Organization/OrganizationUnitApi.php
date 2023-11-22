@@ -48,19 +48,9 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
         return $element->xpath($xpathExpression)[0] ?? null;
     }
 
-    public static function getAttributeXMLElement(SimpleXMLElement $element, string $attributeName): ?SimpleXMLElement
-    {
-        $xpathExpression = self::ATTRIBUTE_NAME_TO_XPATH_MAPPING[$attributeName] ?? null;
-        if ($xpathExpression === null) {
-            throw new ApiException(sprintf('attribute \'%s\'s not defined for %s node', $attributeName, self::ORG_UNIT_RESOURCE_XML_NAME));
-        }
-
-        return $element->xpath($xpathExpression)[0] ?? null;
-    }
-
     public static function getAttributeString(SimpleXMLElement $element, string $attributeName): ?string
     {
-        $attributeElement = self::getAttributeXMLElement($element, $attributeName);
+        $attributeElement = self::getAttribute($element, $attributeName);
 
         return $attributeElement === null ? null : trim((string) $attributeElement);
     }
@@ -130,8 +120,8 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
 
     protected function isResourceNode(SimpleXMLElement $node): array
     {
-        [$isResourceNode, $checkChildren] = parent::isResourceNode($node);
+        [$isResourceNode, $checkChildren, $replacementParentId] = parent::isResourceNode($node);
 
-        return [$isResourceNode && $node->getName() === self::ORG_UNIT_RESOURCE_XML_NAME, $checkChildren];
+        return [$isResourceNode && $node->getName() === self::ORG_UNIT_RESOURCE_XML_NAME, $checkChildren, $replacementParentId];
     }
 }
