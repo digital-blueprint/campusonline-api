@@ -21,7 +21,7 @@ class ApiException extends \RuntimeException
     }
 
     public function __construct(string $message = '', int $code = 0,
-                                bool $isHttpResponseCode = false, \Throwable $previous = null)
+        bool $isHttpResponseCode = false, \Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
         $this->isHttpResponseCode = $isHttpResponseCode;

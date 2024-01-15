@@ -234,7 +234,7 @@ class RoomApiTest extends TestCase
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/rooms_response_1.xml')),
         ]);
 
-        /// case-sensitive name search filter only with 1 case-insensitive match => 0 result
+        // / case-sensitive name search filter only with 1 case-insensitive match => 0 result
         $options = [];
         ResourceApi::addFilter($options, RoomData::NAME_ATTRIBUTE, Filters::CONTAINS_OPERATOR, 'iee', Filters::LOGICAL_OR_OPERATOR);
         $page = $this->api->Room()->getRooms($options);

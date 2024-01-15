@@ -12,7 +12,6 @@ use Dbp\CampusonlineApi\LegacyWebService\ResourceApi;
 use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use SimpleXMLElement;
 
 class PersonApi extends ResourceApi implements LoggerAwareInterface
 {
@@ -59,7 +58,7 @@ class PersonApi extends ResourceApi implements LoggerAwareInterface
         return $this->getPage(self::STUDENTS_BY_COURSE_URI, $uriParameters, $options);
     }
 
-    public static function createPersonResource(SimpleXMLElement $node): PersonData
+    public static function createPersonResource(\SimpleXMLElement $node): PersonData
     {
         $personData = new PersonData();
         $personData->setData(self::getResourceDataFromXmlStatic($node, self::ATTRIBUTE_NAME_TO_XPATH_MAPPING));

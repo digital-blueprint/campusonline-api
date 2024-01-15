@@ -56,6 +56,7 @@ class GenericApi
                 // we got correct results, but too many
                 throw new ApiException("Filter on '$field' with '$value' returned multiple results while only <=1 is allowed");
             }
+
             // we got bogus results because the field type didn't match, so likely the backend tried to return everything
             return null;
         }

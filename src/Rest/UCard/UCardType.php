@@ -11,7 +11,7 @@ class UCardType
     public const PERSON_GROUP_EXTERNAL = 'E'; // Extern
     public const PERSON_GROUP_IDENTITY = 'I'; // Identitaet
 
-    public const CARD_SUBTYPE_PERSONAL_RESOURCE_CARD = 'PR'; //Personengebundene Ressourcenkarte
+    public const CARD_SUBTYPE_PERSONAL_RESOURCE_CARD = 'PR'; // Personengebundene Ressourcenkarte
     public const CARD_SUBTYPE_ID_CARD = 'A'; // Ausweis
     public const CARD_SUBTYPE_RESOURCE_CARD = 'R'; // Ressourcenkarte
 

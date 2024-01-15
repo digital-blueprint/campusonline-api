@@ -14,7 +14,6 @@ use Dbp\CampusonlineApi\LegacyWebService\ResourceApi;
 use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use SimpleXMLElement;
 
 class CourseApi extends ResourceApi implements LoggerAwareInterface
 {
@@ -156,7 +155,7 @@ class CourseApi extends ResourceApi implements LoggerAwareInterface
         return new CourseData();
     }
 
-    protected function getResourceDataFromXml(SimpleXMLElement $node): array
+    protected function getResourceDataFromXml(\SimpleXMLElement $node): array
     {
         $resourceData = parent::getResourceDataFromXml($node);
 

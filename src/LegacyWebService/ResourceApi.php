@@ -11,8 +11,6 @@ use League\Uri\Contracts\UriException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
-use SimpleXMLElement;
-use SimpleXMLIterator;
 
 abstract class ResourceApi
 {
@@ -59,7 +57,7 @@ abstract class ResourceApi
         ];
     }
 
-    public static function getResourcePropertyOrEmptyString(SimpleXMLElement $node, string $xmlPath): string
+    public static function getResourcePropertyOrEmptyString(\SimpleXMLElement $node, string $xmlPath): string
     {
         return trim((string) ($node->xpath($xmlPath)[0] ?? ''));
     }
@@ -74,15 +72,15 @@ abstract class ResourceApi
         if (($filters = $options[self::FILTERS_OPTION] ?? null) !== null) {
             if (($idFilter = $filters[ResourceData::IDENTIFIER_ATTRIBUTE] ?? null) !== null) {
                 return
-                    ($idFilter[self::FILTER_ATTRIBUTE_OPERATOR] ?? null) === Filters::EQUALS_OPERATOR &&
-                    ($idFilter[self::FILTER_ATTRIBUTE_LOGICAL_OPERATOR] ?? null) === Filters::LOGICAL_AND_OPERATOR;
+                    ($idFilter[self::FILTER_ATTRIBUTE_OPERATOR] ?? null) === Filters::EQUALS_OPERATOR
+                    && ($idFilter[self::FILTER_ATTRIBUTE_LOGICAL_OPERATOR] ?? null) === Filters::LOGICAL_AND_OPERATOR;
             }
         }
 
         return false;
     }
 
-    protected static function getResourceDataFromXmlStatic(SimpleXMLElement $node, array $attributeNameToXpathMap): array
+    protected static function getResourceDataFromXmlStatic(\SimpleXMLElement $node, array $attributeNameToXpathMap): array
     {
         $data = [];
         foreach ($attributeNameToXpathMap as $attributeName => $xpathExpression) {
@@ -188,7 +186,7 @@ abstract class ResourceApi
         return $this->filterResources($resourceIdentifiers, $options);
     }
 
-    protected function getResourceDataFromXml(SimpleXMLElement $node): array
+    protected function getResourceDataFromXml(\SimpleXMLElement $node): array
     {
         return self::getResourceDataFromXmlStatic($node, $this->attributeNameToXpathMap);
     }
@@ -224,7 +222,7 @@ abstract class ResourceApi
      * @return array The first element tells whether to accept the given node (default: true).
      *               The second element tells whether to check the given node's child nodes (default: true)
      */
-    protected function isResourceNode(SimpleXMLElement $node): array
+    protected function isResourceNode(\SimpleXMLElement $node): array
     {
         $isResourceNode = true;
         $checkChildNodes = true;
@@ -305,7 +303,7 @@ abstract class ResourceApi
     private function getResourceItems(string $responseBody): array
     {
         try {
-            $xml = new SimpleXMLElement($responseBody);
+            $xml = new \SimpleXMLElement($responseBody);
         } catch (\Exception $e) {
             throw new ApiException('response body is not in valid XML format');
         }
@@ -327,7 +325,7 @@ abstract class ResourceApi
     private function getResourceItemsRecursive(string $responseBody): array
     {
         try {
-            $xml = new SimpleXMLIterator($responseBody);
+            $xml = new \SimpleXMLIterator($responseBody);
         } catch (\Exception $e) {
             throw new ApiException('response body is not in valid XML format');
         }
@@ -350,7 +348,7 @@ abstract class ResourceApi
     /**
      * @psalm-suppress ArgumentTypeCoercion
      */
-    private function addChildResourceItems(SimpleXMLIterator $iterator, ?string $parentIdentifier, array &$childIdentifiers, array &$allResourceItems, array &$idToReplacementParentIdMap)
+    private function addChildResourceItems(\SimpleXMLIterator $iterator, ?string $parentIdentifier, array &$childIdentifiers, array &$allResourceItems, array &$idToReplacementParentIdMap)
     {
         for ($iterator->rewind(); $iterator->valid(); $iterator->next()) {
             $child = $iterator->current();

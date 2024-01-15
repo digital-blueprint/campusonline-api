@@ -31,7 +31,7 @@ class Filters
                 return $value === null ?
                         $filterValue === null :
                         $filterValue !== null && strtolower($value) === strtolower($filterValue);
-                case Filters::CONTAINS_OPERATOR:
+            case Filters::CONTAINS_OPERATOR:
                 return $value !== null && $filterValue !== null && str_contains($value, $filterValue);
             case Filters::CONTAINS_CI_OPERATOR:
                 return $value !== null && $filterValue !== null && str_contains(strtolower($value), strtolower($filterValue));

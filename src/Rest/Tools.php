@@ -80,8 +80,6 @@ class Tools
     /**
      * Like json_decode but throws on invalid json data.
      *
-     * @return mixed
-     *
      * @throws \JsonException
      */
     public static function decodeJSON(string $json, bool $assoc = false)

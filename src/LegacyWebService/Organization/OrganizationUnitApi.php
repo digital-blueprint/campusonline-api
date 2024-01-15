@@ -11,7 +11,6 @@ use Dbp\CampusonlineApi\LegacyWebService\ResourceApi;
 use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use SimpleXMLElement;
 
 class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
 {
@@ -38,7 +37,7 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
         OrganizationUnitData::COUNTRY_ATTRIBUTE => './contacts/contactData/adr/country',
     ];
 
-    public static function getAttribute(SimpleXMLElement $element, string $attributeName): ?SimpleXMLElement
+    public static function getAttribute(\SimpleXMLElement $element, string $attributeName): ?\SimpleXMLElement
     {
         $xpathExpression = self::ATTRIBUTE_NAME_TO_XPATH_MAPPING[$attributeName] ?? null;
         if ($xpathExpression === null) {
@@ -48,14 +47,14 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
         return $element->xpath($xpathExpression)[0] ?? null;
     }
 
-    public static function getAttributeString(SimpleXMLElement $element, string $attributeName): ?string
+    public static function getAttributeString(\SimpleXMLElement $element, string $attributeName): ?string
     {
         $attributeElement = self::getAttribute($element, $attributeName);
 
         return $attributeElement === null ? null : trim((string) $attributeElement);
     }
 
-    public static function getParentElement(SimpleXMLElement $element): ?SimpleXMLElement
+    public static function getParentElement(\SimpleXMLElement $element): ?\SimpleXMLElement
     {
         return $element->xpath('..')[0] ?? null;
     }
@@ -118,7 +117,7 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
         return new OrganizationUnitData();
     }
 
-    protected function isResourceNode(SimpleXMLElement $node): array
+    protected function isResourceNode(\SimpleXMLElement $node): array
     {
         [$isResourceNode, $checkChildren, $replacementParentId] = parent::isResourceNode($node);
 

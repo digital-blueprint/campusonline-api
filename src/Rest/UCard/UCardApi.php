@@ -35,7 +35,7 @@ class UCardApi implements LoggerAwareInterface
     /**
      * @return UCard[]
      */
-    public function getCardsForIdentIdObfuscated(string $identIdObfuscated, ?string $cardType = null): array
+    public function getCardsForIdentIdObfuscated(string $identIdObfuscated, string $cardType = null): array
     {
         $connection = $this->connection;
 
@@ -103,7 +103,7 @@ class UCardApi implements LoggerAwareInterface
     /**
      * @return UCard[]
      *
-     *@throws ApiException
+     * @throws ApiException
      */
     public function parseGetResponse(ResponseInterface $response): array
     {
