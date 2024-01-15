@@ -1,3 +1,7 @@
+# v0.3.13
+
+* Drop support for PHP 7.3
+
 # v0.3.9
 
 * Support kevinrob/guzzle-cache-middleware v5
