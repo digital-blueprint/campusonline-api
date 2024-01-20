@@ -25,7 +25,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
     - name: Cache composer cache directory
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ${{ env.COMPOSER_CACHE_DIR }}
         key: composer-cache
@@ -46,7 +46,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
     - name: Cache composer cache directory
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ${{ env.COMPOSER_CACHE_DIR }}
         key: composer-cache
