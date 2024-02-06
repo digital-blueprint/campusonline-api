@@ -141,7 +141,7 @@ abstract class ResourceApi
         $this->onRebuildingResourceCacheCallback = $onRebuildingResourceCacheCallback;
     }
 
-    protected function __construct(Connection $connection, string $rootOrgUnitId, array $attributeNameToXpathMap, string $resourceXpathExpression = null)
+    protected function __construct(Connection $connection, string $rootOrgUnitId, array $attributeNameToXpathMap, ?string $resourceXpathExpression = null)
     {
         $this->connection = $connection;
         $this->rootOrgUnitId = $rootOrgUnitId;

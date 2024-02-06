@@ -30,7 +30,7 @@ class Api implements LoggerAwareInterface
     private $cacheTtl;
 
     public function __construct(string $baseUrl, string $accessToken, string $rootOrgUnitId = '',
-        LoggerInterface $logger = null, CacheItemPoolInterface $cache = null, int $cacheTTL = 0, $clientHandler = null)
+        ?LoggerInterface $logger = null, ?CacheItemPoolInterface $cache = null, int $cacheTTL = 0, $clientHandler = null)
     {
         $this->connection = new Connection($baseUrl, $accessToken);
         $this->rootOrgUnitId = $rootOrgUnitId;
