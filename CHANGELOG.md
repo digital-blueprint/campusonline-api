@@ -1,3 +1,7 @@
+# v0.3.15
+
+* Add some missing direct dependency requirements
+
 # v0.3.14
 
 * Drop support for PHP 7.4/8.0
