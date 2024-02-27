@@ -1,3 +1,7 @@
+# v0.3.16
+
+* Loosen some constraints on dependencies
+
 # v0.3.15
 
 * Add some missing direct dependency requirements
