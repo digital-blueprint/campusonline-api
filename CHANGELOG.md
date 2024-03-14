@@ -1,3 +1,7 @@
+# v0.3.17
+
+* GenericApi: allow numbers in filter keys
+
 # v0.3.16
 
 * Loosen some constraints on dependencies
