@@ -47,6 +47,10 @@ class ToolsTest extends TestCase
     public function testValidateFilterName()
     {
         $this->assertSame('OK', Tools::validateFilterName('OK'));
+        $this->assertSame('NAME_MASTERORG_L1', Tools::validateFilterName('NAME_MASTERORG_L1'));
+        $this->assertSame('NAME_MASTERORG_L2', Tools::validateFilterName('NAME_MASTERORG_L2'));
+        $this->assertSame('NAME_MASTERORG_L1_ENGL', Tools::validateFilterName('NAME_MASTERORG_L1_ENGL'));
+        $this->assertSame('NAME_MASTERORG_L2_ENGL', Tools::validateFilterName('NAME_MASTERORG_L2_ENGL'));
     }
 
     public function testValidateFilterNameSemicolon()

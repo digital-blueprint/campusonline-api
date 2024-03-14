@@ -36,7 +36,7 @@ class Tools
         }
 
         // XXX: Unclear what is really allowed
-        if (preg_match('/[^A-Z_]/', $input)) {
+        if (preg_match('/[^A-Z0-9_]/', $input)) {
             throw new \ValueError('Column name contains invalid characters');
         }
 
