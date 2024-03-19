@@ -45,4 +45,15 @@ class FilterBuilderTest extends TestCase
         $this->expectException(\ValueError::class);
         (new FilterBuilder())->in('ID', [])->getFilter();
     }
+
+    public function testExtractValidValues()
+    {
+        $this->assertSame([], FilterBuilder::extractValidFilterValueSubstrings(''));
+        $this->assertSame(['foo', 'bar', 'quux'], FilterBuilder::extractValidFilterValueSubstrings('foo; ;bar quux'));
+        $this->assertSame([], FilterBuilder::extractValidFilterValueSubstrings('!#$&\'*+/:;=?@[]"<>\^`{}|~£+'));
+        $OK = ['ℭ', 'Привет', 'öäüß', 'ok', 'OK', '0', '1234567890', '-_,', 'ⅲ', '.'];
+        foreach ($OK as $c) {
+            $this->assertSame([$c], FilterBuilder::extractValidFilterValueSubstrings($c));
+        }
+    }
 }

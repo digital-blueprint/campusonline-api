@@ -1,3 +1,8 @@
+# v0.3.18
+
+* Add new FilterBuilder::extractValidFilterSubstrings() for extracting substrings from a user specified
+  input string which are all valid filter values. This can be used to implement a search with user specified inputs.
+
 # v0.3.17
 
 * GenericApi: allow numbers in filter keys

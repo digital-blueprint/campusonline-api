@@ -25,6 +25,20 @@ class FilterBuilder
     }
 
     /**
+     * Split a filter value into non-allowed and allowed substrings and only returns an array of allowed values.
+     * In case of a user-defined filter string this can be used to at least filter by the substrings that are
+     * allowed.
+     *
+     * 'foo; ;bar quux' -> ['foo', 'bar', 'quux']
+     *
+     * @return string[]
+     */
+    public static function extractValidFilterValueSubstrings(string $value): array
+    {
+        return Tools::extractValidFilterSubstrings($value);
+    }
+
+    /**
      * Equal, case-sensitive.
      */
     public function eq(string $columnName, string $value): FilterBuilder

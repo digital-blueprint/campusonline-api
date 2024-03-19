@@ -65,16 +65,26 @@ class Tools
     public static function validateFilterValue(string $input): string
     {
         // Filtering breaks if the value is empty, so don't allow
-        if (strlen($input) === 0) {
+        // Strictly not needed here, but gives a better error message for this common issue
+        if ($input === '') {
             throw new \ValueError('empty filter value not allowed');
         }
 
-        // XXX: Unclear what is really allowed
-        if (preg_match('/[ !#$&\'*+\/:;=?@\[\]"><>\\\^`{}|~£+]/', $input)) {
+        $parts = self::extractValidFilterSubstrings($input);
+        if (count($parts) !== 1 || $parts[0] !== $input) {
             throw new \ValueError('Contains invalid characters');
         }
 
         return $input;
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function extractValidFilterSubstrings(string $value): array
+    {
+        // XXX: Unclear what is really allowed
+        return preg_split('/[^\p{L}\p{N}._,-]+/u', $value, -1, PREG_SPLIT_NO_EMPTY);
     }
 
     /**
