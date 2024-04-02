@@ -51,7 +51,7 @@ class CourseApi extends ResourceApi implements LoggerAwareInterface
         CourseData::SYLLABUS_URL_ATTRIBUTE => './syllabus/webLink/href',
         CourseData::EXAMS_URL_ATTRIBUTE => './exam/infoBlock/webLink/href',
         CourseData::DATES_URL_ATTRIBUTE => './teachingActivity/infoBlock/webLink/href',
-        ];
+    ];
 
     public function __construct(Connection $connection, string $rootOrgUnitId)
     {
