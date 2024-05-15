@@ -303,7 +303,7 @@ abstract class ResourceApi
     private function getResourceItems(string $responseBody): array
     {
         try {
-            $xml = new \SimpleXMLElement($responseBody);
+            $xml = new \SimpleXMLElement($responseBody, LIBXML_NOERROR);
         } catch (\Exception $e) {
             throw new ApiException('response body is not in valid XML format');
         }
