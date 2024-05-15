@@ -8,6 +8,8 @@ use Dbp\CampusonlineApi\Helpers\ApiException;
 use Dbp\CampusonlineApi\Rest\Api;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
@@ -27,9 +29,11 @@ class GenericTest extends TestCase
         $this->mockResponses([]);
     }
 
-    private function mockResponses(array $responses)
+    private function mockResponses(array $responses, array &$container = [])
     {
+        $history = Middleware::history($container);
         $stack = HandlerStack::create(new MockHandler($responses));
+        $stack->push($history);
         $this->api->getConnection()->setClientHandler($stack);
     }
 
@@ -100,6 +104,26 @@ class GenericTest extends TestCase
         $item = $generic->getResource('ID', '42');
         $this->assertNotNull($item);
         $this->assertSame(42, $item->content['ID']);
+    }
+
+    public function testLanguage()
+    {
+        $RESPONSE = '
+{
+    "type": "resources",
+    "link": [],
+    "resource": [
+    ]
+}';
+
+        $history = [];
+        $this->mockResponses([
+            new Response(200, ['Content-Type' => 'application/json'], $RESPONSE),
+        ], $history);
+
+        $generic = $this->api->Generic('loc_apiProjekte');
+        $x = $generic->getResourceCollection([], language: 'fr');
+        $this->assertSame('fr', $history[0]['request']->getHeaders()['Accept-Language'][0]);
     }
 
     public function testGetSingleNonUniqueField()

@@ -39,13 +39,14 @@ class GenericApi
      *
      * This requires that the field that is used for filtering is unique.
      *
-     * @param string $field The field to filter against (usually 'ID')
-     * @param string $value The requests value of the field
+     * @param string  $field    The field to filter against (usually 'ID')
+     * @param string  $value    The requests value of the field
+     * @param ?string $language The requested language of the response
      */
-    public function getResource(string $field, string $value): ?ApiResource
+    public function getResource(string $field, string $value, ?string $language = null): ?ApiResource
     {
         $filters = (new FilterBuilder())->eq($field, $value)->getFilters();
-        $collection = $this->getResourceCollection($filters, 0, 2);
+        $collection = $this->getResourceCollection($filters, 0, 2, $language);
 
         if (count($collection) >= 1) {
             if ((string) $collection[0]->content[$field] === $value) {
@@ -68,14 +69,15 @@ class GenericApi
     /**
      * Returns an array of API resources.
      *
-     * @param array $filters An array of filters to apply
-     * @param int   $skip    How many items of the result to skip
-     * @param int   $top     How many items to return at a maximum. -1 means as many as possible.
-     *                       Note that the API might return fewer results as requested and available.
+     * @param array   $filters  An array of filters to apply
+     * @param int     $skip     How many items of the result to skip
+     * @param int     $top      How many items to return at a maximum. -1 means as many as possible.
+     *                          Note that the API might return fewer results as requested and available.
+     * @param ?string $language The requested language of the response
      *
      * @return ApiResource[]
      */
-    public function getResourceCollection(array $filters = [], int $skip = 0, int $top = -1): array
+    public function getResourceCollection(array $filters = [], int $skip = 0, int $top = -1, ?string $language = null): array
     {
         $connection = $this->connection;
         $dataService = $connection->getDataServiceId($this->dataService);
@@ -89,9 +91,14 @@ class GenericApi
         ];
         $uri = (string) $uriTemplate->expand($vars);
 
+        $extraOptions = [];
+        if ($language !== null) {
+            $extraOptions['headers']['Accept-Language'] = $language;
+        }
+
         $client = $connection->getClient();
         try {
-            $response = $client->get($uri);
+            $response = $client->get($uri, $extraOptions);
         } catch (GuzzleException $guzzleException) {
             throw ApiException::fromGuzzleException($guzzleException);
         }
@@ -105,20 +112,21 @@ class GenericApi
      * Compared to getResourceCollection() this will always return all available items for the requested range
      * and potentially make multiple requests internally.
      *
-     * @param array $filters And array of filters to apply
-     * @param int   $page    The page to return, starting with 1
-     * @param int   $perPage The amount of items per page
+     * @param array   $filters  And array of filters to apply
+     * @param int     $page     The page to return, starting with 1
+     * @param int     $perPage  The amount of items per page
+     * @param ?string $language The requested language of the response
      *
      * @return ApiResource[]
      */
-    public function getResourcePage(array $filters, int $page, int $perPage): array
+    public function getResourcePage(array $filters, int $page, int $perPage, ?string $language = null): array
     {
         $top = $perPage;
         $skip = Pagination::getPageStartIndex($page, $perPage);
 
         $allItems = [];
         while (true) {
-            $newItems = $this->getResourceCollection($filters, $skip, $top);
+            $newItems = $this->getResourceCollection($filters, $skip, $top, $language);
             if (count($newItems) === 0) {
                 break;
             }
