@@ -27,7 +27,7 @@ class ToolsTest extends TestCase
         Tools::validateFilterValue($value);
     }
 
-    public function providerInvalidValues()
+    public static function providerInvalidValues()
     {
         $arguments = [['']];
         // This list is not complete... just based on manual testing
