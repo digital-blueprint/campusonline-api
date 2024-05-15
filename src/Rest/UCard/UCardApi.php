@@ -16,9 +16,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
-/**
- * @deprecated Use GenericApi instead
- */
 class UCardApi implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
