@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.3.19
+
+* Port to PHPUnit 10
+* Undeprecate UCardApi/StudentApi
+* GenericApi: add support for passing a language parameter to the API
+* LegacyWebService: silence some XML parsing PHP warnings in case of invalid responses
+
 ## v0.3.18
 
 * Add new FilterBuilder::extractValidFilterSubstrings() for extracting substrings from a user specified
