@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.3.20
+
+* Fix get course by ID
+* Refactor and modernize
+
 ## v0.3.19
 
 * Port to PHPUnit 10
