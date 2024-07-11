@@ -6,12 +6,9 @@ namespace Dbp\CampusonlineApi\Helpers;
 
 class Page
 {
-    /** @var array */
-    private $pageItems;
-    /** @var int */
-    private $currentPageNumber;
-    /** @var int */
-    private $maxNumItemsPerPage;
+    private array $pageItems;
+    private int $currentPageNumber;
+    private int $maxNumItemsPerPage;
 
     public function __construct(array $pageItems, int $currentPageNumber, int $maxNumItemsPerPage)
     {

@@ -11,7 +11,7 @@ class Pagination
 
     public const ALL_ITEMS = -1;
 
-    public static function getPageStartIndex(int $pageNumber, int $maxNumItemsPerPage)
+    public static function getPageStartIndex(int $pageNumber, int $maxNumItemsPerPage): int
     {
         return ($pageNumber - 1) * $maxNumItemsPerPage;
     }

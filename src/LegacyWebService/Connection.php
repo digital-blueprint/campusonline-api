@@ -28,29 +28,25 @@ class Connection implements LoggerAwareInterface
     private const LANGUAGE_DE = 'de';
     private const DEFAULT_LANGUAGE = self::LANGUAGE_EN;
 
-    private $cachePool;
-    private $cacheTTL;
-    private $baseUrl;
-    private $accessToken;
-    private $clientHandler;
+    private ?CacheItemPoolInterface $cachePool = null;
+    private int $cacheTTL = 0;
+    private string $baseUrl;
+    private string $accessToken;
+    private ?object $clientHandler = null;
 
     public function __construct(string $baseUrl, string $accessToken)
     {
-        $this->clientHandler = null;
-        $this->logger = null;
         $this->baseUrl = $baseUrl;
         $this->accessToken = $accessToken;
-        $this->cachePool = null;
-        $this->cacheTTL = 0;
     }
 
-    public function setCache(?CacheItemPoolInterface $cachePool, int $ttl)
+    public function setCache(?CacheItemPoolInterface $cachePool, int $ttl): void
     {
         $this->cachePool = $cachePool;
         $this->cacheTTL = $ttl;
     }
 
-    public function setClientHandler(?object $handler)
+    public function setClientHandler(?object $handler): void
     {
         $this->clientHandler = $handler;
     }

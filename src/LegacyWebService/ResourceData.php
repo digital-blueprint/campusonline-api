@@ -10,12 +10,10 @@ class ResourceData
     public const CHILD_IDENTIFIERS_ATTRIBUTE = 'childIds';
     public const PARENT_IDENTIFIER_ATTRIBUTE = 'parentId';
 
-    /** @var array */
-    protected $data;
+    protected array $data = [];
 
     public function __construct()
     {
-        $this->data = [];
     }
 
     public function getData(): array
@@ -28,7 +26,7 @@ class ResourceData
         $this->data = $data;
     }
 
-    public function setAttribute(string $attributeName, $attributeValue)
+    public function setAttribute(string $attributeName, $attributeValue): void
     {
         $this->data[$attributeName] = $attributeValue;
     }
@@ -53,7 +51,7 @@ class ResourceData
         $this->data[self::CHILD_IDENTIFIERS_ATTRIBUTE] = $childIds;
     }
 
-    public function setParentIdentifier(?string $parentIdentifier)
+    public function setParentIdentifier(?string $parentIdentifier): void
     {
         $this->data[self::PARENT_IDENTIFIER_ATTRIBUTE] = $parentIdentifier;
     }

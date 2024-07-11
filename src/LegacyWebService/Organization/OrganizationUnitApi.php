@@ -41,7 +41,8 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
     {
         $xpathExpression = self::ATTRIBUTE_NAME_TO_XPATH_MAPPING[$attributeName] ?? null;
         if ($xpathExpression === null) {
-            throw new ApiException(sprintf('attribute \'%s\'s not defined for %s node', $attributeName, self::ORG_UNIT_RESOURCE_XML_NAME));
+            throw new ApiException(sprintf('attribute \'%s\'s not defined for %s node', $attributeName,
+                self::ORG_UNIT_RESOURCE_XML_NAME));
         }
 
         return $element->xpath($xpathExpression)[0] ?? null;
@@ -64,7 +65,7 @@ class OrganizationUnitApi extends ResourceApi implements LoggerAwareInterface
         parent::__construct($connection, $rootOrgUnitId, self::ATTRIBUTE_NAME_TO_XPATH_MAPPING);
     }
 
-    public function checkConnection()
+    public function checkConnection(): void
     {
         // To check if the API can respond with a proper error
         $this->expectGetError(self::URI, [], 400);

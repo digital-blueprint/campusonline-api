@@ -17,17 +17,10 @@ class Api implements LoggerAwareInterface
     public const HTTP_STATUS_NOT_FOUND = 404;
     public const LANGUAGE_PARAMETER_NAME = 'lang';
 
-    /** @var Connection */
-    private $connection;
-
-    /** @var string */
-    private $rootOrgUnitId;
-
-    /** @var CacheItemPoolInterface|null */
-    private $cache;
-
-    /** @var int */
-    private $cacheTtl;
+    private Connection $connection;
+    private string $rootOrgUnitId;
+    private ?CacheItemPoolInterface $cache;
+    private int $cacheTtl;
 
     public function __construct(string $baseUrl, string $accessToken, string $rootOrgUnitId = '',
         ?LoggerInterface $logger = null, ?CacheItemPoolInterface $cache = null, int $cacheTTL = 0, $clientHandler = null)
@@ -50,7 +43,7 @@ class Api implements LoggerAwareInterface
         $this->connection->setLogger($logger);
     }
 
-    public function setClientHandler(?object $handler)
+    public function setClientHandler(?object $handler): void
     {
         $this->connection->setClientHandler($handler);
     }

@@ -22,29 +22,27 @@ abstract class ResourceApi
     private const FILTER_ATTRIBUTE_FILTER_VALUE = 'filterValue';
     private const FILTER_ATTRIBUTE_LOGICAL_OPERATOR = 'logical';
 
-    /** @var string */
-    protected $rootOrgUnitId;
+    protected string $rootOrgUnitId;
+    protected Connection $connection;
 
     /** @var string[] */
-    private $attributeNameToXpathMap;
+    private array $attributeNameToXpathMap;
+    private ?string $resourceXpathExpression;
+    private ?CacheItemPoolInterface $cache = null;
+    private int $cacheTtl = 0;
 
-    /** @var string|null */
-    private $resourceXpathExpression;
-
-    /** @var Connection */
-    private $connection;
-
-    /** @var CacheItemPoolInterface */
-    private $cache;
-
-    /** @var int */
-    private $cacheTtl = 0;
-
+    /**
+     * @var callable|null
+     */
     private $isResourceNodeCallback;
 
+    /**
+     * @var callable|null
+     */
     private $onRebuildingResourceCacheCallback;
 
-    public static function addFilter(array &$targetOptions, string $fieldName, string $operator, $filterValue, string $logicalOperator = Filters::LOGICAL_AND_OPERATOR)
+    public static function addFilter(array &$targetOptions, string $fieldName, string $operator, $filterValue,
+        string $logicalOperator = Filters::LOGICAL_AND_OPERATOR): void
     {
         if (isset($targetOptions[self::FILTERS_OPTION]) === false) {
             $targetOptions[self::FILTERS_OPTION] = [];
@@ -62,7 +60,7 @@ abstract class ResourceApi
         return trim((string) ($node->xpath($xmlPath)[0] ?? ''));
     }
 
-    protected static function addEqualsIdFilter(array &$targetOptions, string $identifier)
+    protected static function addEqualsIdFilter(array &$targetOptions, string $identifier): void
     {
         self::addFilter($targetOptions, ResourceData::IDENTIFIER_ATTRIBUTE, Filters::EQUALS_OPERATOR, $identifier, Filters::LOGICAL_AND_OPERATOR);
     }
@@ -119,7 +117,7 @@ abstract class ResourceApi
         return $resourceItemIdentifier.':'.Connection::getLanguageParameter($options);
     }
 
-    public function setCache(CacheItemPoolInterface $cache, int $cacheTtl)
+    public function setCache(CacheItemPoolInterface $cache, int $cacheTtl): void
     {
         $this->cache = $cache;
         $this->cacheTtl = $cacheTtl;
@@ -131,12 +129,12 @@ abstract class ResourceApi
      */
     abstract public function checkConnection(); // make sure this doesn't take long with lots of data provided by the API
 
-    public function setIsResourceNodeCallback($isResourceNodeCallback): void
+    public function setIsResourceNodeCallback(callable $isResourceNodeCallback): void
     {
         $this->isResourceNodeCallback = $isResourceNodeCallback;
     }
 
-    public function setOnRebuildingResourceCacheCallback($onRebuildingResourceCacheCallback): void
+    public function setOnRebuildingResourceCacheCallback(callable $onRebuildingResourceCacheCallback): void
     {
         $this->onRebuildingResourceCacheCallback = $onRebuildingResourceCacheCallback;
     }
@@ -292,7 +290,6 @@ abstract class ResourceApi
     private function getResources(string $uri, array $uriParameters = [], array $options = []): array
     {
         $responseBody = $this->connection->get($uri, $uriParameters, $options);
-
         if ($options[self::GET_CHILD_IDS_OPTION_KEY] ?? false) {
             return $this->getResourceItemsRecursive($responseBody);
         } else {
@@ -348,7 +345,7 @@ abstract class ResourceApi
     /**
      * @psalm-suppress ArgumentTypeCoercion
      */
-    private function addChildResourceItems(\SimpleXMLIterator $iterator, ?string $parentIdentifier, array &$childIdentifiers, array &$allResourceItems, array &$idToReplacementParentIdMap)
+    private function addChildResourceItems(\SimpleXMLIterator $iterator, ?string $parentIdentifier, array &$childIdentifiers, array &$allResourceItems, array &$idToReplacementParentIdMap): void
     {
         for ($iterator->rewind(); $iterator->valid(); $iterator->next()) {
             $child = $iterator->current();
@@ -394,7 +391,7 @@ abstract class ResourceApi
         }
     }
 
-    private function saveCacheItem(CacheItemInterface $resourceCacheItem, $resourceItem)
+    private function saveCacheItem(CacheItemInterface $resourceCacheItem, $resourceItem): void
     {
         if ($this->cache === null) {
             throw new ApiException('cache is not set');

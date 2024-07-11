@@ -55,10 +55,11 @@ class CourseApi extends ResourceApi implements LoggerAwareInterface
 
     public function __construct(Connection $connection, string $rootOrgUnitId)
     {
-        parent::__construct($connection, $rootOrgUnitId, self::ATTRIBUTE_NAME_TO_XPATH_MAPPING, self::COURSE_RESOURCE_XML_PATH);
+        parent::__construct($connection, $rootOrgUnitId, self::ATTRIBUTE_NAME_TO_XPATH_MAPPING,
+            self::COURSE_RESOURCE_XML_PATH);
     }
 
-    public function checkConnection()
+    public function checkConnection(): void
     {
         // To check if the API can respond with a proper error
         $this->expectGetError(self::COURSE_BY_ID_URI, [], 400);
@@ -76,7 +77,7 @@ class CourseApi extends ResourceApi implements LoggerAwareInterface
         }
 
         $uriParameters = [];
-        $uriParameters[OrganizationUnitApi::ORG_UNIT_ID_PARAMETER_NAME] = $identifier;
+        $uriParameters[OrganizationUnitApi::ORG_UNIT_ID_PARAMETER_NAME] = $this->rootOrgUnitId;
 
         $courseData = $this->getItem($identifier, self::COURSES_BY_ORGANIZATION_URI, $uriParameters, $options);
 

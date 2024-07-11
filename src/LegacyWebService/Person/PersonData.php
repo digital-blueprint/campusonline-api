@@ -11,6 +11,7 @@ class PersonData extends ResourceData
     public const GIVEN_NAME_ATTRIBUTE = 'givenName';
     public const FAMILY_NAME_ATTRIBUTE = 'familyName';
     public const EMAIL_ATTRIBUTE = 'email';
+    public const IDENT_ATTRIBUTE = 'ident';
 
     public function getGivenName(): string
     {
@@ -40,5 +41,15 @@ class PersonData extends ResourceData
     public function setEmail(string $email): void
     {
         $this->data[self::EMAIL_ATTRIBUTE] = $email;
+    }
+
+    public function getIdent(): string
+    {
+        return $this->data[self::IDENT_ATTRIBUTE];
+    }
+
+    public function setIdent(string $email): void
+    {
+        $this->data[self::IDENT_ATTRIBUTE] = $email;
     }
 }

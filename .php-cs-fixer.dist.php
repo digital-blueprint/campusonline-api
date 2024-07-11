@@ -18,6 +18,7 @@ $config->setRules([
     'strict_param' => true,
     'declare_strict_types' => true,
     'method_argument_space' => ['on_multiline' => 'ignore'],
+    'single_line_throw' => false,
 ])
 ->setRiskyAllowed(true)
 ->setFinder($finder);

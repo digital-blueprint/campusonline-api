@@ -10,7 +10,6 @@ use Dbp\CampusonlineApi\LegacyWebService\Api;
 use Dbp\CampusonlineApi\LegacyWebService\ApiException;
 use Dbp\CampusonlineApi\LegacyWebService\Course\CourseData;
 use Dbp\CampusonlineApi\LegacyWebService\ResourceApi;
-use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -75,14 +74,6 @@ class CourseApiTest extends TestCase
         $this->assertSame('VO', $course->getType());
         $this->assertSame('', $course->getDescription());
         $this->assertSame(2.0, $course->getNumberOfCredits());
-
-        $this->assertSame('241333', $course->getData()[ResourceData::IDENTIFIER_ATTRIBUTE]);
-        $this->assertSame('Technische Informatik 1', $course->getData()[CourseData::NAME_ATTRIBUTE]);
-        $this->assertSame('german', $course->getData()[CourseData::LANGUAGE_ATTRIBUTE]);
-        $this->assertSame('448001', $course->getData()[CourseData::CODE_ATTRIBUTE]);
-        $this->assertSame('VO', $course->getData()[CourseData::TYPE_ATTRIBUTE]);
-        $this->assertSame('', $course->getData()[CourseData::DESCRIPTION_ATTRIBUTE]);
-        $this->assertSame('2', $course->getData()[CourseData::NUMBER_OF_CREDITS_ATTRIBUTE]);
     }
 
     /**

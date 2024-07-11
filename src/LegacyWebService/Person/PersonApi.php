@@ -25,6 +25,7 @@ class PersonApi extends ResourceApi implements LoggerAwareInterface
 
     private const ATTRIBUTE_NAME_TO_XPATH_MAPPING = [
         ResourceData::IDENTIFIER_ATTRIBUTE => self::PERSON_IDENTIFIER_XML_PATH,
+        PersonData::IDENT_ATTRIBUTE => './@ident',
         PersonData::GIVEN_NAME_ATTRIBUTE => './name/given',
         PersonData::FAMILY_NAME_ATTRIBUTE => './name/family',
         PersonData::EMAIL_ATTRIBUTE => './contactData/email',
@@ -32,10 +33,11 @@ class PersonApi extends ResourceApi implements LoggerAwareInterface
 
     public function __construct(Connection $connection, string $rootOrgUnitId)
     {
-        parent::__construct($connection, $rootOrgUnitId, self::ATTRIBUTE_NAME_TO_XPATH_MAPPING, self::PERSON_RESOURCE_XML_PATH);
+        parent::__construct($connection, $rootOrgUnitId, self::ATTRIBUTE_NAME_TO_XPATH_MAPPING,
+            self::PERSON_RESOURCE_XML_PATH);
     }
 
-    public function checkConnection()
+    public function checkConnection(): void
     {
         // To check if the API can respond with a proper error
         $this->expectGetError(self::STUDENTS_BY_COURSE_URI, [], 400);

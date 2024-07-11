@@ -40,7 +40,8 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
 
     public function __construct(Connection $connection, string $rootOrgUnitId)
     {
-        parent::__construct($connection, $rootOrgUnitId, self::ATTRIBUTE_NAME_TO_XPATH_MAPPING, self::ROOM_RESOURCE_XML_PATH);
+        parent::__construct($connection, $rootOrgUnitId, self::ATTRIBUTE_NAME_TO_XPATH_MAPPING,
+            self::ROOM_RESOURCE_XML_PATH);
     }
 
     public function checkConnection()
