@@ -18,6 +18,7 @@ abstract class ResourceApi
 
     protected const GET_CHILD_IDS_OPTION_KEY = 'get_child_ids';
 
+    private const FILTER_ATTRIBUTE_FIELD_NAME = 'field';
     private const FILTER_ATTRIBUTE_OPERATOR = 'operator';
     private const FILTER_ATTRIBUTE_FILTER_VALUE = 'filterValue';
     private const FILTER_ATTRIBUTE_LOGICAL_OPERATOR = 'logical';
@@ -48,7 +49,8 @@ abstract class ResourceApi
             $targetOptions[self::FILTERS_OPTION] = [];
         }
 
-        $targetOptions[self::FILTERS_OPTION][$fieldName] = [
+        $targetOptions[self::FILTERS_OPTION][] = [
+            self::FILTER_ATTRIBUTE_FIELD_NAME => $fieldName,
             self::FILTER_ATTRIBUTE_OPERATOR => $operator,
             self::FILTER_ATTRIBUTE_FILTER_VALUE => $filterValue,
             self::FILTER_ATTRIBUTE_LOGICAL_OPERATOR => $logicalOperator,
@@ -93,8 +95,8 @@ abstract class ResourceApi
         // tri-state: null (no 'or' filter applied), true (at least one 'or' filter passed), false (none of the 'or' filters passed)
         $didAnyLogicalOrFilterPass = null;
 
-        foreach ($filters as $attributeName => $filter) {
-            $stringValue = $currentResourceItem->getData()[$attributeName];
+        foreach ($filters as $filter) {
+            $stringValue = $currentResourceItem->getData()[$filter[self::FILTER_ATTRIBUTE_FIELD_NAME]];
             $logicalOperator = $filter[self::FILTER_ATTRIBUTE_LOGICAL_OPERATOR];
             if ($logicalOperator === Filters::LOGICAL_AND_OPERATOR || $didAnyLogicalOrFilterPass !== true) {
                 if (Filters::passesFilter($stringValue, $filter[self::FILTER_ATTRIBUTE_OPERATOR], $filter[self::FILTER_ATTRIBUTE_FILTER_VALUE])) {
