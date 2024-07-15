@@ -25,11 +25,10 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
     /** Response attributes: */
     private const ROOM_RESOURCE_XML_PATH = './/cor:resource[@cor:typeID="room"]';
     private const ROOM_IDENTIFIER_XML_PATH = './cor:description/cor:attribute[@cor:attrID="roomID"]';
-    private const ROOM_NAME_XML_PATH = './cor:description/cor:attribute[@cor:attrID="roomCode"]';
 
     private const ATTRIBUTE_NAME_TO_XPATH_MAPPING = [
         ResourceData::IDENTIFIER_ATTRIBUTE => self::ROOM_IDENTIFIER_XML_PATH,
-        RoomData::NAME_ATTRIBUTE => self::ROOM_NAME_XML_PATH,
+        RoomData::CODE_ATTRIBUTE => './cor:description/cor:attribute[@cor:attrID="roomCode"]',
         RoomData::ADDITIONAL_INFO_ATTRIBUTE => './cor:description/cor:attribute[@cor:attrID="additionalInformation"]',
         RoomData::ADDRESS_ATTRIBUTE => './cor:description/cor:attribute[@cor:attrID="address"]',
         RoomData::URL_ATTRIBUTE => './cor:description/cor:attribute[@cor:attrID="address"]/@cor:attrAltUrl',
@@ -38,13 +37,15 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
         RoomData::PURPOSE_ATTRIBUTE => './cor:description/cor:attribute[@cor:attrID="purpose"]',
     ];
 
+    private const ORGANIZATIONS_XML_PATH = './cor:description/cor:resourceGroup[@cor:typeID="orgUnitUserList"]/cor:description/cor:resource';
+
     public function __construct(Connection $connection, string $rootOrgUnitId)
     {
         parent::__construct($connection, $rootOrgUnitId, self::ATTRIBUTE_NAME_TO_XPATH_MAPPING,
             self::ROOM_RESOURCE_XML_PATH);
     }
 
-    public function checkConnection()
+    public function checkConnection(): void
     {
         // To check if the API can respond with a proper error
         // NOTE: room API returns 404 if no id is specified, where other APIs (course, organization, ...) return 400
@@ -92,5 +93,21 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
     protected function createResource(): ResourceData
     {
         return new RoomData();
+    }
+
+    protected function getResourceDataFromXml(\SimpleXMLElement $node): array
+    {
+        $resourceData = parent::getResourceDataFromXml($node);
+
+        $orgUnitIds = [];
+        foreach ($node->xpath(self::ORGANIZATIONS_XML_PATH) as $organizationResourceNode) {
+            $orgUnitId = self::getResourcePropertyOrEmptyString($organizationResourceNode, './cor:description/cor:attribute[cor:attrID="orgUnitID"]');
+            if ($orgUnitId !== '') {
+                $orgUnitIds[] = $orgUnitId;
+            }
+        }
+        $resourceData[RoomData::ORGANIZATIONS_ATTRIBUTE] = $orgUnitIds;
+
+        return $resourceData;
     }
 }

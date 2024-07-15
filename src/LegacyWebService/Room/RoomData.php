@@ -16,22 +16,23 @@ class RoomData extends ResourceData
     /** @var string Partial, case-insensitive text search on the 'additionalInfo' attribute. Passes if filter is empty. */
     public const ADDITIONAL_INFO_SEARCH_FILTER_NAME = 'additionalInfoSearchFilter';
 
-    public const NAME_ATTRIBUTE = 'name';
+    public const CODE_ATTRIBUTE = 'code';
     public const ADDRESS_ATTRIBUTE = 'address';
     public const URL_ATTRIBUTE = 'url';
     public const FLOOR_SIZE_ATTRIBUTE = 'floorSize';
     public const PURPOSE_ATTRIBUTE = 'purpose';
     public const PURPOSE_ID_ATTRIBUTE = 'purposeId';
     public const ADDITIONAL_INFO_ATTRIBUTE = 'additionalInfo';
+    public const ORGANIZATIONS_ATTRIBUTE = 'organizations';
 
-    public function getName(): string
+    public function getCode(): string
     {
-        return $this->data[self::NAME_ATTRIBUTE];
+        return $this->data[self::CODE_ATTRIBUTE];
     }
 
-    public function setName(string $name): void
+    public function setCode(string $code): void
     {
-        $this->data[self::NAME_ATTRIBUTE] = $name;
+        $this->data[self::CODE_ATTRIBUTE] = $code;
     }
 
     public function getAddress(): string
@@ -92,5 +93,15 @@ class RoomData extends ResourceData
     public function setAdditionalInfo(string $additionalInfo): void
     {
         $this->data[self::ADDITIONAL_INFO_ATTRIBUTE] = $additionalInfo;
+    }
+
+    public function getOrganizations(): array
+    {
+        return $this->data[self::ORGANIZATIONS_ATTRIBUTE];
+    }
+
+    public function setOrganizations(array $organizations): void
+    {
+        $this->data[self::ORGANIZATIONS_ATTRIBUTE] = $organizations;
     }
 }
