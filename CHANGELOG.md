@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.21
+
+* Add organizations attribute to rooms data
+
 ## v0.3.20
 
 * Fix get course by ID
