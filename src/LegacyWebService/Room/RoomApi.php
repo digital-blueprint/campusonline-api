@@ -37,7 +37,7 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
         RoomData::PURPOSE_ATTRIBUTE => './cor:description/cor:attribute[@cor:attrID="purpose"]',
     ];
 
-    private const ORGANIZATIONS_XML_PATH = './cor:description/cor:resourceGroup[@cor:typeID="orgUnitUserList"]/cor:description/cor:resource';
+    private const ORGANIZATIONS_XML_PATH = './cor:description/cor:resourceGroup[@cor:typeID="orgUnitUserList"]/cor:description/cor:resource[@cor:typeID="orgUnitUser"]';
 
     public function __construct(Connection $connection, string $rootOrgUnitId)
     {
@@ -101,7 +101,7 @@ class RoomApi extends ResourceApi implements LoggerAwareInterface
 
         $orgUnitIds = [];
         foreach ($node->xpath(self::ORGANIZATIONS_XML_PATH) as $organizationResourceNode) {
-            $orgUnitId = self::getResourcePropertyOrEmptyString($organizationResourceNode, './cor:description/cor:attribute[cor:attrID="orgUnitID"]');
+            $orgUnitId = self::getResourcePropertyOrEmptyString($organizationResourceNode, './cor:description/cor:attribute[@cor:attrID="orgUnitID"]');
             if ($orgUnitId !== '') {
                 $orgUnitIds[] = $orgUnitId;
             }
