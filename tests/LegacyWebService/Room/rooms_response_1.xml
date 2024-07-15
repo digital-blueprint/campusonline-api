@@ -45,6 +45,15 @@
                             <cor:attribute cor:attrID="principalOccupantID" cor:attrDataType="String">J</cor:attribute>
                         </cor:description>
                     </cor:resource>
+                    <cor:resource cor:typeID="orgUnitUser">
+                        <cor:description>
+                            <cor:attribute cor:attrID="orgUnitID" cor:attrDataType="String">2346</cor:attribute>
+                            <cor:attribute cor:attrID="orgUnitName" cor:attrDataType="String">Institut für Unit Tests 2</cor:attribute>
+                            <cor:attribute cor:attrID="areaPercentage" cor:attrDataType="int">50</cor:attribute>
+                            <cor:attribute cor:attrID="areaPart" cor:attrDataType="float">25.79</cor:attribute>
+                            <cor:attribute cor:attrID="principalOccupantID" cor:attrDataType="String">J</cor:attribute>
+                        </cor:description>
+                    </cor:resource>
                 </cor:description>
             </cor:resourceGroup>
         </cor:description>

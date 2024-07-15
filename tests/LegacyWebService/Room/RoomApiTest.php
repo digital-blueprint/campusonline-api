@@ -73,7 +73,7 @@ class RoomApiTest extends TestCase
         $this->assertSame('29', $room->getPurposeID());
         $this->assertSame(42.42, $room->getFloorSize());
         $this->assertSame('https://online.tugraz.at/tug_online/ris.einzelraum?raumkey=1234', $room->getUrl());
-        // $this->assertSame(['4321'], $room->getOrganizations());
+        $this->assertSame(['4321'], $room->getOrganizations());
 
         $room = $page->getItems()[1];
         $this->assertSame('1235', $room->getIdentifier());
@@ -83,7 +83,7 @@ class RoomApiTest extends TestCase
         $this->assertSame('14', $room->getPurposeID());
         $this->assertSame(51.59, $room->getFloorSize());
         $this->assertSame('https://online.tugraz.at/tug_online/ris.einzelraum?raumkey=1235', $room->getUrl());
-        // $this->assertSame(['2345'], $room->getOrganizations());
+        $this->assertSame(['2345', '2346'], $room->getOrganizations());
 
         $this->mockResponses([
             new Response(200, ['Content-Type' => 'text/xml;charset=utf-8'], file_get_contents(__DIR__.'/rooms_response_1.xml')),
