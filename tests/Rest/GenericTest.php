@@ -29,7 +29,7 @@ class GenericTest extends TestCase
         $this->mockResponses([]);
     }
 
-    private function mockResponses(array $responses, array &$container = [])
+    private function mockResponses(array $responses, &$container = [])
     {
         $history = Middleware::history($container);
         $stack = HandlerStack::create(new MockHandler($responses));

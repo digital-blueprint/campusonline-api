@@ -48,7 +48,7 @@ class RoomApiTest extends TestCase
         ]);
 
         $this->api->Room()->checkConnection();
-        $this->assertTrue(true);
+        $this->expectNotToPerformAssertions();
     }
 
     /**

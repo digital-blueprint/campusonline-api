@@ -9,3 +9,5 @@ parameters:
         - tests
     excludePaths:
         - tests/bootstrap.php
+    ignoreErrors:
+        - identifier: method.alreadyNarrowedType

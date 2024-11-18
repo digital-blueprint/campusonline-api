@@ -43,7 +43,7 @@ class PersonApiTest extends TestCase
         ]);
 
         $this->api->Person()->checkConnection();
-        $this->assertTrue(true);
+        $this->expectNotToPerformAssertions();
     }
 
     /**

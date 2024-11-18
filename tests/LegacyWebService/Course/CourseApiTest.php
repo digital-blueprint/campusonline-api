@@ -46,7 +46,7 @@ class CourseApiTest extends TestCase
         ]);
 
         $this->api->Course()->checkConnection();
-        $this->assertTrue(true);
+        $this->expectNotToPerformAssertions();
     }
 
     /**

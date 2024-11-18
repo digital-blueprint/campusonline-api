@@ -76,8 +76,8 @@ class UCardTest extends TestCase
             new Response(201, ['Content-Type' => 'application/json'], $UCARD_POST_RESPONSE),
         ]);
 
+        $this->expectNotToPerformAssertions();
         $this->api->UCard()->createCardForIdentIdObfuscated(self::IDENT_ID_OBFUSCATED, UCardType::STA);
-        $this->assertTrue(true);
     }
 
     public function testCreateCardError()
@@ -126,7 +126,7 @@ class UCardTest extends TestCase
         ]);
         $card = new UCard(self::IDENT_ID_OBFUSCATED, UCardType::STA, self::CONTENT_ID, 0, true);
         $this->api->UCard()->setCardPicture($card, 'foobar');
-        $this->assertTrue(true);
+        $this->expectNotToPerformAssertions();
     }
 
     public function testSetCardPictureError()

@@ -84,7 +84,7 @@ class OrganizationUnitApiTest extends TestCase
         ]);
 
         $this->getOrgUnitApi()->checkConnection();
-        $this->assertTrue(true);
+        $this->expectNotToPerformAssertions();
     }
 
     /**

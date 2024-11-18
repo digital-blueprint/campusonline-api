@@ -351,6 +351,8 @@ abstract class ResourceApi
     {
         for ($iterator->rewind(); $iterator->valid(); $iterator->next()) {
             $child = $iterator->current();
+            // phpstorm return type is wrong here
+            // @phpstan-ignore notIdentical.alwaysTrue
             if ($child !== null) {
                 [$isResourceNode, $checkChildren, $replacementParentId] = $this->isResourceNode($child);
                 if ($isResourceNode) {

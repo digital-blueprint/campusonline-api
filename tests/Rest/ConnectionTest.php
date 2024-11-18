@@ -36,7 +36,7 @@ class ConnectionTest extends TestCase
             new Response(200, ['Content-Type' => 'application/json'], '{"access_token": "foobar"}'),
         ]);
         $this->conn->getClient();
-        $this->assertTrue(true);
+        $this->expectNotToPerformAssertions();
     }
 
     public function testFetchTokenNoAuth()
