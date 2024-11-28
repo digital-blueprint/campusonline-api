@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.3.22
+
+* Add support for kevinrob/guzzle-cache-middleware v6
+* dev: drop psalm
+* dev: update to phpstan v2
+
 ## v0.3.21
 
 * Add organizations attribute to rooms data
