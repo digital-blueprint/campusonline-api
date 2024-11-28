@@ -56,5 +56,4 @@ jobs:
         result=0
         composer run cs || result=1
         composer run phpstan || result=1
-        composer run psalm || result=1
         exit $result

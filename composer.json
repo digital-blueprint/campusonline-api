@@ -20,8 +20,7 @@
         "phpstan/phpstan-phpunit": "^2.0.0",
         "phpunit/phpunit": "^10.1",
         "symfony/cache": "^5.4 || ^6.4.3",
-        "symfony/phpunit-bridge": "^7.0.7",
-        "vimeo/psalm": "^5.22.2"
+        "symfony/phpunit-bridge": "^7.0.7"
     },
     "autoload": {
         "psr-4": {
@@ -50,14 +49,9 @@
             "@php vendor/bin/phpunit --atleast-version 0",
             "@php vendor/bin/phpstan analyze --ansi"
         ],
-        "psalm": [
-            "@php vendor/bin/phpunit --atleast-version 0",
-            "@php vendor/bin/psalm"
-        ],
         "lint": [
             "@composer run cs",
-            "@composer run phpstan",
-            "@composer run psalm"
+            "@composer run phpstan"
         ],
         "cs-fix": [
             "@php vendor/bin/php-cs-fixer --ansi fix"

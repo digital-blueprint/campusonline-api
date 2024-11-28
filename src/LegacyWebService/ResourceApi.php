@@ -344,9 +344,6 @@ abstract class ResourceApi
         return $allResourceItems;
     }
 
-    /**
-     * @psalm-suppress ArgumentTypeCoercion
-     */
     private function addChildResourceItems(\SimpleXMLIterator $iterator, ?string $parentIdentifier, array &$childIdentifiers, array &$allResourceItems, array &$idToReplacementParentIdMap): void
     {
         for ($iterator->rewind(); $iterator->valid(); $iterator->next()) {
