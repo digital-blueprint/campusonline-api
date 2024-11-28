@@ -7,7 +7,7 @@
         "ext-json": "*",
         "ext-simplexml": "*",
         "guzzlehttp/guzzle": "^7.3",
-        "kevinrob/guzzle-cache-middleware": "^3.5 || ^4.0 || ^5.0",
+        "kevinrob/guzzle-cache-middleware": "^3.5 || ^4.0 || ^5.0 || ^6.0",
         "league/uri": "^6.5 || ^7.4.0",
         "league/uri-interfaces": "^2.3 || ^7.4",
         "psr/log": "^1.1.4 || ^2.0 || ^3.0",
