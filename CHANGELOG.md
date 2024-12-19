@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.23
+
+* Add FORCE_CACHE_MISS option which ignores a cache hit and forces a re-request of the resources from CO
+
 ## v0.3.22
 
 * Add support for kevinrob/guzzle-cache-middleware v6
