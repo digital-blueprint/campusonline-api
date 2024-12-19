@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\LegacyWebService;
 
 use Dbp\CampusonlineApi\Helpers\Filters;
+use Dbp\CampusonlineApi\Helpers\Options;
 use Dbp\CampusonlineApi\Helpers\Page;
 use Dbp\CampusonlineApi\Helpers\Pagination;
 use League\Uri\Contracts\UriException;
@@ -267,7 +268,7 @@ abstract class ResourceApi
         }
 
         $resultIdentifiersCacheItem = $this->getCacheItem($uriCacheKey);
-        if ($resultIdentifiersCacheItem->isHit() === false) {
+        if ($resultIdentifiersCacheItem->isHit() === false || ($options[Options::FORCE_CACHE_MISS] ?? false)) {
             if ($this->onRebuildingResourceCacheCallback !== null) {
                 $callback = $this->onRebuildingResourceCacheCallback;
                 $callback();
