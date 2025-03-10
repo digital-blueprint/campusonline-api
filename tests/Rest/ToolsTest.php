@@ -75,4 +75,20 @@ class ToolsTest extends TestCase
     {
         $this->assertSame('foo,bar', Tools::validateFilterValueList(['foo', 'bar']));
     }
+
+    /**
+     * @throws \JsonException
+     */
+    public function testDecodeJSONWithIllegalControlCharacters(): void
+    {
+        $json = "{\"foo\": \"bar\x04\"}";
+        try {
+            json_decode($json, flags: JSON_THROW_ON_ERROR);
+            $this->fail('Expected json_decode of string with illegal control character to throw a JSON_THROW_ON_ERROR exception');
+        } catch (\JsonException $exception) {
+            $this->assertEquals(JSON_ERROR_CTRL_CHAR, $exception->getCode());
+        }
+
+        $this->assertEquals(['foo' => "bar\x04"], Tools::decodeJSON($json, true));
+    }
 }

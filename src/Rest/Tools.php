@@ -92,9 +92,31 @@ class Tools
      *
      * @throws \JsonException
      */
-    public static function decodeJSON(string $json, bool $assoc = false)
+    public static function decodeJSON(string $json, bool $assoc = false): mixed
     {
-        return json_decode($json, $assoc, 512, JSON_THROW_ON_ERROR);
+        $data = null;
+        try {
+            $data = json_decode($json, $assoc, flags: JSON_THROW_ON_ERROR);
+        } catch (\JsonException $jsonException) {
+            $throw = true;
+            if (in_array($jsonException->getCode(), [JSON_ERROR_CTRL_CHAR, JSON_ERROR_SYNTAX], true)) {
+                // escape illegal control characters from JSON string
+                $json = preg_replace_callback('/[\x00-\x1F\x7F]/',
+                    function ($matches) {
+                        return sprintf('\\u%04x', ord($matches[0]));
+                    }, $json);
+                try {
+                    $data = json_decode($json, true, flags: JSON_THROW_ON_ERROR);
+                    $throw = false;
+                } catch (\JsonException) {
+                }
+            }
+            if ($throw) {
+                throw new ApiException('API response is not valid JSON');
+            }
+        }
+
+        return $data;
     }
 
     /**

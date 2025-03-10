@@ -147,19 +147,15 @@ class GenericApi
 
     /**
      * @return ApiResource[]
+     *
+     * @throws \JsonException
      */
     private function parseResourceList(ResponseInterface $response): array
     {
-        $content = (string) $response->getBody();
-
-        try {
-            $json = Tools::decodeJSON($content, true);
-        } catch (\JsonException $exception) {
-            throw new ApiException('json response invalid');
-        }
+        $resourceData = Tools::decodeJSON((string) $response->getBody(), true);
 
         $resultList = [];
-        foreach ($json['resource'] as $resource) {
+        foreach ($resourceData['resource'] as $resource) {
             $content = $resource['content'];
             $type = $content['type'];
             $parts = explode('.', $type);
