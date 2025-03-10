@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.24
+
+* Try to escape illegal control characters in JSON string returned by the CO export API in case the decode fails
+
 ## v0.3.23
 
 * Add FORCE_CACHE_MISS option which ignores a cache hit and forces a re-request of the resources from CO
