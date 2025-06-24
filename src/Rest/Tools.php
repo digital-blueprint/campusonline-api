@@ -9,6 +9,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Middleware;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -117,6 +118,18 @@ class Tools
         }
 
         return $data;
+    }
+
+    /**
+     * @throws ApiException
+     */
+    public static function decodeJsonResponse(ResponseInterface $response): mixed
+    {
+        try {
+            return Tools::decodeJSON($response->getBody()->getContents(), true);
+        } catch (\JsonException $exception) {
+            throw new ApiException('failed to decode JSON response');
+        }
     }
 
     /**

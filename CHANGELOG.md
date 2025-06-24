@@ -3,6 +3,9 @@
 ## Unreleased
 
 * Drop support for PHP 8.1
+* Add basic API support for the Campusonline Public REST APIs
+* Add support for the Public REST API 'rooms'
+* Add support for the Public REST API 'organizations'
 
 ## v0.3.24
 
