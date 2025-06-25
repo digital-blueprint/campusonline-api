@@ -9,10 +9,8 @@ use GuzzleHttp\Exception\RequestException;
 
 class ApiException extends \RuntimeException
 {
-    private const HTTP_NOT_FOUND = 404;
-    private const HTTP_UNAUTHORIZED = 401;
-
-    private $isHttpResponseCode;
+    public const HTTP_NOT_FOUND = 404;
+    public const HTTP_UNAUTHORIZED = 401;
 
     public static function fromGuzzleException(GuzzleException $guzzleException): ApiException
     {
@@ -21,10 +19,9 @@ class ApiException extends \RuntimeException
     }
 
     public function __construct(string $message = '', int $code = 0,
-        bool $isHttpResponseCode = false, ?\Throwable $previous = null)
+        private readonly bool $isHttpResponseCode = false, ?\Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
-        $this->isHttpResponseCode = $isHttpResponseCode;
     }
 
     public function isHttpResponseCode(): bool

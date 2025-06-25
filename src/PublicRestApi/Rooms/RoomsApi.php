@@ -8,6 +8,7 @@ use Dbp\CampusonlineApi\Helpers\ApiException;
 use Dbp\CampusonlineApi\PublicRestApi\Api;
 use Dbp\CampusonlineApi\Rest\Tools;
 use GuzzleHttp\Exception\GuzzleException;
+use Psr\Http\Message\ResponseInterface;
 
 class RoomsApi extends Api
 {
@@ -18,12 +19,17 @@ class RoomsApi extends Api
     public function getRoomByIdentifier(string $identifier): RoomResource
     {
         try {
-            return new RoomResource(Tools::decodeJsonResponse(
+            $roomResources = iterator_to_array($this->getRoomsFromResponse(
                 $this->connection->getClient()->get(
                     self::API_PATH.'?'.http_build_query([
                         self::ROOM_UID_QUERY_PARAMETER_NAME => $identifier,
                     ])
                 )));
+            if (empty($roomResources)) {
+                throw new ApiException('room not found', ApiException::HTTP_NOT_FOUND, true);
+            }
+
+            return $roomResources[0];
         } catch (GuzzleException $guzzleException) {
             throw ApiException::fromGuzzleException($guzzleException);
         }
@@ -35,13 +41,18 @@ class RoomsApi extends Api
     public function getRooms(int $firstItemIndex, int $maxNumItems, array $options = []): iterable
     {
         try {
-            $response = $this->connection->getClient()->get(self::API_PATH.'?'.
-                http_build_query(self::getPaginationQueryParameters($firstItemIndex, $maxNumItems)));
-            foreach (Tools::decodeJsonResponse($response)['items'] ?? [] as $roomResourceData) {
-                yield new RoomResource($roomResourceData);
-            }
+            return $this->getRoomsFromResponse(
+                $this->connection->getClient()->get(self::API_PATH.'?'.
+                    http_build_query(self::getPaginationQueryParameters($firstItemIndex, $maxNumItems))));
         } catch (GuzzleException $guzzleException) {
             throw ApiException::fromGuzzleException($guzzleException);
+        }
+    }
+
+    private function getRoomsFromResponse(ResponseInterface $response): iterable
+    {
+        foreach (Tools::decodeJsonResponse($response)['items'] ?? [] as $roomResourceData) {
+            yield new RoomResource($roomResourceData);
         }
     }
 }
