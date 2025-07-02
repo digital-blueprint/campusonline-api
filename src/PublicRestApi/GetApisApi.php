@@ -6,7 +6,7 @@ namespace Dbp\CampusonlineApi\PublicRestApi;
 
 use Dbp\CampusonlineApi\Rest\Tools;
 
-class TestApi extends Api
+class GetApisApi extends AbstractApi
 {
     public function getApis(): array
     {

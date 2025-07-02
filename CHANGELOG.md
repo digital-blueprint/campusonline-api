@@ -6,6 +6,7 @@
 * Add basic API support for the Campusonline Public REST APIs
 * Add support for the Public REST API 'rooms'
 * Add support for the Public REST API 'organizations'
+* Add support for the Public REST API 'courses'
 
 ## v0.3.24
 

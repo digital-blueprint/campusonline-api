@@ -19,7 +19,7 @@ class RoomResource
     {
     }
 
-    public function getIdentifier(): ?int
+    public function getRoomUid(): ?int
     {
         return $this->resourceData[self::ROOM_UID_ATTRIBUTE] ?? null;
     }
