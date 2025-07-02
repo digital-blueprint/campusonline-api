@@ -22,6 +22,11 @@ class OrganizationResource
     {
     }
 
+    public function getResourceData(): array
+    {
+        return $this->organizationResourceData;
+    }
+
     public function getUid(): ?string
     {
         return $this->organizationResourceData[self::UID_ATTRIBUTE] ?? null;
