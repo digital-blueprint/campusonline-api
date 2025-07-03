@@ -7,7 +7,7 @@ namespace Dbp\CampusonlineApi\PublicRestApi\Courses;
 class CourseResource
 {
     private const UID_ATTRIBUTE = 'uid';
-    private const TITLE_ATTRIBUTE = 'code';
+    private const TITLE_ATTRIBUTE = 'title';
     private const TITLE_VALUE_ATTRIBUTE = 'value';
     private const COURSE_CODE_ATTRIBUTE = 'courseCode';
     private const SEMESTER_KEY_ATTRIBUTE = 'semesterKey';
