@@ -2,11 +2,14 @@
 
 ## Unreleased
 
+## v0.3.25
+
 * Drop support for PHP 8.1
-* Add basic API support for the Campusonline Public REST APIs
-* Add support for the Public REST API 'rooms'
-* Add support for the Public REST API 'organizations'
-* Add support for the Public REST API 'courses'
+* Add basic API support for the Campusonline Public REST APIs (experimental)
+* Add support for the Public REST API 'rooms' (experimental)
+* Add support for the Public REST API 'organizations' (experimental)
+* Add support for the Public REST API 'courses' (experimental)
+* Allow kevinrob/guzzle-cache-middleware v7
 
 ## v0.3.24
 
