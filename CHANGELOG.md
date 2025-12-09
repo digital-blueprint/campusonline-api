@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.3.26
+
 * LegacyWebService: Return an array of arrays for the course contacts attribute for better serialization support
 
 ## v0.3.25
