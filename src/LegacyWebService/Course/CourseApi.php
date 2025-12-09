@@ -162,7 +162,7 @@ class CourseApi extends ResourceApi implements LoggerAwareInterface
 
         $contacts = [];
         foreach ($node->xpath(self::COURSE_CONTACTS_PERSON_XML_PATH) as $personNode) {
-            $contacts[] = PersonApi::createPersonResource($personNode);
+            $contacts[] = PersonApi::createPersonData($personNode);
         }
         $resourceData[CourseData::CONTACTS_ATTRIBUTE] = $contacts;
 

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* LegacyWebService: Return an array of arrays for the course contacts attribute for better serialization support
+
 ## v0.3.25
 
 * Drop support for PHP 8.1

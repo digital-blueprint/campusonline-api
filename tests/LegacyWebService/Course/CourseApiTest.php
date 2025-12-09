@@ -10,6 +10,7 @@ use Dbp\CampusonlineApi\LegacyWebService\Api;
 use Dbp\CampusonlineApi\LegacyWebService\ApiException;
 use Dbp\CampusonlineApi\LegacyWebService\Course\CourseData;
 use Dbp\CampusonlineApi\LegacyWebService\ResourceApi;
+use Dbp\CampusonlineApi\LegacyWebService\ResourceData;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -185,7 +186,7 @@ class CourseApiTest extends TestCase
 
         $contacts = $course->getContacts();
 
-        $this->assertSame('DEADBEEF2', $contacts[0]->getIdentifier());
+        $this->assertSame('DEADBEEF2', $contacts[0][ResourceData::IDENTIFIER_ATTRIBUTE]);
     }
 
     /**

@@ -25,7 +25,6 @@ class PersonApi extends ResourceApi implements LoggerAwareInterface
 
     private const ATTRIBUTE_NAME_TO_XPATH_MAPPING = [
         ResourceData::IDENTIFIER_ATTRIBUTE => self::PERSON_IDENTIFIER_XML_PATH,
-        PersonData::IDENT_ATTRIBUTE => './@ident',
         PersonData::GIVEN_NAME_ATTRIBUTE => './name/given',
         PersonData::FAMILY_NAME_ATTRIBUTE => './name/family',
         PersonData::EMAIL_ATTRIBUTE => './contactData/email',
@@ -60,12 +59,9 @@ class PersonApi extends ResourceApi implements LoggerAwareInterface
         return $this->getPage(self::STUDENTS_BY_COURSE_URI, $uriParameters, $options);
     }
 
-    public static function createPersonResource(\SimpleXMLElement $node): PersonData
+    public static function createPersonData(\SimpleXMLElement $node): array
     {
-        $personData = new PersonData();
-        $personData->setData(self::getResourceDataFromXmlStatic($node, self::ATTRIBUTE_NAME_TO_XPATH_MAPPING));
-
-        return $personData;
+        return self::getResourceDataFromXmlStatic($node, self::ATTRIBUTE_NAME_TO_XPATH_MAPPING);
     }
 
     protected function createResource(): ResourceData
