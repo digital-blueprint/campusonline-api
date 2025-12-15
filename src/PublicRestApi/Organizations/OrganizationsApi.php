@@ -8,7 +8,7 @@ use Dbp\CampusonlineApi\PublicRestApi\AbstractApi;
 
 class OrganizationsApi extends AbstractApi
 {
-    private const ORGANIZATIONS_API_PATH = Common::API_PATH.'/organisations';
+    private const API_PATH = Common::API_PATH.'/organisations';
 
     private const UIDS_QUERY_PARAMETER_NAME = 'uids';
 
@@ -17,7 +17,7 @@ class OrganizationsApi extends AbstractApi
         $resource = $this->getResourceByIdentifierFromCollection(
             $identifier,
             self::UIDS_QUERY_PARAMETER_NAME,
-            self::ORGANIZATIONS_API_PATH,
+            self::API_PATH,
             OrganizationResource::class);
         assert($resource instanceof OrganizationResource);
 
@@ -31,7 +31,7 @@ class OrganizationsApi extends AbstractApi
         int $firstItemIndex = 0, int $maxNumItems = 30, array $options = []): iterable
     {
         return $this->getResourcesOffsetBased(
-            self::ORGANIZATIONS_API_PATH, OrganizationResource::class,
+            self::API_PATH, OrganizationResource::class,
             $queryParameters, $firstItemIndex, $maxNumItems);
     }
 }
