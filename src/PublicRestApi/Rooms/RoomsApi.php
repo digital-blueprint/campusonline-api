@@ -27,12 +27,11 @@ class RoomsApi extends AbstractApi
     /**
      * @return iterable<RoomResource>
      */
-    public function getRooms(int $firstItemIndex = 0, int $maxNumItems = 30, array $options = []): iterable
+    public function getRooms(array $queryParameters = [],
+        int $firstItemIndex = 0, int $maxNumItems = 30, array $options = []): iterable
     {
         return $this->getResourcesOffsetBased(
-            self::ROOMS_API_PATH,
-            RoomResource::class,
-            firstItemIndex: $firstItemIndex,
-            maxNumItems: $maxNumItems);
+            self::ROOMS_API_PATH, RoomResource::class,
+            $queryParameters, $firstItemIndex, $maxNumItems);
     }
 }

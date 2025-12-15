@@ -9,8 +9,9 @@ use Dbp\CampusonlineApi\PublicRestApi\CursorBasedResourcePage;
 
 class CourseApi extends AbstractApi
 {
+    public const SEMESTER_KEY_QUERY_PARAMETER_NAME = 'semester_key';
+
     private const COURSES_API_PATH = Common::API_PATH.'/courses';
-    private const SEMESTER_KEY_QUERY_PARAMETER_NAME = 'semester_key';
 
     public function getCourseByIdentifier(string $identifier): CourseResource
     {
@@ -21,13 +22,16 @@ class CourseApi extends AbstractApi
         return $resource;
     }
 
-    public function getCourses(string $semesterKey, ?string $cursor = null, int $maxNumItems = 30, array $options = []): CursorBasedResourcePage
+    public function getCourses(array $queryParameters = [], ?string $cursor = null, int $maxNumItems = 30, array $options = []): CursorBasedResourcePage
     {
-        $queryParameters = [
-            self::SEMESTER_KEY_QUERY_PARAMETER_NAME => $semesterKey,
-        ];
-
         return $this->getResourcesCursorBased(self::COURSES_API_PATH,
             CourseResource::class, $queryParameters, $cursor, $maxNumItems);
+    }
+
+    public function getCoursesBySemesterKey(string $semesterKey, ?string $cursor = null, int $maxNumItems = 30, array $options = []): CursorBasedResourcePage
+    {
+        return $this->getCourses([
+            self::SEMESTER_KEY_QUERY_PARAMETER_NAME => $semesterKey,
+        ], $cursor, $maxNumItems, $options);
     }
 }

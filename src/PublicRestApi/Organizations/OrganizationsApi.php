@@ -27,10 +27,11 @@ class OrganizationsApi extends AbstractApi
     /**
      * @return iterable<OrganizationResource>
      */
-    public function getOrganizations(int $firstItemIndex = 0, int $maxNumItems = 30, array $options = []): iterable
+    public function getOrganizations(array $queryParameters = [],
+        int $firstItemIndex = 0, int $maxNumItems = 30, array $options = []): iterable
     {
-        return $this->getResourcesOffsetBased(self::ORGANIZATIONS_API_PATH, OrganizationResource::class,
-            firstItemIndex: $firstItemIndex,
-            maxNumItems: $maxNumItems);
+        return $this->getResourcesOffsetBased(
+            self::ORGANIZATIONS_API_PATH, OrganizationResource::class,
+            $queryParameters, $firstItemIndex, $maxNumItems);
     }
 }

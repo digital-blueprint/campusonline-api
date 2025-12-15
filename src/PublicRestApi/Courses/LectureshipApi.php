@@ -8,16 +8,27 @@ use Dbp\CampusonlineApi\PublicRestApi\AbstractApi;
 
 class LectureshipApi extends AbstractApi
 {
+    public const COURSE_UID_QUERY_PARAMETER_NAME = 'course_uid';
+
     private const LECTURESHIPS_API_PATH = Common::API_PATH.'/lectureships';
-    private const COURSE_UID_QUERY_PARAMETER_NAME = 'course_uid';
 
     /**
      * @return iterable<LectureshipResource>
      */
-    public function getLectureshipsByCourseUid(string $courseUid): iterable
+    public function getLectureships(array $queryParameters = [], array $options = []): iterable
     {
         return $this->getResources(self::LECTURESHIPS_API_PATH,
             LectureshipResource::class,
-            [self::COURSE_UID_QUERY_PARAMETER_NAME => $courseUid]);
+            $queryParameters);
+    }
+
+    /**
+     * @return iterable<LectureshipResource>
+     */
+    public function getLectureshipsByCourseUid(string $courseUid, array $options = []): iterable
+    {
+        return $this->getLectureships([
+            self::COURSE_UID_QUERY_PARAMETER_NAME => $courseUid,
+        ], $options);
     }
 }
