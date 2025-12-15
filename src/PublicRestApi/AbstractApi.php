@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\PublicRestApi;
 
+use Dbp\CampusonlineApi\Helpers\ApiException;
+use Dbp\CampusonlineApi\Rest\Tools;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 
@@ -12,6 +17,25 @@ abstract class AbstractApi implements LoggerAwareInterface
     protected const OFFSET_QUERY_PARAMETER_NAME = 'offset';
     protected const LIMIT_QUERY_PARAMETER_NAME = 'limit';
     protected const CURSOR_QUERY_PARAMETER_NAME = 'cursor';
+
+    public function __construct(private readonly Connection $connection)
+    {
+    }
+
+    public function setLogger(LoggerInterface $logger): void
+    {
+        $this->connection->setLogger($logger);
+    }
+
+    public function setClientHandler(?object $handler): void
+    {
+        $this->connection->setClientHandler($handler);
+    }
+
+    public function getConnection(): Connection
+    {
+        return $this->connection;
+    }
 
     protected static function getOffsetBasedPaginationQueryParameters(?int $offset, ?int $limit): array
     {
@@ -39,25 +63,92 @@ abstract class AbstractApi implements LoggerAwareInterface
         return $queryParameters;
     }
 
-    protected Connection $connection;
-
-    public function __construct(string $baseUrl, string $clientId, string $clientSecret)
+    protected function getClient(): Client
     {
-        $this->connection = new Connection($baseUrl, $clientId, $clientSecret);
+        return $this->connection->getClient();
     }
 
-    public function setLogger(LoggerInterface $logger): void
+    protected function getResourceByIdentifier(string $apiPath, string $resourceClassName, string $identifier): Resource
     {
-        $this->connection->setLogger($logger);
+        try {
+            $responseData = Tools::decodeJsonResponse(
+                $this->getClient()->get(
+                    $apiPath.'/'.rawurlencode($identifier)));
+
+            return new $resourceClassName($responseData);
+        } catch (GuzzleException $guzzleException) {
+            throw ApiException::fromGuzzleException($guzzleException);
+        }
     }
 
-    public function setClientHandler(?object $handler): void
+    protected function getResourcesCursorBased(string $apiPath, string $resourceClassName, array $queryParameters = [],
+        ?string $cursor = null, int $maxNumItems = 30): CursorBasedResourcePage
     {
-        $this->connection->setClientHandler($handler);
+        try {
+            // WORKAROUND: CO ignores limit=0
+            if ($maxNumItems === 0) {
+                return CursorBasedResourcePage::createEmptyPage($cursor);
+            } else {
+                $queryParameters = array_merge(
+                    $queryParameters,
+                    self::getCursorBasedPaginationQueryParameters($cursor, $maxNumItems)
+                );
+                $responseData = Tools::decodeJsonResponse($this->getClient()->get(
+                    $apiPath.'?'.http_build_query($queryParameters)));
+
+                return CursorBasedResourcePage::createFromResponseData($responseData, $resourceClassName);
+            }
+        } catch (GuzzleException $guzzleException) {
+            throw ApiException::fromGuzzleException($guzzleException);
+        }
     }
 
-    public function getConnection(): Connection
+    protected function getResourcesOffsetBased(string $apiPath, string $resourceClassName, array $queryParameters = [],
+        int $firstItemIndex = 0, int $maxNumItems = 30): iterable
     {
-        return $this->connection;
+        return $this->getResources($apiPath, $resourceClassName,
+            array_merge(
+                $queryParameters,
+                self::getOffsetBasedPaginationQueryParameters($firstItemIndex, $maxNumItems)
+            ));
+    }
+
+    protected function getResources(string $apiPath, string $resourceClassName, array $queryParameters = []): iterable
+    {
+        try {
+            return self::createResourceIterator(
+                $this->getClient()->get($apiPath.'?'.http_build_query($queryParameters)),
+                $resourceClassName);
+        } catch (GuzzleException $guzzleException) {
+            throw ApiException::fromGuzzleException($guzzleException);
+        }
+    }
+
+    protected function getResourceByIdentifierFromCollection(string $identifier, string $identifierQueryParameterName,
+        string $apiPath, string $resourceClassName, array $queryParameters = []): Resource
+    {
+        $resources = iterator_to_array(
+            $this->getResources(
+                $apiPath,
+                $resourceClassName,
+                array_merge($queryParameters, [
+                    $identifierQueryParameterName => $identifier,
+                ])
+            )
+        );
+
+        $resource = $resources[0] ?? null;
+        if ($resource === null) {
+            throw new ApiException('Item not found', ApiException::HTTP_NOT_FOUND, true);
+        }
+
+        return $resource;
+    }
+
+    private static function createResourceIterator(ResponseInterface $response, string $resourceClassName): iterable
+    {
+        foreach (Tools::decodeJsonResponse($response)['items'] ?? [] as $organizationResourceData) {
+            yield new $resourceClassName($organizationResourceData);
+        }
     }
 }

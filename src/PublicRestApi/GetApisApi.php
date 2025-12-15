@@ -10,6 +10,6 @@ class GetApisApi extends AbstractApi
 {
     public function getApis(): array
     {
-        return Tools::decodeJsonResponse($this->connection->getClient()->get('co/public/api/apis'));
+        return Tools::decodeJsonResponse($this->getClient()->get('co/public/api/apis'));
     }
 }

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\PublicRestApi\Courses;
 
-class CourseResource
+use Dbp\CampusonlineApi\PublicRestApi\Resource;
+
+class CourseResource extends Resource
 {
     private const UID_ATTRIBUTE = 'uid';
     private const TITLE_ATTRIBUTE = 'title';
@@ -13,38 +15,28 @@ class CourseResource
     private const SEMESTER_KEY_ATTRIBUTE = 'semesterKey';
     private const COURSE_TYPE_KEY_ATTRIBUTE = 'courseTypeKey';
 
-    public function __construct(
-        private readonly array $courseResourceData)
-    {
-    }
-
-    public function getResourceData(): array
-    {
-        return $this->courseResourceData;
-    }
-
     public function getUid(): ?string
     {
-        return $this->courseResourceData[self::UID_ATTRIBUTE] ?? null;
+        return $this->resourceData[self::UID_ATTRIBUTE] ?? null;
     }
 
     public function getTitle(): ?array
     {
-        return $this->courseResourceData[self::TITLE_ATTRIBUTE][self::TITLE_VALUE_ATTRIBUTE] ?? null;
+        return $this->resourceData[self::TITLE_ATTRIBUTE][self::TITLE_VALUE_ATTRIBUTE] ?? null;
     }
 
     public function getCourseCode(): ?string
     {
-        return $this->courseResourceData[self::COURSE_CODE_ATTRIBUTE] ?? null;
+        return $this->resourceData[self::COURSE_CODE_ATTRIBUTE] ?? null;
     }
 
     public function getSemesterKey(): ?string
     {
-        return $this->courseResourceData[self::SEMESTER_KEY_ATTRIBUTE] ?? null;
+        return $this->resourceData[self::SEMESTER_KEY_ATTRIBUTE] ?? null;
     }
 
     public function getCourseTypeKey(): ?string
     {
-        return $this->courseResourceData[self::COURSE_TYPE_KEY_ATTRIBUTE] ?? null;
+        return $this->resourceData[self::COURSE_TYPE_KEY_ATTRIBUTE] ?? null;
     }
 }
