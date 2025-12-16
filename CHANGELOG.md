@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.3.27
+
 - PublicRestApi: generalize API access and move it to AbstractApi
 - PublicRestApi: add LectureshipApi and CourseRegistrationApi
 
