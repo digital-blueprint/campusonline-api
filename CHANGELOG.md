@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.3.28
+
 - Unify public rest API names
 
 ## v0.3.27
