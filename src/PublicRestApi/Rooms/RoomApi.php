@@ -6,7 +6,7 @@ namespace Dbp\CampusonlineApi\PublicRestApi\Rooms;
 
 use Dbp\CampusonlineApi\PublicRestApi\AbstractApi;
 
-class RoomsApi extends AbstractApi
+class RoomApi extends AbstractApi
 {
     private const API_PATH = Common::API_PATH.'/rooms';
 

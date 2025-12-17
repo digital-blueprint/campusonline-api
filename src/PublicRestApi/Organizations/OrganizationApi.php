@@ -6,7 +6,7 @@ namespace Dbp\CampusonlineApi\PublicRestApi\Organizations;
 
 use Dbp\CampusonlineApi\PublicRestApi\AbstractApi;
 
-class OrganizationsApi extends AbstractApi
+class OrganizationApi extends AbstractApi
 {
     private const API_PATH = Common::API_PATH.'/organisations';
 

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Unify public rest API names
+
 ## v0.3.27
 
 - PublicRestApi: generalize API access and move it to AbstractApi
