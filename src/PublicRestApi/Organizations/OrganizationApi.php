@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\PublicRestApi\Organizations;
 
 use Dbp\CampusonlineApi\PublicRestApi\AbstractApi;
+use Dbp\CampusonlineApi\PublicRestApi\CursorBasedResourcePage;
 
 class OrganizationApi extends AbstractApi
 {
@@ -27,11 +28,19 @@ class OrganizationApi extends AbstractApi
     /**
      * @return iterable<OrganizationResource>
      */
-    public function getOrganizations(array $queryParameters = [],
+    public function getOrganizationsOffsetBased(array $queryParameters = [],
         int $firstItemIndex = 0, int $maxNumItems = 30, array $options = []): iterable
     {
         return $this->getResourcesOffsetBased(
             self::API_PATH, OrganizationResource::class,
             $queryParameters, $firstItemIndex, $maxNumItems);
+    }
+
+    public function getOrganizationsCursorBased(array $queryParameters = [],
+        ?string $cursor = null, int $maxNumItems = 30, array $options = []): CursorBasedResourcePage
+    {
+        return $this->getResourcesCursorBased(
+            self::API_PATH, OrganizationResource::class,
+            $queryParameters, $cursor, $maxNumItems);
     }
 }
