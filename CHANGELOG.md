@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- PublicRestApi: offer/distinguish offset and cursor based pagination where available
+
 ## v0.3.28
 
 - Unify public rest API names

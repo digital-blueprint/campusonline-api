@@ -22,15 +22,15 @@ class CourseApi extends AbstractApi
         return $resource;
     }
 
-    public function getCourses(array $queryParameters = [], ?string $cursor = null, int $maxNumItems = 30, array $options = []): CursorBasedResourcePage
+    public function getCoursesCursorBased(array $queryParameters = [], ?string $cursor = null, int $maxNumItems = 30, array $options = []): CursorBasedResourcePage
     {
         return $this->getResourcesCursorBased(self::COURSES_API_PATH,
             CourseResource::class, $queryParameters, $cursor, $maxNumItems);
     }
 
-    public function getCoursesBySemesterKey(string $semesterKey, ?string $cursor = null, int $maxNumItems = 30, array $options = []): CursorBasedResourcePage
+    public function getCoursesBySemesterKeyCursorBased(string $semesterKey, ?string $cursor = null, int $maxNumItems = 30, array $options = []): CursorBasedResourcePage
     {
-        return $this->getCourses([
+        return $this->getCoursesCursorBased([
             self::SEMESTER_KEY_QUERY_PARAMETER_NAME => $semesterKey,
         ], $cursor, $maxNumItems, $options);
     }

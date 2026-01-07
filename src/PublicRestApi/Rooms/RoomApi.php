@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\PublicRestApi\Rooms;
 
 use Dbp\CampusonlineApi\PublicRestApi\AbstractApi;
+use Dbp\CampusonlineApi\PublicRestApi\CursorBasedResourcePage;
 
 class RoomApi extends AbstractApi
 {
@@ -27,11 +28,19 @@ class RoomApi extends AbstractApi
     /**
      * @return iterable<RoomResource>
      */
-    public function getRooms(array $queryParameters = [],
+    public function getRoomsOffsetBased(array $queryParameters = [],
         int $firstItemIndex = 0, int $maxNumItems = 30, array $options = []): iterable
     {
         return $this->getResourcesOffsetBased(
             self::API_PATH, RoomResource::class,
             $queryParameters, $firstItemIndex, $maxNumItems);
+    }
+
+    public function getRoomsCursorBased(array $queryParameters = [],
+        ?string $cursor = null, int $maxNumItems = 30, array $options = []): CursorBasedResourcePage
+    {
+        return $this->getResourcesCursorBased(
+            self::API_PATH, RoomResource::class,
+            $queryParameters, $cursor, $maxNumItems);
     }
 }
