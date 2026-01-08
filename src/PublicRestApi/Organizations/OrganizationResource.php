@@ -18,6 +18,12 @@ class OrganizationResource extends Resource
     private const TYPE_UID_ATTRIBUTE = 'uid';
     private const TYPE_NAME_ATTRIBUTE = 'name';
     private const NAME_VALUE_ATTRIBUTE = 'value';
+    private const CONTACT_INFO_ATTRIBUTE = 'contactInfo';
+    private const ADDRESS_ATTRIBUTE = 'address';
+    private const STREET_ATTRIBUTE = 'street';
+    private const CITY_ATTRIBUTE = 'city';
+    private const POSTAL_CODE_ATTRIBUTE = 'postalCode';
+    private const COUNTRY_ATTRIBUTE = 'country';
 
     public function getUid(): ?string
     {
@@ -52,5 +58,30 @@ class OrganizationResource extends Resource
     public function getTypeName(): ?array
     {
         return $this->resourceData[self::TYPE_ATTRIBUTE][self::TYPE_NAME_ATTRIBUTE][self::NAME_VALUE_ATTRIBUTE] ?? null;
+    }
+
+    public function getNumberOfContactInfos(): int
+    {
+        return count($this->resourceData[self::CONTACT_INFO_ATTRIBUTE] ?? []);
+    }
+
+    public function getAddressStreet(int $contactInfoIndex = 0): ?string
+    {
+        return $this->resourceData[self::CONTACT_INFO_ATTRIBUTE][$contactInfoIndex][self::ADDRESS_ATTRIBUTE][self::STREET_ATTRIBUTE] ?? null;
+    }
+
+    public function getAddressCity(int $contactInfoIndex = 0): ?string
+    {
+        return $this->resourceData[self::CONTACT_INFO_ATTRIBUTE][$contactInfoIndex][self::ADDRESS_ATTRIBUTE][self::CITY_ATTRIBUTE] ?? null;
+    }
+
+    public function getAddressPostalCode(int $contactInfoIndex = 0): ?string
+    {
+        return $this->resourceData[self::CONTACT_INFO_ATTRIBUTE][$contactInfoIndex][self::ADDRESS_ATTRIBUTE][self::POSTAL_CODE_ATTRIBUTE] ?? null;
+    }
+
+    public function getAddressCountry(int $contactInfoIndex = 0): ?string
+    {
+        return $this->resourceData[self::CONTACT_INFO_ATTRIBUTE][$contactInfoIndex][self::ADDRESS_ATTRIBUTE][self::COUNTRY_ATTRIBUTE] ?? null;
     }
 }

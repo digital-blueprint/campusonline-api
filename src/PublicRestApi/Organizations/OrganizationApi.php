@@ -9,15 +9,17 @@ use Dbp\CampusonlineApi\PublicRestApi\CursorBasedResourcePage;
 
 class OrganizationApi extends AbstractApi
 {
+    public const INCLUDE_CONTACT_INFO_QUERY_PARAMETER = 'include_contact';
+
     private const API_PATH = Common::API_PATH.'/organisations';
 
-    private const UIDS_QUERY_PARAMETER_NAME = 'uids';
+    private const UIDS_QUERY_PARAMETER = 'uids';
 
     public function getOrganizationByIdentifier(string $identifier): OrganizationResource
     {
         $resource = $this->getResourceByIdentifierFromCollection(
             $identifier,
-            self::UIDS_QUERY_PARAMETER_NAME,
+            self::UIDS_QUERY_PARAMETER,
             self::API_PATH,
             OrganizationResource::class);
         assert($resource instanceof OrganizationResource);
