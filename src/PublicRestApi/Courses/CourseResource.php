@@ -14,6 +14,7 @@ class CourseResource extends Resource
     private const COURSE_CODE_ATTRIBUTE = 'courseCode';
     private const SEMESTER_KEY_ATTRIBUTE = 'semesterKey';
     private const COURSE_TYPE_KEY_ATTRIBUTE = 'courseTypeKey';
+    private const COURSE_IDENTITY_CODE_UID_ATTRIBUTE = 'courseIdentityCodeUid';
 
     public function getUid(): ?string
     {
@@ -38,5 +39,10 @@ class CourseResource extends Resource
     public function getCourseTypeKey(): ?string
     {
         return $this->resourceData[self::COURSE_TYPE_KEY_ATTRIBUTE] ?? null;
+    }
+
+    public function getCourseIdentityCodeUid(): ?string
+    {
+        return $this->resourceData[self::COURSE_IDENTITY_CODE_UID_ATTRIBUTE] ?? null;
     }
 }
