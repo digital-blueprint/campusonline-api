@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- PublicRestApi: add CourseGroupApi and AppointmentApi
+
 ## v0.3.29
 
 - PublicRestApi: offer/distinguish offset and cursor based pagination where available

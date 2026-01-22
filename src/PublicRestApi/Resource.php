@@ -6,6 +6,11 @@ namespace Dbp\CampusonlineApi\PublicRestApi;
 
 class Resource
 {
+    protected const DEFAULT_LANGUAGE_TAG = 'en';
+
+    protected const VALUE_ATTRIBUTE = 'value';
+    protected const ITEMS_ATTRIBUTE = 'items';
+
     public function __construct(
         protected readonly array $resourceData)
     {
