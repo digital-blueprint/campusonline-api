@@ -66,7 +66,7 @@ class CourseGroupResource extends Resource
     /**
      * @return array<string, mixed>
      */
-    private function getEvent(int $eventIndex): array
+    public function getEvent(int $eventIndex): array
     {
         return $this->resourceData[self::EVENTS_ATTRIBUTE][self::ITEMS_ATTRIBUTE][$eventIndex];
     }
