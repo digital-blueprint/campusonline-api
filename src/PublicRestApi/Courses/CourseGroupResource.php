@@ -28,9 +28,9 @@ class CourseGroupResource extends Resource
         return $this->resourceData[self::COURSE_UID_ATTRIBUTE] ?? null;
     }
 
-    public function getName(): ?string
+    public function getName(string $languageTag = self::DEFAULT_LANGUAGE_TAG): ?string
     {
-        return $this->resourceData[self::NAME_ATTRIBUTE] ?? null;
+        return $this->resourceData[self::NAME_ATTRIBUTE][self::VALUE_ATTRIBUTE][$languageTag] ?? null;
     }
 
     public function getNumberOfEvents(): int

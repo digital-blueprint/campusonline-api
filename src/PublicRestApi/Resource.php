@@ -6,7 +6,7 @@ namespace Dbp\CampusonlineApi\PublicRestApi;
 
 class Resource
 {
-    protected const DEFAULT_LANGUAGE_TAG = 'en';
+    protected const DEFAULT_LANGUAGE_TAG = 'de';
 
     protected const VALUE_ATTRIBUTE = 'value';
     protected const ITEMS_ATTRIBUTE = 'items';
