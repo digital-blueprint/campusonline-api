@@ -295,9 +295,9 @@ abstract class ResourceApi
         $responseBody = $this->connection->get($uri, $uriParameters, $options);
         if ($options[self::GET_CHILD_IDS_OPTION_KEY] ?? false) {
             return $this->getResourceItemsRecursive($responseBody);
-        } else {
-            return $this->getResourceItems($responseBody);
         }
+
+        return $this->getResourceItems($responseBody);
     }
 
     private function getResourceItems(string $responseBody): array
