@@ -153,8 +153,8 @@ class Connection implements LoggerAwareInterface
             }
 
             return new ApiException(self::hideToken($e->getMessage()), $e->getCode(), $e->getResponse() !== null);
-        } else {
-            return new ApiException(self::hideToken($e->getMessage()), $e->getCode(), false);
         }
+
+        return new ApiException(self::hideToken($e->getMessage()), $e->getCode(), false);
     }
 }

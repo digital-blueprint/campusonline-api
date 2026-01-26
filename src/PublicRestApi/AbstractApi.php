@@ -88,16 +88,15 @@ abstract class AbstractApi implements LoggerAwareInterface
             // WORKAROUND: CO ignores limit=0
             if ($maxNumItems === 0) {
                 return CursorBasedResourcePage::createEmptyPage($cursor);
-            } else {
-                $queryParameters = array_merge(
-                    $queryParameters,
-                    self::getCursorBasedPaginationQueryParameters($cursor, $maxNumItems)
-                );
-                $responseData = Tools::decodeJsonResponse($this->getClient()->get(
-                    $apiPath.'?'.http_build_query($queryParameters)));
-
-                return CursorBasedResourcePage::createFromResponseData($responseData, $resourceClassName);
             }
+            $queryParameters = array_merge(
+                $queryParameters,
+                self::getCursorBasedPaginationQueryParameters($cursor, $maxNumItems)
+            );
+            $responseData = Tools::decodeJsonResponse($this->getClient()->get(
+                $apiPath.'?'.http_build_query($queryParameters)));
+
+            return CursorBasedResourcePage::createFromResponseData($responseData, $resourceClassName);
         } catch (GuzzleException $guzzleException) {
             throw ApiException::fromGuzzleException($guzzleException);
         }
