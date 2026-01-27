@@ -9,7 +9,8 @@ use Dbp\CampusonlineApi\PublicRestApi\CursorBasedResourcePage;
 
 class AppointmentApi extends AbstractApi
 {
-    private const COURSE_UID_QUERY_PARAMETER_NAME = 'course_uid';
+    public const EVENT_TYPE_KEY_QUERY_PARAMETER_NAME = 'event_type_key';
+    public const COURSE_UID_QUERY_PARAMETER_NAME = 'course_uid';
 
     private const API_PATH = Common::API_PATH.'/appointments';
 

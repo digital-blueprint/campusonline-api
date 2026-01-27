@@ -12,6 +12,8 @@ class AppointmentResource extends Resource
     private const COURSE_UID_ATTRIBUTE = 'courseUid';
     private const START_AT_ATTRIBUTE = 'startAt';
     private const END_AT_ATTRIBUTE = 'endAt';
+    private const COURSE_GROUP_UID_ATTRIBUTE = 'courseGroupUid';
+    private const ROOM_UID_ATTRIBUTE = 'roomUid';
     private const STATUS_TYPE_KEY_ATTRIBUTE = 'statusTypeKey';
     private const EVENT_TYPE_KEY_ATTRIBUTE = 'eventTypeKey';
 
@@ -33,6 +35,16 @@ class AppointmentResource extends Resource
     public function getEndAt(): ?string
     {
         return $this->resourceData[self::END_AT_ATTRIBUTE] ?? null;
+    }
+
+    public function getCourseGroupUid(): ?string
+    {
+        return $this->resourceData[self::COURSE_GROUP_UID_ATTRIBUTE] ?? null;
+    }
+
+    public function getRoomUid(): ?string
+    {
+        return $this->resourceData[self::ROOM_UID_ATTRIBUTE] ?? null;
     }
 
     public function getStatusTypeKey(): ?string
