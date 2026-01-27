@@ -8,6 +8,9 @@ use Dbp\CampusonlineApi\PublicRestApi\Resource;
 
 class AppointmentResource extends Resource
 {
+    public const REGULAR_CLASS_EVENT_TYPE_KEY = 'REGULAR';
+    public const EXAM_EVENT_TYPE_KEY = 'EXAM';
+
     private const UID_ATTRIBUTE = 'uid';
     private const COURSE_UID_ATTRIBUTE = 'courseUid';
     private const START_AT_ATTRIBUTE = 'startAt';
