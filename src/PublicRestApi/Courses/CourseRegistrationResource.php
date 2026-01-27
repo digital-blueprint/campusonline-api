@@ -11,6 +11,7 @@ class CourseRegistrationResource extends Resource
     private const UID_ATTRIBUTE = 'uid';
     private const PERSON_UID_ATTRIBUTE = 'personUid';
     private const COURSE_UID_ATTRIBUTE = 'courseUid';
+    private const COURSE_GROUP_UID_ATTRIBUTE = 'courseGroupUid';
 
     public function getUid(): ?string
     {
@@ -25,5 +26,10 @@ class CourseRegistrationResource extends Resource
     public function getPersonUid(): ?string
     {
         return $this->resourceData[self::PERSON_UID_ATTRIBUTE] ?? null;
+    }
+
+    public function getCourseGroupUid(): ?string
+    {
+        return $this->resourceData[self::COURSE_GROUP_UID_ATTRIBUTE] ?? null;
     }
 }

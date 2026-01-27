@@ -12,6 +12,8 @@ class LectureshipResource extends Resource
     private const FUNCTION_KEY_ATTRIBUTE = 'functionKey';
     private const PERSON_UID_ATTRIBUTE = 'personUid';
     private const COURSE_UID_ATTRIBUTE = 'courseUid';
+    private const GROUPS_ATTRIBUTE = 'groups';
+    private const GROUP_UID_ATTRIBUTE = 'groupUid';
 
     public function getUid(): ?string
     {
@@ -31,5 +33,15 @@ class LectureshipResource extends Resource
     public function getFunctionKey(): ?string
     {
         return $this->resourceData[self::FUNCTION_KEY_ATTRIBUTE] ?? null;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function getGroupUids(): array
+    {
+        return array_filter($this->resourceData[self::GROUPS_ATTRIBUTE][self::ITEMS_ATTRIBUTE] ?? [],
+            fn (array $group) => $group[self::GROUP_UID_ATTRIBUTE]
+        );
     }
 }
