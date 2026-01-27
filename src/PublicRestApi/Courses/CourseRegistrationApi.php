@@ -13,17 +13,17 @@ class CourseRegistrationApi extends AbstractApi
     private const API_PATH = Common::API_PATH.'/registrations';
 
     /**
-     * @return iterable<LectureshipResource>
+     * @return iterable<CourseRegistrationResource>
      */
     public function getCourseRegistrations(array $queryParameters = [], array $options = []): iterable
     {
         return $this->getResources(self::API_PATH,
-            LectureshipResource::class,
+            CourseRegistrationResource::class,
             $queryParameters);
     }
 
     /**
-     * @return iterable<LectureshipResource>
+     * @return iterable<CourseRegistrationResource>
      */
     public function getCourseRegistrationsByCourseUid(string $courseUid, array $options = []): iterable
     {
