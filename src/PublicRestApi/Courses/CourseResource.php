@@ -15,7 +15,7 @@ class CourseResource extends Resource
     private const SEMESTER_KEY_ATTRIBUTE = 'semesterKey';
     private const COURSE_TYPE_KEY_ATTRIBUTE = 'courseTypeKey';
     private const COURSE_IDENTITY_CODE_UID_ATTRIBUTE = 'courseIdentityCodeUid';
-    private const ORGANIZATION_UID_ATTRIBUTE = 'organizationUid';
+    private const ORGANISATION_UID_ATTRIBUTE = 'organisationUid';
     private const SEMESTER_HOURS_ATTRIBUTE = 'semesterHours';
     private const MAIN_LANGUAGE_OF_INSTRUCTION_ATTRIBUTE = 'mainLanguageOfInstruction';
 
@@ -49,12 +49,12 @@ class CourseResource extends Resource
         return $this->resourceData[self::COURSE_IDENTITY_CODE_UID_ATTRIBUTE] ?? null;
     }
 
-    public function getOrganizationUid(): ?string
+    public function getOrganisationUid(): ?string
     {
-        return $this->resourceData[self::ORGANIZATION_UID_ATTRIBUTE] ?? null;
+        return $this->resourceData[self::ORGANISATION_UID_ATTRIBUTE] ?? null;
     }
 
-    public function getSemesterHours(): ?int
+    public function getSemesterHours(): ?float
     {
         return $this->resourceData[self::SEMESTER_HOURS_ATTRIBUTE] ?? null;
     }
