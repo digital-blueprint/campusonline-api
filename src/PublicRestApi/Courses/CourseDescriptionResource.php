@@ -17,12 +17,12 @@ class CourseDescriptionResource extends Resource
         return $this->resourceData[self::UID_ATTRIBUTE];
     }
 
-    public function getContent(string $languageTag = self::DEFAULT_LANGUAGE_TAG): ?array
+    public function getContent(string $languageTag = self::DEFAULT_LANGUAGE_TAG): ?string
     {
         return $this->resourceData[self::CONTENT_ATTRIBUTE][self::VALUE_ATTRIBUTE][$languageTag] ?? null;
     }
 
-    public function getObjective(string $languageTag = self::DEFAULT_LANGUAGE_TAG): ?array
+    public function getObjective(string $languageTag = self::DEFAULT_LANGUAGE_TAG): ?string
     {
         return $this->resourceData[self::OBJECTIVE_ATTRIBUTE][self::VALUE_ATTRIBUTE][$languageTag] ?? null;
     }

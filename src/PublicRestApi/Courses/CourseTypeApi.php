@@ -24,7 +24,7 @@ class CourseTypeApi extends AbstractApi
     /**
      * @return iterable<CourseTypeResource>
      */
-    public function getCourseTypes(array $options): iterable
+    public function getCourseTypes(array $options = []): iterable
     {
         return $this->getResources(self::API_PATH, CourseTypeResource::class);
     }
