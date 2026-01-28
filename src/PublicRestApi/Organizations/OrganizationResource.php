@@ -8,7 +8,6 @@ use Dbp\CampusonlineApi\PublicRestApi\Resource;
 
 class OrganizationResource extends Resource
 {
-    private const UID_ATTRIBUTE = 'uid';
     private const CODE_ATTRIBUTE = 'code';
     private const PARENT_UID_ATTRIBUTE = 'parentUid';
     private const NAME_ATTRIBUTE = 'name';

@@ -11,7 +11,6 @@ class AppointmentResource extends Resource
     public const REGULAR_CLASS_EVENT_TYPE_KEY = 'REGULAR';
     public const EXAM_EVENT_TYPE_KEY = 'EXAM_DATE';
 
-    private const UID_ATTRIBUTE = 'uid';
     private const COURSE_UID_ATTRIBUTE = 'courseUid';
     private const START_AT_ATTRIBUTE = 'startAt';
     private const END_AT_ATTRIBUTE = 'endAt';

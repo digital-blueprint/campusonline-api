@@ -8,7 +8,6 @@ use Dbp\CampusonlineApi\PublicRestApi\Resource;
 
 class LectureshipResource extends Resource
 {
-    private const UID_ATTRIBUTE = 'uid';
     private const FUNCTION_KEY_ATTRIBUTE = 'functionKey';
     private const PERSON_UID_ATTRIBUTE = 'personUid';
     private const COURSE_UID_ATTRIBUTE = 'courseUid';
