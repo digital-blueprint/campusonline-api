@@ -21,8 +21,13 @@ class CourseTypeResource extends Resource
         return $this->resourceData[self::KEY_ATTRIBUTE] ?? null;
     }
 
-    public function getName(string $languageTag = self::DEFAULT_LANGUAGE_TAG): ?array
+    public function getLocalizedName(string $languageTag = self::DEFAULT_LANGUAGE_TAG): ?string
     {
         return $this->resourceData[self::NAME_ATTRIBUTE][self::VALUE_ATTRIBUTE][$languageTag] ?? null;
+    }
+
+    public function getName(): ?array
+    {
+        return $this->resourceData[self::NAME_ATTRIBUTE][self::VALUE_ATTRIBUTE] ?? null;
     }
 }
