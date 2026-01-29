@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-- PublicRestApi: add CourseGroupApi and AppointmentApi
+## v0.3.30
+
+- PublicRestApi: add CourseGroupApi, AppointmentApi, CourseDescriptionApi, CourseGroupApi, and CourseTypeApi
 
 ## v0.3.29
 
