@@ -94,7 +94,7 @@ abstract class AbstractApi implements LoggerAwareInterface
                 self::getCursorBasedPaginationQueryParameters($cursor, $maxNumItems)
             );
             $responseData = Tools::decodeJsonResponse($this->getClient()->get(
-                $apiPath.'?'.http_build_query($queryParameters)));
+                $apiPath.'?'.self::buildQueryString($queryParameters)));
 
             return CursorBasedResourcePage::createFromResponseData($responseData, $resourceClassName);
         } catch (GuzzleException $guzzleException) {
@@ -116,7 +116,7 @@ abstract class AbstractApi implements LoggerAwareInterface
     {
         try {
             return self::createResourceIterator(
-                $this->getClient()->get($apiPath.'?'.http_build_query($queryParameters)),
+                $this->getClient()->get($apiPath.'?'.self::buildQueryString($queryParameters)),
                 $resourceClassName);
         } catch (GuzzleException $guzzleException) {
             throw ApiException::fromGuzzleException($guzzleException);
@@ -149,5 +149,21 @@ abstract class AbstractApi implements LoggerAwareInterface
         foreach (Tools::decodeJsonResponse($response)['items'] ?? [] as $organizationResourceData) {
             yield new $resourceClassName($organizationResourceData);
         }
+    }
+
+    private static function buildQueryString(array $queryParameters): string
+    {
+        $queryParts = [];
+        foreach ($queryParameters as $key => $value) {
+            if (is_array($value)) {
+                foreach ($value as $item) {
+                    $queryParts[] = urlencode($key).'='.urlencode((string) $item);
+                }
+            } else {
+                $queryParts[] = urlencode($key).'='.urlencode((string) $value);
+            }
+        }
+
+        return implode('&', $queryParts);
     }
 }
