@@ -23,14 +23,8 @@ class PersonClaimsApi extends AbstractApi
     public const STUDENT_PERSON_GROUP_KEY = 'STUDENT';
     public const EXTERNAL_PERSON_GROUP_KEY = 'EXTPERS';
 
-    public const ALL_CLAIM = 'CO_CLAIM_ALL';
-    public const NAME_CLAIM = 'CO_CLAIM_NAME';
-    public const MATRICULATION_NUMBER_CLAIM = 'CO_CLAIM_MATRICULATION_NUMBER';
-    public const EMAIL_CLAIM = 'CO_CLAIM_EMAIL';
-    public const TITLE_CLAIM = 'CO_CLAIM_TITLE';
-
     private const DEFAULT_CLAIMS = [
-        self::NAME_CLAIM,
+        Common::NAME_CLAIM,
     ];
 
     private const API_PATH = Common::API_PATH.'/person-claims';

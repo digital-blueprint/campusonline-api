@@ -68,12 +68,13 @@ abstract class AbstractApi implements LoggerAwareInterface
         return $this->connection->getClient();
     }
 
-    protected function getResourceByIdentifier(string $apiPath, string $resourceClassName, string $identifier): Resource
+    protected function getResourceByIdentifier(string $apiPath, string $resourceClassName,
+        string $identifier, array $queryParameters = []): Resource
     {
         try {
             $responseData = Tools::decodeJsonResponse(
                 $this->getClient()->get(
-                    $apiPath.'/'.rawurlencode($identifier)));
+                    $apiPath.'/'.rawurlencode($identifier).'?'.self::buildQueryString($queryParameters)));
 
             return new $resourceClassName($responseData);
         } catch (GuzzleException $guzzleException) {
