@@ -14,6 +14,11 @@ use Psr\Log\LoggerInterface;
 
 abstract class AbstractApi implements LoggerAwareInterface
 {
+    protected const USE_POST_OPTION = 'use_post';
+    protected const DEFAULT_OPTIONS = [
+        self::USE_POST_OPTION => false,
+    ];
+
     protected const OFFSET_QUERY_PARAMETER_NAME = 'offset';
     protected const LIMIT_QUERY_PARAMETER_NAME = 'limit';
     protected const CURSOR_QUERY_PARAMETER_NAME = 'cursor';
@@ -83,7 +88,7 @@ abstract class AbstractApi implements LoggerAwareInterface
     }
 
     protected function getResourcesCursorBased(string $apiPath, string $resourceClassName, array $queryParameters = [],
-        ?string $cursor = null, int $maxNumItems = 30): CursorBasedResourcePage
+        ?string $cursor = null, int $maxNumItems = 30, array $options = []): CursorBasedResourcePage
     {
         try {
             // WORKAROUND: CO ignores limit=0
@@ -94,8 +99,13 @@ abstract class AbstractApi implements LoggerAwareInterface
                 $queryParameters,
                 self::getCursorBasedPaginationQueryParameters($cursor, $maxNumItems)
             );
-            $responseData = Tools::decodeJsonResponse($this->getClient()->get(
-                $apiPath.'?'.self::buildQueryString($queryParameters)));
+
+            $uri = $apiPath.'?'.self::buildQueryString($queryParameters);
+            $responseData = Tools::decodeJsonResponse(
+                self::getOption($options, self::USE_POST_OPTION) ?
+                    $this->getClient()->post($uri) :
+                    $this->getClient()->get($uri)
+            );
 
             return CursorBasedResourcePage::createFromResponseData($responseData, $resourceClassName);
         } catch (GuzzleException $guzzleException) {
@@ -104,7 +114,7 @@ abstract class AbstractApi implements LoggerAwareInterface
     }
 
     protected function getResourcesOffsetBased(string $apiPath, string $resourceClassName, array $queryParameters = [],
-        int $firstItemIndex = 0, int $maxNumItems = 30): iterable
+        int $firstItemIndex = 0, int $maxNumItems = 30, array $options = []): iterable
     {
         return $this->getResources($apiPath, $resourceClassName,
             array_merge(
@@ -166,5 +176,10 @@ abstract class AbstractApi implements LoggerAwareInterface
         }
 
         return implode('&', $queryParts);
+    }
+
+    private static function getOption(array $options, string $optionName): mixed
+    {
+        return $options[$optionName] ?? self::DEFAULT_OPTIONS[$optionName];
     }
 }

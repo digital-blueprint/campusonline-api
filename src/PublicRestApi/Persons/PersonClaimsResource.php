@@ -11,6 +11,9 @@ class PersonClaimsResource extends Resource
     private const GIVEN_NAME_ATTRIBUTE = 'givenName';
     private const SURNAME_ATTRIBUTE = 'surname';
     private const EMAIL_ATTRIBUTE = 'email';
+    private const EMAIL_EMPLOYEE_ATTRIBUTE = 'emailEmployee';
+    private const EMAIL_STUDENT_ATTRIBUTE = 'emailStudent';
+    private const EMAIL_EXTPERS_ATTRIBUTE = 'emailExtpers';
     private const MATRICULATION_NUMBER_ATTRIBUTE = 'matriculationNumber';
     private const DATE_OF_BIRTH_ATTRIBUTE = 'dateOfBirth';
     private const TITLE_PREFIX_ATTRIBUTE = 'titlePrefix';
@@ -36,6 +39,21 @@ class PersonClaimsResource extends Resource
     public function getEmail(): ?string
     {
         return $this->resourceData[self::EMAIL_ATTRIBUTE] ?? null;
+    }
+
+    public function getEmailEmployee(): ?string
+    {
+        return $this->resourceData[self::EMAIL_EMPLOYEE_ATTRIBUTE] ?? null;
+    }
+
+    public function getEmailStudent(): ?string
+    {
+        return $this->resourceData[self::EMAIL_STUDENT_ATTRIBUTE] ?? null;
+    }
+
+    public function getEmailExtpers(): ?string
+    {
+        return $this->resourceData[self::EMAIL_EXTPERS_ATTRIBUTE] ?? null;
     }
 
     public function getMatriculationNumber(): ?string
