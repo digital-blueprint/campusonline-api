@@ -14,7 +14,7 @@ class UserApi extends AbstractApi
     public const ACCOUNT_TYPE_KEY_QUERY_PARAMETER_NAME = 'account_type_key';
     public const ACCOUNT_STATUS_KEY_QUERY_PARAMETER_NAME = 'account_status_key';
 
-    private const API_PATH = Common::API_PATH.'/users';
+    private const API_PATH = Common::API_PATH.'/users/search';
 
     public function getUserByPersonUid(string $personUid, array $options = []): UserResource
     {
