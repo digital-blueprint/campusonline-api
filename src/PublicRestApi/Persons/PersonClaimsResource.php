@@ -28,6 +28,9 @@ class PersonClaimsResource extends Resource
     private const EMPLOYEE_ADDRESS_TYPE_ABBREVIATION_ATTRIBUTE = 'employeeAddressTypeAbbreviation';
     private const BUSINESS_CARD_URL_EMPLOYEE_ATTRIBUTE = 'businessCardUrlEmployee';
     private const ADDITIONAL_ADDRESS_INFO_ATTRIBUTE = 'additionalAddressInfo';
+    private const MOBILE_PHONE_NUMBER_EMPLOYEE_ATTRIBUTE = 'mobilePhoneNumberEmployee';
+    private const EXTERNAL_PHONE_NUMBER_EMPLOYEE_ATTRIBUTE = 'externalPhoneNumberEmployee';
+    private const INTERNAL_PHONE_NUMBERS_EMPLOYEE_ATTRIBUTE = 'internalPhoneNumbersEmployee';
 
     public function getUid(): ?string
     {
@@ -132,5 +135,20 @@ class PersonClaimsResource extends Resource
     public function getBusinessCardUrlEmployee(): ?string
     {
         return $this->resourceData[self::BUSINESS_CARD_URL_EMPLOYEE_ATTRIBUTE] ?? null;
+    }
+
+    public function getMobilePhoneNumberEmployee(): ?string
+    {
+        return $this->resourceData[self::MOBILE_PHONE_NUMBER_EMPLOYEE_ATTRIBUTE] ?? null;
+    }
+
+    public function getExternalPhoneNumberEmployee(): ?string
+    {
+        return $this->resourceData[self::EXTERNAL_PHONE_NUMBER_EMPLOYEE_ATTRIBUTE] ?? null;
+    }
+
+    public function getInternalPhoneNumbersEmployee(): ?array
+    {
+        return $this->resourceData[self::INTERNAL_PHONE_NUMBERS_EMPLOYEE_ATTRIBUTE] ?? null;
     }
 }
