@@ -10,7 +10,6 @@ class OrganizationResource extends Resource
 {
     private const CODE_ATTRIBUTE = 'code';
     private const PARENT_UID_ATTRIBUTE = 'parentUid';
-    private const NAME_ATTRIBUTE = 'name';
     private const GROUP_KEY_ATTRIBUTE = 'groupKey';
     private const TYPE_ATTRIBUTE = 'type';
 

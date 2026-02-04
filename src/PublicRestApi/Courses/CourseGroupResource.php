@@ -9,7 +9,6 @@ use Dbp\CampusonlineApi\PublicRestApi\Resource;
 class CourseGroupResource extends Resource
 {
     private const COURSE_UID_ATTRIBUTE = 'courseUid';
-    private const NAME_ATTRIBUTE = 'name';
     private const EVENTS_ATTRIBUTE = 'events';
     private const EVENT_UID_ATTRIBUTE = 'uid';
     private const EVENT_START_ATTRIBUTE = 'start';

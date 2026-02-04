@@ -31,6 +31,7 @@ class PersonClaimsResource extends Resource
     private const MOBILE_PHONE_NUMBER_EMPLOYEE_ATTRIBUTE = 'mobilePhoneNumberEmployee';
     private const EXTERNAL_PHONE_NUMBER_EMPLOYEE_ATTRIBUTE = 'externalPhoneNumberEmployee';
     private const INTERNAL_PHONE_NUMBERS_EMPLOYEE_ATTRIBUTE = 'internalPhoneNumbersEmployee';
+    private const WWW_HOMEPAGE_EMPLOYEE_ATTRIBUTE = 'wwwHomepageEmployee';
 
     public function getUid(): ?string
     {
@@ -150,5 +151,10 @@ class PersonClaimsResource extends Resource
     public function getInternalPhoneNumbersEmployee(): ?array
     {
         return $this->resourceData[self::INTERNAL_PHONE_NUMBERS_EMPLOYEE_ATTRIBUTE] ?? null;
+    }
+
+    public function getWwwHomepageEmployee(): ?string
+    {
+        return $this->resourceData[self::WWW_HOMEPAGE_EMPLOYEE_ATTRIBUTE] ?? null;
     }
 }

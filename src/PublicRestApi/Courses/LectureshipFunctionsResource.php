@@ -6,13 +6,8 @@ namespace Dbp\CampusonlineApi\PublicRestApi\Courses;
 
 use Dbp\CampusonlineApi\PublicRestApi\Resource;
 
-class CourseTypeResource extends Resource
+class LectureshipFunctionsResource extends Resource
 {
-    public function getUid(): ?string
-    {
-        return $this->resourceData[self::UID_ATTRIBUTE] ?? null;
-    }
-
     public function getKey(): ?string
     {
         return $this->resourceData[self::KEY_ATTRIBUTE] ?? null;
