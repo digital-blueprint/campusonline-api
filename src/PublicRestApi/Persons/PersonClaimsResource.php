@@ -20,6 +20,14 @@ class PersonClaimsResource extends Resource
     private const TITLE_SUFFIX_ATTRIBUTE = 'titleSuffix';
     private const GENDER_KEY_ATTRIBUTE = 'genderKey';
     private const PERSON_GROUPS_ATTRIBUTE = 'personGroups';
+    private const ADDRESSES_ATTRIBUTE = 'addresses';
+    private const COUNTRY_ATTRIBUTE = 'country';
+    private const CITY_ATTRIBUTE = 'city';
+    private const POSTAL_CODE_ATTRIBUTE = 'postalCode';
+    private const STREET_ATTRIBUTE = 'street';
+    private const EMPLOYEE_ADDRESS_TYPE_ABBREVIATION_ATTRIBUTE = 'employeeAddressTypeAbbreviation';
+    private const BUSINESS_CARD_URL_EMPLOYEE_ATTRIBUTE = 'businessCardUrlEmployee';
+    private const ADDITIONAL_ADDRESS_INFO_ATTRIBUTE = 'additionalAddressInfo';
 
     public function getUid(): ?string
     {
@@ -84,5 +92,45 @@ class PersonClaimsResource extends Resource
     public function getPersonGroups(): ?array
     {
         return $this->resourceData[self::PERSON_GROUPS_ATTRIBUTE] ?? null;
+    }
+
+    public function getNumAddresses(): int
+    {
+        return count($this->resourceData[self::ADDRESSES_ATTRIBUTE] ?? []);
+    }
+
+    public function getAddressCountry(int $addressIndex): ?string
+    {
+        return $this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::COUNTRY_ATTRIBUTE] ?? null;
+    }
+
+    public function getAddressCity(int $addressIndex): ?string
+    {
+        return $this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::CITY_ATTRIBUTE] ?? null;
+    }
+
+    public function getAddressPostalCode(int $addressIndex): ?string
+    {
+        return $this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::POSTAL_CODE_ATTRIBUTE] ?? null;
+    }
+
+    public function getAddressStreet(int $addressIndex): ?string
+    {
+        return $this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::STREET_ATTRIBUTE] ?? null;
+    }
+
+    public function getEmployeeAddressTypeAbbreviation(int $addressIndex): ?string
+    {
+        return $this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::EMPLOYEE_ADDRESS_TYPE_ABBREVIATION_ATTRIBUTE] ?? null;
+    }
+
+    public function getAdditionalAddressInfo(int $addressIndex): ?string
+    {
+        return $this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::ADDITIONAL_ADDRESS_INFO_ATTRIBUTE] ?? null;
+    }
+
+    public function getBusinessCardUrlEmployee(): ?string
+    {
+        return $this->resourceData[self::BUSINESS_CARD_URL_EMPLOYEE_ATTRIBUTE] ?? null;
     }
 }
