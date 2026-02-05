@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- fix LectureshipResource::getGroupUids()
+
 ## v0.3.30
 
 - PublicRestApi: add CourseGroupApi, AppointmentApi, CourseDescriptionApi, CourseGroupApi, and CourseTypeApi

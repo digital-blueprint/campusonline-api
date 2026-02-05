@@ -39,8 +39,9 @@ class LectureshipResource extends Resource
      */
     public function getGroupUids(): array
     {
-        return array_filter($this->resourceData[self::GROUPS_ATTRIBUTE][self::ITEMS_ATTRIBUTE] ?? [],
-            fn (array $group) => $group[self::GROUP_UID_ATTRIBUTE]
+        return array_map(
+            fn (array $group) => $group[self::GROUP_UID_ATTRIBUTE],
+            $this->resourceData[self::GROUPS_ATTRIBUTE][self::ITEMS_ATTRIBUTE] ?? []
         );
     }
 }
