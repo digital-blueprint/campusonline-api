@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.3.31
+
 - fix LectureshipResource::getGroupUids()
 
 ## v0.3.30
