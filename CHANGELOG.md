@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## v0.3.32
+
+- Add support for CO puRS APIs, which are custom-built and use the same authentication
+as the CO Public REST APIs.
+
 ## v0.3.31
 
 - fix LectureshipResource::getGroupUids()
