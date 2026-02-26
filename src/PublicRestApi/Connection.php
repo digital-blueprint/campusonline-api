@@ -19,6 +19,7 @@ class Connection implements LoggerAwareInterface
     private ?object $clientHandler = null;
 
     private ?string $token = null;
+    private ?\DateTimeImmutable $requestNewTokenBefore = null;
 
     public function __construct(
         private string $baseUrl,
@@ -54,53 +55,62 @@ class Connection implements LoggerAwareInterface
         return new Client($clientOptions);
     }
 
-    private function getToken(): string
-    {
-        return $this->token ?? $this->token = $this->getNewToken();
-    }
-
     /**
      * @throws ApiException
      */
-    private function getNewToken(): string
+    private function getToken(): string
     {
-        $stack = HandlerStack::create($this->clientHandler);
-        $client_options = [
-            'handler' => $stack,
-        ];
-        if ($this->logger !== null) {
-            $stack->push(Tools::createLoggerMiddleware($this->logger));
+        if ($this->token === null
+            || $this->requestNewTokenBefore === null
+            || (new \DateTimeImmutable()) >= $this->requestNewTokenBefore) {
+            $stack = HandlerStack::create($this->clientHandler);
+            $client_options = [
+                'handler' => $stack,
+            ];
+            if ($this->logger !== null) {
+                $stack->push(Tools::createLoggerMiddleware($this->logger));
+            }
+            $client = new Client($client_options);
+
+            try {
+                $authServerUrl = Tools::decodeJsonResponse(
+                    $client->get($this->baseUrl.'/co/public/api/environment'))['authServerUrl'] ?? null;
+                if ($authServerUrl === null) {
+                    throw new ApiException('auth server url not found in environment');
+                }
+
+                $tokenEndpoint = Tools::decodeJsonResponse(
+                    $client->get($authServerUrl.'/.well-known/openid-configuration'))['token_endpoint'] ?? null;
+                if ($tokenEndpoint === null) {
+                    throw new ApiException('token endpoint not found in auth server response');
+                }
+
+                $tokenData = Tools::decodeJsonResponse(
+                    $client->post($tokenEndpoint, [
+                        'form_params' => [
+                            'client_id' => $this->clientId,
+                            'client_secret' => $this->clientSecret,
+                            'grant_type' => 'client_credentials',
+                        ],
+                    ]));
+
+                if (null === ($token = $tokenData['access_token'] ?? null)) {
+                    throw new ApiException('access token not found in auth server response');
+                }
+                $this->token = $token;
+
+                $getNewTokenInSecs = (int) ($tokenData['expires_in'] ?? 0) - 30;
+                try {
+                    $this->requestNewTokenBefore = (new \DateTimeImmutable())
+                        ->add(new \DateInterval('PT'.$getNewTokenInSecs.'S'));
+                } catch (\Exception) {
+                    throw new ApiException('failed to calculate token refresh time');
+                }
+            } catch (GuzzleException $guzzleException) {
+                throw ApiException::fromGuzzleException($guzzleException);
+            }
         }
-        $client = new Client($client_options);
 
-        try {
-            $authServerUrl = Tools::decodeJsonResponse(
-                $client->get($this->baseUrl.'/co/public/api/environment'))['authServerUrl'] ?? null;
-            if ($authServerUrl === null) {
-                throw new ApiException('auth server url not found in environment');
-            }
-
-            $tokenEndpoint = Tools::decodeJsonResponse(
-                $client->get($authServerUrl.'/.well-known/openid-configuration'))['token_endpoint'] ?? null;
-            if ($tokenEndpoint === null) {
-                throw new ApiException('token endpoint not found in auth server response');
-            }
-
-            $token = Tools::decodeJsonResponse(
-                $client->post($tokenEndpoint, [
-                    'form_params' => [
-                        'client_id' => $this->clientId,
-                        'client_secret' => $this->clientSecret,
-                        'grant_type' => 'client_credentials',
-                    ],
-                ]))['access_token'] ?? null;
-            if ($token === null) {
-                throw new ApiException('access token not found in auth server response');
-            }
-
-            return $token;
-        } catch (GuzzleException $guzzleException) {
-            throw ApiException::fromGuzzleException($guzzleException);
-        }
+        return $this->token;
     }
 }
