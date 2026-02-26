@@ -26,8 +26,8 @@ class OrganizationResource extends Resource
     private const EMAIL_ATTRIBUTE = 'email';
     private const TEL_ATTRIBUTE = 'tel';
     private const ADDITIONAL_INFORMATION_ATTRIBUTE = 'additionalInformation';
-    private const SEKRETARIAT_INFORMATION_ATTRIBUTE = 'sekretariatInformation';
-    private const WEBLINKS_ATTRIBUTE = 'weblinks';
+    private const SEKRETARIAT_INFORMATION_ATTRIBUTE = 'secretariatInformation';
+    private const WEBLINKS_ATTRIBUTE = 'webLinks';
     private const WEB_PAGE_HREF_ATTRIBUTE = 'webPageHref';
 
     private bool $areContactInfosSorted = false;
