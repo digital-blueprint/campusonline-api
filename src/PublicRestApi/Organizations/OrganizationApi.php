@@ -13,13 +13,13 @@ class OrganizationApi extends AbstractApi
 
     private const API_PATH = Common::API_PATH.'/organisations';
 
-    private const UIDS_QUERY_PARAMETER = 'uids';
+    private const UID_QUERY_PARAMETER = 'uid';
 
     public function getOrganizationByIdentifier(string $identifier): OrganizationResource
     {
         $resource = $this->getResourceByIdentifierFromCollection(
             $identifier,
-            self::UIDS_QUERY_PARAMETER,
+            self::UID_QUERY_PARAMETER,
             self::API_PATH,
             OrganizationResource::class);
         assert($resource instanceof OrganizationResource);

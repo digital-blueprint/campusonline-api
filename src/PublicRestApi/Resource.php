@@ -15,7 +15,7 @@ class Resource
     protected const NAME_ATTRIBUTE = 'name';
 
     public function __construct(
-        protected readonly array $resourceData)
+        protected array $resourceData)
     {
     }
 

@@ -30,6 +30,8 @@ class OrganizationResource extends Resource
     private const WEBLINKS_ATTRIBUTE = 'weblinks';
     private const WEB_PAGE_HREF_ATTRIBUTE = 'webPageHref';
 
+    private bool $areContactInfosSorted = false;
+
     public function getUid(): ?string
     {
         return $this->resourceData[self::UID_ATTRIBUTE] ?? null;
@@ -72,56 +74,88 @@ class OrganizationResource extends Resource
 
     public function getContactInfoKey(int $contactInfoIndex = 0): ?string
     {
+        $this->ensureContactInfosAreSorted();
+
         return $this->resourceData[self::CONTACT_INFO_ATTRIBUTE][$contactInfoIndex][self::KEY_ATTRIBUTE] ?? null;
     }
 
     public function getContactInfoSort(int $contactInfoIndex = 0): ?int
     {
+        $this->ensureContactInfosAreSorted();
+
         return $this->resourceData[self::CONTACT_INFO_ATTRIBUTE][$contactInfoIndex][self::SORT_ATTRIBUTE] ?? null;
     }
 
     public function getContactInfoEmail(int $contactInfoIndex = 0): ?string
     {
+        $this->ensureContactInfosAreSorted();
+
         return $this->resourceData[self::CONTACT_INFO_ATTRIBUTE][$contactInfoIndex][self::EMAIL_ATTRIBUTE] ?? null;
     }
 
-    public function getContractInfoAddressStreet(int $contactInfoIndex = 0): ?string
+    public function getContactInfoAddressStreet(int $contactInfoIndex = 0): ?string
     {
+        $this->ensureContactInfosAreSorted();
+
         return $this->resourceData[self::CONTACT_INFO_ATTRIBUTE][$contactInfoIndex][self::ADDRESS_ATTRIBUTE][self::STREET_ATTRIBUTE] ?? null;
     }
 
     public function getContactInfoAddressCity(int $contactInfoIndex = 0): ?string
     {
+        $this->ensureContactInfosAreSorted();
+
         return $this->resourceData[self::CONTACT_INFO_ATTRIBUTE][$contactInfoIndex][self::ADDRESS_ATTRIBUTE][self::CITY_ATTRIBUTE] ?? null;
     }
 
     public function getContactInfoAddressPostalCode(int $contactInfoIndex = 0): ?string
     {
+        $this->ensureContactInfosAreSorted();
+
         return $this->resourceData[self::CONTACT_INFO_ATTRIBUTE][$contactInfoIndex][self::ADDRESS_ATTRIBUTE][self::POSTAL_CODE_ATTRIBUTE] ?? null;
     }
 
     public function getContactInfoAddressCountry(int $contactInfoIndex = 0): ?string
     {
+        $this->ensureContactInfosAreSorted();
+
         return $this->resourceData[self::CONTACT_INFO_ATTRIBUTE][$contactInfoIndex][self::ADDRESS_ATTRIBUTE][self::COUNTRY_ATTRIBUTE] ?? null;
     }
 
     public function getContactInfoTel(int $contactInfoIndex = 0): ?string
     {
+        $this->ensureContactInfosAreSorted();
+
         return $this->resourceData[self::CONTACT_INFO_ATTRIBUTE][$contactInfoIndex][self::TEL_ATTRIBUTE] ?? null;
     }
 
     public function getContactInfoSecretariatInformation(int $contactInfoIndex = 0): ?string
     {
+        $this->ensureContactInfosAreSorted();
+
         return $this->resourceData[self::CONTACT_INFO_ATTRIBUTE][$contactInfoIndex][self::ADDITIONAL_INFORMATION_ATTRIBUTE][self::SEKRETARIAT_INFORMATION_ATTRIBUTE] ?? null;
     }
 
     public function getContactInfoWebPageHref(int $contactInfoIndex = 0): ?string
     {
+        $this->ensureContactInfosAreSorted();
+
         return $this->resourceData[self::CONTACT_INFO_ATTRIBUTE][$contactInfoIndex][self::WEBLINKS_ATTRIBUTE][self::WEB_PAGE_HREF_ATTRIBUTE] ?? null;
     }
 
-    public function getShortDescription(): ?string
+    public function getShortDescription(): ?array
     {
-        return $this->resourceData[self::SHORT_DESCRIPTION_ATTRIBUTE] ?? null;
+        return $this->resourceData[self::SHORT_DESCRIPTION_ATTRIBUTE][self::VALUE_ATTRIBUTE] ?? null;
+    }
+
+    private function ensureContactInfosAreSorted(): void
+    {
+        if (false === $this->areContactInfosSorted) {
+            $contactInfos = $this->resourceData[self::CONTACT_INFO_ATTRIBUTE] ?? [];
+            usort($contactInfos, function (array $contactInfoA, array $contactInfoB) {
+                return ($contactInfoA[self::SORT_ATTRIBUTE] ?? 0) <=> ($contactInfoB[self::SORT_ATTRIBUTE] ?? 0);
+            });
+            $this->resourceData[self::CONTACT_INFO_ATTRIBUTE] = $contactInfos;
+            $this->areContactInfosSorted = true;
+        }
     }
 }
