@@ -26,6 +26,7 @@ class PersonClaimsResource extends Resource
     private const POSTAL_CODE_ATTRIBUTE = 'postalCode';
     private const STREET_ATTRIBUTE = 'street';
     private const EMPLOYEE_ADDRESS_TYPE_ABBREVIATION_ATTRIBUTE = 'employeeAddressTypeAbbreviation';
+    private const EMPLOYEE_ADDRESS_TYPE_NAME_ATTRIBUTE = 'employeeAddressTypeName';
     private const BUSINESS_CARD_URL_EMPLOYEE_ATTRIBUTE = 'businessCardUrlEmployee';
     private const ADDITIONAL_ADDRESS_INFO_ATTRIBUTE = 'additionalAddressInfo';
     private const MOBILE_PHONE_NUMBER_EMPLOYEE_ATTRIBUTE = 'mobilePhoneNumberEmployee';
@@ -121,6 +122,11 @@ class PersonClaimsResource extends Resource
     public function getAddressStreet(int $addressIndex): ?string
     {
         return $this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::STREET_ATTRIBUTE] ?? null;
+    }
+
+    public function getEmployeeAddressTypeName(int $addressIndex): ?string
+    {
+        return $this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::EMPLOYEE_ADDRESS_TYPE_NAME_ATTRIBUTE] ?? null;
     }
 
     public function getEmployeeAddressTypeAbbreviation(int $addressIndex): ?string
