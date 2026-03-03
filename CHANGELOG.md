@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## v0.3.33
+
+- Refresh token for Public REST and PuRS APIs before expiry
+- Add more data attributes to the Public REST resources
+
 ## v0.3.32
 
 - Add support for CO puRS APIs, which are custom-built and use the same authentication
