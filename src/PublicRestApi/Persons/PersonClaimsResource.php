@@ -74,6 +74,9 @@ class PersonClaimsResource extends Resource
         return $this->resourceData[self::MATRICULATION_NUMBER_ATTRIBUTE] ?? null;
     }
 
+    /**
+     * Example: '1975-06-23'.
+     */
     public function getDateOfBirth(): ?string
     {
         return $this->resourceData[self::DATE_OF_BIRTH_ATTRIBUTE] ?? null;
@@ -124,9 +127,9 @@ class PersonClaimsResource extends Resource
         return $this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::STREET_ATTRIBUTE] ?? null;
     }
 
-    public function getEmployeeAddressTypeName(int $addressIndex): ?string
+    public function getEmployeeAddressTypeName(int $addressIndex, string $lang): ?string
     {
-        return $this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::EMPLOYEE_ADDRESS_TYPE_NAME_ATTRIBUTE] ?? null;
+        return ($this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::EMPLOYEE_ADDRESS_TYPE_NAME_ATTRIBUTE] ?? [])['value'][$lang] ?? null;
     }
 
     public function getEmployeeAddressTypeAbbreviation(int $addressIndex): ?string

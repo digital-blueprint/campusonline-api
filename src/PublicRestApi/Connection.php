@@ -55,6 +55,12 @@ class Connection implements LoggerAwareInterface
         return new Client($clientOptions);
     }
 
+    public function setToken(string $token, \DateTimeImmutable $requestNewTokenBefore): void
+    {
+        $this->token = $token;
+        $this->requestNewTokenBefore = $requestNewTokenBefore;
+    }
+
     /**
      * @throws ApiException
      */
