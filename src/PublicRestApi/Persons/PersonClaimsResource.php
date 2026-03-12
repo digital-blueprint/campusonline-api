@@ -127,7 +127,7 @@ class PersonClaimsResource extends Resource
         return $this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::STREET_ATTRIBUTE] ?? null;
     }
 
-    public function getEmployeeAddressTypeName(int $addressIndex, string $lang): ?string
+    public function getEmployeeAddressTypeName(int $addressIndex, string $lang): ?array
     {
         return ($this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::EMPLOYEE_ADDRESS_TYPE_NAME_ATTRIBUTE] ?? [])['value'][$lang] ?? null;
     }
