@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.3.34
+
 - public rest resource objects: Standardize methods names for localized attributes (e.g. getName() and getNameLocalized())
 
 ## v0.3.33
