@@ -127,9 +127,14 @@ class PersonClaimsResource extends Resource
         return $this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::STREET_ATTRIBUTE] ?? null;
     }
 
-    public function getEmployeeAddressTypeName(int $addressIndex, string $lang): ?array
+    public function getEmployeeAddressTypeNameLocalized(int $addressIndex, string $languageTag = self::DEFAULT_LANGUAGE_TAG): ?string
     {
-        return ($this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::EMPLOYEE_ADDRESS_TYPE_NAME_ATTRIBUTE] ?? [])['value'][$lang] ?? null;
+        return $this->getEmployeeAddressTypeName($addressIndex)[$languageTag] ?? null;
+    }
+
+    public function getEmployeeAddressTypeName(int $addressIndex): ?array
+    {
+        return $this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::EMPLOYEE_ADDRESS_TYPE_NAME_ATTRIBUTE][self::VALUE_ATTRIBUTE] ?? null;
     }
 
     public function getEmployeeAddressTypeAbbreviation(int $addressIndex): ?string

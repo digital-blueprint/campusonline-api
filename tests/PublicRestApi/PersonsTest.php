@@ -116,13 +116,13 @@ class PersonsTest extends TestCase
         $this->mockResponses([]);
     }
 
-    private function mockResponses(array $responses)
+    private function mockResponses(array $responses): void
     {
         $stack = HandlerStack::create(new MockHandler($responses));
         $this->api->setClientHandler($stack);
     }
 
-    public function testGetPersonClaimsByPersonUid()
+    public function testGetPersonClaimsByPersonUid(): void
     {
         $this->mockResponses([
             new Response(200, ['Content-Type' => 'application/json'], self::RESPONSE),
@@ -146,14 +146,26 @@ class PersonsTest extends TestCase
         $this->assertSame('Sample City', $result->getAddressCity(0));
         $this->assertSame('7243', $result->getAddressPostalCode(0));
         $this->assertSame('Sample Street 12', $result->getAddressStreet(0));
-        $this->assertSame('Residence', $result->getEmployeeAddressTypeName(0, 'en'));
+        $this->assertSame('Residence', $result->getEmployeeAddressTypeNameLocalized(0, 'en'));
+        $this->assertSame([
+            'de' => 'Wohnsitz',
+            'en' => 'Residence',
+            'it' => null,
+            'fr' => null,
+        ], $result->getEmployeeAddressTypeName(0));
         $this->assertSame('WS', $result->getEmployeeAddressTypeAbbreviation(0));
         $this->assertSame(null, $result->getAdditionalAddressInfo(0));
         $this->assertSame('AT', $result->getAddressCountry(1));
         $this->assertSame('Sample City', $result->getAddressCity(1));
         $this->assertSame('7243', $result->getAddressPostalCode(1));
         $this->assertSame('Sample Street 12', $result->getAddressStreet(1));
-        $this->assertSame('Zweitwohnsitz', $result->getEmployeeAddressTypeName(1, 'de'));
+        $this->assertSame('Zweitwohnsitz', $result->getEmployeeAddressTypeNameLocalized(1, 'de'));
+        $this->assertSame([
+            'de' => 'Zweitwohnsitz',
+            'en' => 'Secondary residence',
+            'it' => null,
+            'fr' => null,
+        ], $result->getEmployeeAddressTypeName(1));
         $this->assertSame('ZW', $result->getEmployeeAddressTypeAbbreviation(1));
         $this->assertSame(null, $result->getAdditionalAddressInfo(1));
         $this->assertSame('https://qline.tugraz.at/QSYSTEM_TUG/visitenkarte.show_vcard?pPersonenGruppe=3&pPersonenId=4B7E2F9A1C3D8E5F', $result->getBusinessCardUrlEmployee());

@@ -13,7 +13,15 @@ class LectureshipFunctionsResource extends Resource
         return $this->resourceData[self::KEY_ATTRIBUTE] ?? null;
     }
 
+    /**
+     * @deprecated use getNameLocalized() instead
+     */
     public function getLocalizedName(string $languageTag = self::DEFAULT_LANGUAGE_TAG): ?string
+    {
+        return $this->resourceData[self::NAME_ATTRIBUTE][self::VALUE_ATTRIBUTE][$languageTag] ?? null;
+    }
+
+    public function getNameLocalized(string $languageTag = self::DEFAULT_LANGUAGE_TAG): ?string
     {
         return $this->resourceData[self::NAME_ATTRIBUTE][self::VALUE_ATTRIBUTE][$languageTag] ?? null;
     }

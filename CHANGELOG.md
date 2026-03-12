@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- public rest resource objects: Standardize methods names for localized attributes (e.g. getName() and getNameLocalized())
+
 ## v0.3.33
 
 - Refresh token for Public REST and PuRS APIs before expiry
