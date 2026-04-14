@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.3.35
+
 - Add "additionalInformation" and "officeHoursEmployee" attributes to PersonClaimsResource
 
 ## v0.3.34
