@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v0.3.36
+
+- Fix UserApi.getUserByPersonUid
+
 ## v0.3.35
 
 - Add "additionalInformation" and "officeHoursEmployee" attributes to PersonClaimsResource

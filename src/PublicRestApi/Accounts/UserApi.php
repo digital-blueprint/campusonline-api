@@ -24,11 +24,12 @@ class UserApi extends AbstractApi
             UserResource::class, [
                 self::PERSON_UID_QUERY_PARAMETER_NAME => $personUid,
             ]);
-        if (empty($users)) {
+        $user = iterator_to_array($users)[0] ?? null;
+        if ($user === null) {
             throw new ApiException('user not found', ApiException::HTTP_NOT_FOUND);
         }
 
-        return $users[0];
+        return $user;
     }
 
     public function getUsersCursorBased(array $queryParameters = [],
