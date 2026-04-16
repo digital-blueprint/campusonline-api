@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.3.37
+
 - Add attributes to Appointment-, Course-, and PersonClaimsResource
 
 ## v0.3.36
