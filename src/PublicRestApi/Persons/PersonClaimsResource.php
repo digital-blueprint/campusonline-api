@@ -35,6 +35,9 @@ class PersonClaimsResource extends Resource
     private const WWW_HOMEPAGE_EMPLOYEE_ATTRIBUTE = 'wwwHomepageEmployee';
     private const ADDITIONAL_INFORMATION_ATTRIBUTE = 'additionalInformation';
     private const OFFICE_HOURS_EMPLOYEE_ATTRIBUTE = 'officeHoursEmployee';
+    private const CONTACT_ORG_UID_ATTRIBUTE = 'contactOrgUid';
+    private const ROOM_UID_ATTRIBUTE = 'roomUid';
+    private const ROOM_CODE_ATTRIBUTE = 'roomCode';
 
     public function getUid(): ?string
     {
@@ -147,6 +150,21 @@ class PersonClaimsResource extends Resource
     public function getAdditionalAddressInfo(int $addressIndex): ?string
     {
         return $this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::ADDITIONAL_ADDRESS_INFO_ATTRIBUTE] ?? null;
+    }
+
+    public function getContactOrgUid(int $addressIndex): ?string
+    {
+        return $this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::CONTACT_ORG_UID_ATTRIBUTE] ?? null;
+    }
+
+    public function getRoomUid(int $addressIndex): ?string
+    {
+        return $this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::ROOM_UID_ATTRIBUTE] ?? null;
+    }
+
+    public function getRoomCode(int $addressIndex): ?string
+    {
+        return $this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::ROOM_CODE_ATTRIBUTE] ?? null;
     }
 
     public function getBusinessCardUrlEmployee(): ?string

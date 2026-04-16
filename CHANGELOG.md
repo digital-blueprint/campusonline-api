@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add attributes to Appointment-, Course-, and PersonClaimsResource
+
 ## v0.3.36
 
 - Fix UserApi.getUserByPersonUid

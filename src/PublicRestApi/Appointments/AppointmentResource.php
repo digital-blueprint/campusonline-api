@@ -18,6 +18,11 @@ class AppointmentResource extends Resource
     private const ROOM_UID_ATTRIBUTE = 'roomUid';
     private const STATUS_TYPE_KEY_ATTRIBUTE = 'statusTypeKey';
     private const EVENT_TYPE_KEY_ATTRIBUTE = 'eventTypeKey';
+    private const COMMENT_ATTRIBUTE = 'comment';
+    private const APPLICATION_TYPE_KEY_ATTRIBUTE = 'applicationTypeKey';
+    private const RESOURCE_URL_ATTRIBUTE = 'resourceUrl';
+    private const EXTERNAL_OBJECT_UID_ATTRIBUTE = 'externalObjectUid';
+    private const RESOURCE_UID_ATTRIBUTE = 'resourceUId';
 
     public function getUid(): ?string
     {
@@ -57,5 +62,30 @@ class AppointmentResource extends Resource
     public function getEventTypeKey(): ?string
     {
         return $this->resourceData[self::EVENT_TYPE_KEY_ATTRIBUTE] ?? null;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->resourceData[self::COMMENT_ATTRIBUTE] ?? null;
+    }
+
+    public function getApplicationTypeKey(): ?string
+    {
+        return $this->resourceData[self::APPLICATION_TYPE_KEY_ATTRIBUTE] ?? null;
+    }
+
+    public function getResourceUrl(): ?string
+    {
+        return $this->resourceData[self::RESOURCE_URL_ATTRIBUTE] ?? null;
+    }
+
+    public function getExternalObjectUid(): ?string
+    {
+        return $this->resourceData[self::EXTERNAL_OBJECT_UID_ATTRIBUTE] ?? null;
+    }
+
+    public function getResourceUid(): ?string
+    {
+        return $this->resourceData[self::RESOURCE_UID_ATTRIBUTE] ?? null;
     }
 }
