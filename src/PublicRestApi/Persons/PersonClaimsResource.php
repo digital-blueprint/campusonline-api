@@ -32,6 +32,7 @@ class PersonClaimsResource extends Resource
     private const MOBILE_PHONE_NUMBER_EMPLOYEE_ATTRIBUTE = 'mobilePhoneNumberEmployee';
     private const EXTERNAL_PHONE_NUMBER_EMPLOYEE_ATTRIBUTE = 'externalPhoneNumberEmployee';
     private const INTERNAL_PHONE_NUMBERS_EMPLOYEE_ATTRIBUTE = 'internalPhoneNumbersEmployee';
+    private const FAX_NUMBER_EMPLOYEE_ATTRIBUTE = 'faxNumberEmployee';
     private const WWW_HOMEPAGE_EMPLOYEE_ATTRIBUTE = 'wwwHomepageEmployee';
     private const ADDITIONAL_INFORMATION_ATTRIBUTE = 'additionalInformation';
     private const OFFICE_HOURS_EMPLOYEE_ATTRIBUTE = 'officeHoursEmployee';
@@ -152,12 +153,12 @@ class PersonClaimsResource extends Resource
         return $this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::ADDITIONAL_ADDRESS_INFO_ATTRIBUTE] ?? null;
     }
 
-    public function getContactOrgUid(int $addressIndex): ?string
+    public function getContactOrgUid(int $addressIndex): ?int
     {
         return $this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::CONTACT_ORG_UID_ATTRIBUTE] ?? null;
     }
 
-    public function getRoomUid(int $addressIndex): ?string
+    public function getRoomUid(int $addressIndex): ?int
     {
         return $this->resourceData[self::ADDRESSES_ATTRIBUTE][$addressIndex][self::ROOM_UID_ATTRIBUTE] ?? null;
     }
@@ -185,6 +186,11 @@ class PersonClaimsResource extends Resource
     public function getInternalPhoneNumbersEmployee(): ?array
     {
         return $this->resourceData[self::INTERNAL_PHONE_NUMBERS_EMPLOYEE_ATTRIBUTE] ?? null;
+    }
+
+    public function getFaxNumberEmployee(): ?string
+    {
+        return $this->resourceData[self::FAX_NUMBER_EMPLOYEE_ATTRIBUTE] ?? null;
     }
 
     public function getWwwHomepageEmployee(): ?string

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v0.3.38
+
+- Add faxNumberEmployee to PersonClaimsResource
+
 ## v0.3.37
 
 - Add attributes to Appointment-, Course-, and PersonClaimsResource
