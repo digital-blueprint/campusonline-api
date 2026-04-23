@@ -26,7 +26,7 @@ class UserApi extends AbstractApi
             ]);
         $user = iterator_to_array($users)[0] ?? null;
         if ($user === null) {
-            throw new ApiException('user not found', ApiException::HTTP_NOT_FOUND);
+            throw new ApiException('user not found', ApiException::HTTP_NOT_FOUND, true);
         }
 
         return $user;

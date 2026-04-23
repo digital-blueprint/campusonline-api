@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v0.3.39
+
+- UserApi: fix ApiException to be an http response exception for better error handling
+
 ## v0.3.38
 
 - Add faxNumberEmployee to PersonClaimsResource
