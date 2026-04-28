@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- UserApi: fix http method for getUserByPersonUid
+
 ## v0.3.39
 
 - UserApi: fix ApiException to be an http response exception for better error handling
