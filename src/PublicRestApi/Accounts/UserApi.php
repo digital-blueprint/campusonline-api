@@ -20,11 +20,11 @@ class UserApi extends AbstractApi
 
     public function getUserByPersonUid(string $personUid, array $options = []): UserResource
     {
-        $users = $this->getUsersOffsetBasedInternal([
+        $usersIterator = $this->getUsersOffsetBasedInternal([
             self::PERSON_UID_QUERY_PARAMETER_NAME => $personUid,
         ]);
 
-        $user = iterator_to_array($users)[0] ?? null;
+        $user = iterator_to_array($usersIterator)[0] ?? null;
         if ($user === null) {
             throw new ApiException('user not found', ApiException::HTTP_NOT_FOUND, true);
         }
@@ -41,14 +41,14 @@ class UserApi extends AbstractApi
     }
 
     public function getUsersOffsetBased(array $queryParameters = [],
-        int $firstItemIndex = 0, int $maxNumItems = 30, array $options = []): array
+        int $firstItemIndex = 0, int $maxNumItems = 30, array $options = []): iterable
     {
         return $this->getUsersOffsetBasedInternal(
             $queryParameters, $firstItemIndex, $maxNumItems);
     }
 
     private function getUsersOffsetBasedInternal(array $queryParameters,
-        int $firstItemIndex = 0, int $maxNumItems = 30): array
+        int $firstItemIndex = 0, int $maxNumItems = 30): iterable
     {
         return $this->getResourcesOffsetBased(self::API_PATH,
             UserResource::class, $queryParameters, $firstItemIndex, $maxNumItems,

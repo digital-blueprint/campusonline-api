@@ -46,7 +46,7 @@ class PersonClaimsApi extends AbstractApi
         return $personClaims;
     }
 
-    public function getPersonClaimsPageCursorBased(array $queryParameters = [],
+    public function getPersonClaimsCursorBased(array $queryParameters = [],
         array $claims = self::DEFAULT_CLAIMS,
         ?string $cursor = null, int $maxNumItems = 30, array $options = []): CursorBasedResourcePage
     {
@@ -57,7 +57,7 @@ class PersonClaimsApi extends AbstractApi
             $queryParameters, $cursor, $maxNumItems);
     }
 
-    public function getPersonClaimsPageOffsetBased(array $queryParameters = [],
+    public function getPersonClaimsOffsetBased(array $queryParameters = [],
         array $claims = self::DEFAULT_CLAIMS,
         int $firstItemIndex = 0, int $maxNumItems = 30, array $options = []): iterable
     {

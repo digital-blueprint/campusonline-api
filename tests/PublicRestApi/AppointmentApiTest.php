@@ -12,44 +12,46 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
-class AppointmentsTest extends TestCase
+class AppointmentApiTest extends TestCase
 {
     private $api;
 
-    public const RESPONSE = '{
-  "items": [
-    {
-      "uid": "1234",
-      "applicationTypeKey": "LEH",
-      "courseGroupUid": "12345",
-      "courseUid": "23456",
-      "endAt": "2000-10-06T09:45:00",
-      "eventTypeKey": "REGULAR",
-      "externalObjectUid": "56789",
-      "resourceUId": "987",
-      "resourceUrl": "https://example.com/ee/rest/pages/slc.cp.apt/resource/3568",
-      "roomUid": "3568",
-      "startAt": "2000-10-06T08:15:00",
-      "statusTypeKey": "CONFIRMED"
-    },
-    {
-      "uid": "2345",
-      "applicationTypeKey": "LEH",
-      "courseGroupUid": "45627",
-      "courseUid": "12356",
-      "endAt": "2000-10-13T09:45:00",
-      "eventTypeKey": "REGULAR",
-      "externalObjectUid": "98765",
-      "resourceUId": "181",
-      "resourceUrl": "https://example.com/ee/rest/pages/slc.cp.apt/resource/4242",
-      "roomUid": "4242",
-      "startAt": "2000-10-13T08:15:00",
-      "statusTypeKey": "CONFIRMED"
-    }
-  ],
-  "limit": 2,
-  "nextCursor": "xxxxxxxx=="
-}';
+    public const RESPONSE = <<<JSON
+        {
+          "items": [
+            {
+              "uid": "1234",
+              "applicationTypeKey": "LEH",
+              "courseGroupUid": "12345",
+              "courseUid": "23456",
+              "endAt": "2000-10-06T09:45:00",
+              "eventTypeKey": "REGULAR",
+              "externalObjectUid": "56789",
+              "resourceUId": "987",
+              "resourceUrl": "https://example.com/ee/rest/pages/slc.cp.apt/resource/3568",
+              "roomUid": "3568",
+              "startAt": "2000-10-06T08:15:00",
+              "statusTypeKey": "CONFIRMED"
+            },
+            {
+              "uid": "2345",
+              "applicationTypeKey": "LEH",
+              "courseGroupUid": "45627",
+              "courseUid": "12356",
+              "endAt": "2000-10-13T09:45:00",
+              "eventTypeKey": "REGULAR",
+              "externalObjectUid": "98765",
+              "resourceUId": "181",
+              "resourceUrl": "https://example.com/ee/rest/pages/slc.cp.apt/resource/4242",
+              "roomUid": "4242",
+              "startAt": "2000-10-13T08:15:00",
+              "statusTypeKey": "CONFIRMED"
+            }
+          ],
+          "limit": 2,
+          "nextCursor": "xxxxxxxx=="
+        }
+        JSON;
 
     protected function setUp(): void
     {
