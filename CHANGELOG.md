@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.3.40
+
 - UserApi: fix http method for getUserByPersonUid
 
 ## v0.3.39
