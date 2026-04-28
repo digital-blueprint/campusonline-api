@@ -120,14 +120,19 @@ abstract class AbstractApi implements LoggerAwareInterface
             array_merge(
                 $queryParameters,
                 self::getOffsetBasedPaginationQueryParameters($firstItemIndex, $maxNumItems)
-            ));
+            ), $options);
     }
 
-    protected function getResources(string $apiPath, string $resourceClassName, array $queryParameters = []): iterable
+    protected function getResources(string $apiPath, string $resourceClassName,
+        array $queryParameters = [], array $options = []): iterable
     {
         try {
+            $uri = $apiPath.'?'.self::buildQueryString($queryParameters);
+
             return self::createResourceIterator(
-                $this->getClient()->get($apiPath.'?'.self::buildQueryString($queryParameters)),
+                self::getOption($options, self::USE_POST_OPTION) ?
+                    $this->getClient()->post($uri) :
+                    $this->getClient()->get($uri),
                 $resourceClassName);
         } catch (GuzzleException $guzzleException) {
             throw ApiException::fromGuzzleException($guzzleException);
@@ -135,7 +140,7 @@ abstract class AbstractApi implements LoggerAwareInterface
     }
 
     protected function getResourceByIdentifierFromCollection(string $identifier, string $identifierQueryParameterName,
-        string $apiPath, string $resourceClassName, array $queryParameters = []): Resource
+        string $apiPath, string $resourceClassName, array $queryParameters = [], array $options = []): Resource
     {
         $resources = iterator_to_array(
             $this->getResources(
@@ -143,7 +148,8 @@ abstract class AbstractApi implements LoggerAwareInterface
                 $resourceClassName,
                 array_merge($queryParameters, [
                     $identifierQueryParameterName => $identifier,
-                ])
+                ]),
+                $options
             )
         );
 

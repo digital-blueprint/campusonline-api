@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v0.3.42
+
+- Add support to use POST instead of GET for AbstractApi::getResources
+
 ## v0.3.41
 
 - UserApi: fix getUsers
