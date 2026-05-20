@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- PublicRest/CouresRegistrationResource: add registration status
+
 ## v0.3.42
 
 - Add support to use POST instead of GET for AbstractApi::getResources

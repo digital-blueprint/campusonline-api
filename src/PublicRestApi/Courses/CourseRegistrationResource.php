@@ -8,9 +8,14 @@ use Dbp\CampusonlineApi\PublicRestApi\Resource;
 
 class CourseRegistrationResource extends Resource
 {
+    public const REGISTRATION_STATUS_FIXED = 'FIX';
+    public const REGISTRATION_STATUS_WAITING_LIST = 'WL';
+    public const REGISTRATION_STATUS_DEREGISTERED = 'ABG';
+
     private const PERSON_UID_ATTRIBUTE = 'personUid';
     private const COURSE_UID_ATTRIBUTE = 'courseUid';
     private const COURSE_GROUP_UID_ATTRIBUTE = 'courseGroupUid';
+    private const REGISTRATION_STATUS_ATTRIBUTE = 'registrationStatus';
 
     public function getUid(): ?string
     {
@@ -30,5 +35,10 @@ class CourseRegistrationResource extends Resource
     public function getCourseGroupUid(): ?string
     {
         return $this->resourceData[self::COURSE_GROUP_UID_ATTRIBUTE] ?? null;
+    }
+
+    public function getRegistrationStatus(): ?string
+    {
+        return $this->resourceData[self::REGISTRATION_STATUS_ATTRIBUTE] ?? null;
     }
 }
