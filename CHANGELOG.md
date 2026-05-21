@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.3.43
+
 - PublicRest/CouresRegistrationResource: add registration status
 
 ## v0.3.42
