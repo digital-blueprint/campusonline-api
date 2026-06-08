@@ -15,13 +15,13 @@ class CourseGroupApi extends AbstractApi
     /**
      * @return iterable<CourseGroupResource>
      */
-    public function getCourseGroupsByCourseUid(string $courseUid, array $options = []): iterable
+    public function getCourseGroupsFor(array $courseUids, array $options = []): iterable
     {
         return $this->getResources(
             self::API_PATH,
             CourseGroupResource::class,
             [
-                self::COURSE_UID_QUERY_PARAMETER_NAME => $courseUid,
+                self::COURSE_UID_QUERY_PARAMETER_NAME => $courseUids,
             ]);
     }
 }

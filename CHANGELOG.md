@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- PublicRestApi/Courses: change signatures to accept arrays of courseUids
+
 ## v0.3.43
 
 - PublicRest/CouresRegistrationResource: add registration status

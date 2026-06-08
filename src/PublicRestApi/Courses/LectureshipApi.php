@@ -15,20 +15,12 @@ class LectureshipApi extends AbstractApi
     /**
      * @return iterable<LectureshipResource>
      */
-    public function getLectureships(array $queryParameters = [], array $options = []): iterable
+    public function getLectureshipsFor(array $courseUids, array $queryParameters = [], array $options = []): iterable
     {
+        $queryParameters[self::COURSE_UID_QUERY_PARAMETER_NAME] = $courseUids;
+
         return $this->getResources(self::API_PATH,
             LectureshipResource::class,
             $queryParameters);
-    }
-
-    /**
-     * @return iterable<LectureshipResource>
-     */
-    public function getLectureshipsByCourseUid(string $courseUid, array $options = []): iterable
-    {
-        return $this->getLectureships([
-            self::COURSE_UID_QUERY_PARAMETER_NAME => $courseUid,
-        ], $options);
     }
 }

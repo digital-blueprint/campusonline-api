@@ -15,11 +15,12 @@ class CourseDescriptionApi extends AbstractApi
     /**
      * @return iterable<CourseDescriptionResource>
      */
-    public function getCourseDescriptionsByCourseUid(string $courseUid, array $options = []): iterable
+    public function getCourseDescriptionsFor(array $courseUids, array $options = []): iterable
     {
-        $queryParameters[self::COURSE_UID_QUERY_PARAMETER_NAME] = $courseUid;
-
         return $this->getResources(self::API_PATH,
-            CourseDescriptionResource::class, $queryParameters);
+            CourseDescriptionResource::class,
+            [
+                self::COURSE_UID_QUERY_PARAMETER_NAME => $courseUids,
+            ]);
     }
 }
