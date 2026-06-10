@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.3.44
+
 - PublicRestApi/Courses: change signatures to accept arrays of courseUids
 
 ## v0.3.43
