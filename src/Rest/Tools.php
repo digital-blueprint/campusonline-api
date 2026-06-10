@@ -164,4 +164,14 @@ class Tools
 
         return new ApiException($guzzleException->getMessage(), $guzzleException->getCode(), $response !== null);
     }
+
+    /**
+     * Escape a cache key string to be valid as a Symfony cache key.
+     */
+    public static function escapeCacheKey(string $input): string
+    {
+        // Always append a '.' since empty strings are also not allowed.
+        // For what isn't allowed, see ItemInterface::RESERVED_CHARACTERS
+        return rawurlencode($input.'.');
+    }
 }

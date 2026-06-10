@@ -9,6 +9,7 @@ use Dbp\CampusonlineApi\Rest\Tools;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\HandlerStack;
+use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
@@ -20,6 +21,10 @@ class Connection implements LoggerAwareInterface
 
     private ?string $token = null;
     private ?\DateTimeImmutable $requestNewTokenBefore = null;
+
+    private ?CacheItemPoolInterface $cachePool = null;
+
+    private int $cacheTTL = 0;
 
     public function __construct(
         private string $baseUrl,
@@ -34,6 +39,12 @@ class Connection implements LoggerAwareInterface
     public function setClientHandler(?object $handler): void
     {
         $this->clientHandler = $handler;
+    }
+
+    public function setCache(?CacheItemPoolInterface $cachePool, int $ttl): void
+    {
+        $this->cachePool = $cachePool;
+        $this->cacheTTL = $ttl;
     }
 
     public function getClient(): Client
@@ -61,60 +72,99 @@ class Connection implements LoggerAwareInterface
         $this->requestNewTokenBefore = $requestNewTokenBefore;
     }
 
+    private function getTokenCacheKey(): string
+    {
+        return Tools::escapeCacheKey('client-tokens/'.$this->clientId);
+    }
+
     /**
      * @throws ApiException
      */
     private function getToken(): string
     {
-        if ($this->token === null
-            || $this->requestNewTokenBefore === null
-            || (new \DateTimeImmutable()) >= $this->requestNewTokenBefore) {
-            $stack = HandlerStack::create($this->clientHandler);
-            $client_options = [
-                'handler' => $stack,
-            ];
-            if ($this->logger !== null) {
-                $stack->push(Tools::createLoggerMiddleware($this->logger));
+        if ($this->token !== null
+            && $this->requestNewTokenBefore !== null
+            && (new \DateTimeImmutable()) < $this->requestNewTokenBefore) {
+            return $this->token;
+        }
+
+        if ($this->cachePool !== null) {
+            $cacheItem = $this->cachePool->getItem($this->getTokenCacheKey());
+
+            if ($cacheItem->isHit()) {
+                $cachedToken = $cacheItem->get();
+
+                if (is_string($cachedToken) && $cachedToken !== '') {
+                    $this->token = $cachedToken;
+
+                    return $this->token;
+                }
             }
-            $client = new Client($client_options);
+        }
+
+        $stack = HandlerStack::create($this->clientHandler);
+        $clientOptions = [
+            'handler' => $stack,
+        ];
+
+        if ($this->logger !== null) {
+            $stack->push(Tools::createLoggerMiddleware($this->logger));
+        }
+
+        $client = new Client($clientOptions);
+
+        try {
+            $authServerUrl = Tools::decodeJsonResponse(
+                $client->get($this->baseUrl.'/co/public/api/environment')
+            )['authServerUrl'] ?? null;
+
+            if ($authServerUrl === null) {
+                throw new ApiException('auth server url not found in environment');
+            }
+
+            $tokenEndpoint = Tools::decodeJsonResponse(
+                $client->get($authServerUrl.'/.well-known/openid-configuration')
+            )['token_endpoint'] ?? null;
+
+            if ($tokenEndpoint === null) {
+                throw new ApiException('token endpoint not found in auth server response');
+            }
+
+            $tokenData = Tools::decodeJsonResponse(
+                $client->post($tokenEndpoint, [
+                    'form_params' => [
+                        'client_id' => $this->clientId,
+                        'client_secret' => $this->clientSecret,
+                        'grant_type' => 'client_credentials',
+                    ],
+                ])
+            );
+
+            if (null === ($token = $tokenData['access_token'] ?? null)) {
+                throw new ApiException('access token not found in auth server response');
+            }
+
+            $this->token = $token;
+
+            $expiresIn = (int) ($tokenData['expires_in'] ?? 0);
+            $getNewTokenInSecs = $expiresIn > 0 ? $expiresIn - 30 : $this->cacheTTL;
+            $getNewTokenInSecs = max(1, $getNewTokenInSecs);
 
             try {
-                $authServerUrl = Tools::decodeJsonResponse(
-                    $client->get($this->baseUrl.'/co/public/api/environment'))['authServerUrl'] ?? null;
-                if ($authServerUrl === null) {
-                    throw new ApiException('auth server url not found in environment');
-                }
-
-                $tokenEndpoint = Tools::decodeJsonResponse(
-                    $client->get($authServerUrl.'/.well-known/openid-configuration'))['token_endpoint'] ?? null;
-                if ($tokenEndpoint === null) {
-                    throw new ApiException('token endpoint not found in auth server response');
-                }
-
-                $tokenData = Tools::decodeJsonResponse(
-                    $client->post($tokenEndpoint, [
-                        'form_params' => [
-                            'client_id' => $this->clientId,
-                            'client_secret' => $this->clientSecret,
-                            'grant_type' => 'client_credentials',
-                        ],
-                    ]));
-
-                if (null === ($token = $tokenData['access_token'] ?? null)) {
-                    throw new ApiException('access token not found in auth server response');
-                }
-                $this->token = $token;
-
-                $getNewTokenInSecs = (int) ($tokenData['expires_in'] ?? 0) - 30;
-                try {
-                    $this->requestNewTokenBefore = (new \DateTimeImmutable())
-                        ->add(new \DateInterval('PT'.$getNewTokenInSecs.'S'));
-                } catch (\Exception) {
-                    throw new ApiException('failed to calculate token refresh time');
-                }
-            } catch (GuzzleException $guzzleException) {
-                throw ApiException::fromGuzzleException($guzzleException);
+                $this->requestNewTokenBefore = (new \DateTimeImmutable())
+                    ->add(new \DateInterval('PT'.$getNewTokenInSecs.'S'));
+            } catch (\Exception) {
+                throw new ApiException('failed to calculate token refresh time');
             }
+
+            if ($this->cachePool !== null) {
+                $cacheItem = $this->cachePool->getItem($this->getTokenCacheKey());
+                $cacheItem->set($this->token);
+                $cacheItem->expiresAfter($getNewTokenInSecs);
+                $this->cachePool->save($cacheItem);
+            }
+        } catch (GuzzleException $guzzleException) {
+            throw ApiException::fromGuzzleException($guzzleException);
         }
 
         return $this->token;
