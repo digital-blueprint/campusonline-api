@@ -23,14 +23,13 @@ class Connection implements LoggerAwareInterface
     private ?\DateTimeImmutable $requestNewTokenBefore = null;
 
     private ?CacheItemPoolInterface $cachePool = null;
-
-    private int $cacheTTL = 0;
+    private int $fallbackCacheTTL = 300;
 
     public function __construct(
         private string $baseUrl,
         private readonly string $clientId,
-        private readonly string $clientSecret)
-    {
+        private readonly string $clientSecret
+    ) {
         if (false === str_ends_with($this->baseUrl, '/')) {
             $this->baseUrl .= '/';
         }
@@ -41,10 +40,12 @@ class Connection implements LoggerAwareInterface
         $this->clientHandler = $handler;
     }
 
-    public function setCache(?CacheItemPoolInterface $cachePool, int $ttl): void
-    {
+    public function setCache(
+        ?CacheItemPoolInterface $cachePool,
+        int $fallbackTTL = 300
+    ): void {
         $this->cachePool = $cachePool;
-        $this->cacheTTL = $ttl;
+        $this->fallbackCacheTTL = $fallbackTTL;
     }
 
     public function getClient(): Client
@@ -96,8 +97,11 @@ class Connection implements LoggerAwareInterface
             return $this->token;
         }
 
-        if ($this->cachePool !== null) {
-            $cacheItem = $this->cachePool->getItem($this->getTokenCacheKey());
+        $cachePool = $this->cachePool;
+        $cacheItem = null;
+
+        if ($cachePool !== null) {
+            $cacheItem = $cachePool->getItem($this->getTokenCacheKey());
 
             if ($cacheItem->isHit()) {
                 $cachedToken = $cacheItem->get();
@@ -155,7 +159,9 @@ class Connection implements LoggerAwareInterface
             $this->token = $token;
 
             $expiresIn = (int) ($tokenData['expires_in'] ?? 0);
-            $getNewTokenInSecs = $expiresIn > 0 ? $expiresIn - 30 : $this->cacheTTL;
+            $getNewTokenInSecs = $expiresIn > 0
+                ? $expiresIn - 30
+                : $this->fallbackCacheTTL;
             $getNewTokenInSecs = max(1, $getNewTokenInSecs);
 
             try {
@@ -165,11 +171,10 @@ class Connection implements LoggerAwareInterface
                 throw new ApiException('failed to calculate token refresh time');
             }
 
-            if ($this->cachePool !== null) {
-                $cacheItem = $this->cachePool->getItem($this->getTokenCacheKey());
+            if ($cacheItem !== null) {
                 $cacheItem->set($this->token);
                 $cacheItem->expiresAfter($getNewTokenInSecs);
-                $this->cachePool->save($cacheItem);
+                $cachePool->save($cacheItem);
             }
         } catch (GuzzleException $guzzleException) {
             throw ApiException::fromGuzzleException($guzzleException);
