@@ -11,7 +11,11 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Bridge\PhpUnit\Attribute\TimeSensitive;
+use Symfony\Bridge\PhpUnit\ClockMock;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
+#[TimeSensitive(ArrayAdapter::class)]
 class ConnectionTest extends TestCase
 {
     public function testReusesFetchedTokenFromCacheAcrossConnectionInstances(): void
@@ -19,18 +23,7 @@ class ConnectionTest extends TestCase
         $cacheItem = new InMemoryCacheItem(null, false);
         $cachePool = new InMemoryCachePool($cacheItem);
 
-        $firstHandler = new MockHandler([
-            new Response(200, ['Content-Type' => 'application/json'], json_encode([
-                'authServerUrl' => 'https://auth.example.invalid',
-            ], JSON_THROW_ON_ERROR)),
-            new Response(200, ['Content-Type' => 'application/json'], json_encode([
-                'token_endpoint' => 'https://auth.example.invalid/token',
-            ], JSON_THROW_ON_ERROR)),
-            new Response(200, ['Content-Type' => 'application/json'], json_encode([
-                'access_token' => 'shared-cache-token',
-                'expires_in' => 120,
-            ], JSON_THROW_ON_ERROR)),
-        ]);
+        $firstHandler = new MockHandler(self::getMockAuthServerResponses('shared-cache-token', 120));
 
         $firstConnection = new Connection('https://api.example.invalid', 'client-id', 'secret');
         $firstConnection->setClientHandler($firstHandler);
@@ -61,6 +54,71 @@ class ConnectionTest extends TestCase
         self::assertSame(3, $cachePool->getItemCalls);
         self::assertSame(1, $cachePool->saveCalls);
         self::assertSame(Tools::escapeCacheKey('client-tokens/client-id'), $cachePool->lastKey);
+    }
+
+    public function testTokenCacheItemPool(): void
+    {
+        ClockMock::withClockMock(true);
+
+        $cachePool = new ArrayAdapter();
+        $tokenExpiresIn = 120;
+        $cacheItemExpiresIn = $tokenExpiresIn - 30;
+
+        // initially, the token must be requested from the auth server:
+        $firstConnection = new Connection('https://api.example.invalid', 'client-id', 'secret');
+        $mockHandler = new MockHandler(self::getMockAuthServerResponses('shared-cache-token', $tokenExpiresIn));
+        $firstConnection->setClientHandler($mockHandler);
+        $firstConnection->setCache($cachePool, 999);
+
+        self::assertSame('shared-cache-token', $firstConnection->getTokenForTesting());
+        self::assertSame(0, $mockHandler->count()); // assert that mock API responses have been consumed
+
+        // the cache item must be valid (no more API calls must be made):
+        ClockMock::sleep($cacheItemExpiresIn - 1);
+        $secondConnection = new Connection('https://api.example.invalid', 'client-id', 'secret');
+        $secondConnection->setCache($cachePool, 999);
+
+        self::assertSame('shared-cache-token', $secondConnection->getTokenForTesting());
+
+        // the cache item must be expired and the token requested from the auth server:
+        ClockMock::sleep(2);
+        $thirdConnection = new Connection('https://api.example.invalid', 'client-id', 'secret');
+        $mockHandler = new MockHandler(self::getMockAuthServerResponses('shared-cache-token', 120));
+        $thirdConnection->setClientHandler($mockHandler);
+        $thirdConnection->setCache($cachePool, 999);
+
+        self::assertSame('shared-cache-token', $thirdConnection->getTokenForTesting());
+        self::assertSame(0, $mockHandler->count()); // assert that mock API responses have been consumed
+    }
+
+    public function testTokenRequestCache(): void
+    {
+        // initially, the token must be requested from the auth server:
+        $connection = new Connection('https://api.example.invalid', 'client-id', 'secret');
+        $mockHandler = new MockHandler(self::getMockAuthServerResponses('shared-cache-token', 120));
+        $connection->setClientHandler($mockHandler);
+        self::assertSame('shared-cache-token', $connection->getTokenForTesting());
+        self::assertSame(0, $mockHandler->count()); // assert that mock API responses have been consumed
+
+        // request cached token from memory must be used (no more API calls must be made):
+        self::assertSame('shared-cache-token', $connection->getTokenForTesting());
+    }
+
+    private static function getMockAuthServerResponses(
+        string $token = 'token', int $expiresIn = 300): array
+    {
+        return [
+            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'authServerUrl' => 'https://auth.example.invalid',
+            ], JSON_THROW_ON_ERROR)),
+            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'token_endpoint' => 'https://auth.example.invalid/token',
+            ], JSON_THROW_ON_ERROR)),
+            new Response(200, ['Content-Type' => 'application/json'], json_encode([
+                'access_token' => $token,
+                'expires_in' => $expiresIn,
+            ], JSON_THROW_ON_ERROR)),
+        ];
     }
 }
 

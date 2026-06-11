@@ -72,6 +72,14 @@ class Connection implements LoggerAwareInterface
         $this->requestNewTokenBefore = $requestNewTokenBefore;
     }
 
+    /**
+     * @internal
+     */
+    public function getTokenForTesting(): string
+    {
+        return $this->getToken();
+    }
+
     private function getTokenCacheKey(): string
     {
         return Tools::escapeCacheKey('client-tokens/'.$this->clientId);
