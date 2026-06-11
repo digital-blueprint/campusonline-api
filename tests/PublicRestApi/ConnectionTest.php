@@ -36,7 +36,7 @@ class ConnectionTest extends TestCase
             )
         );
         $firstConnection->setClientHandler($mockHandler);
-        $firstConnection->setCache($cachePool, 999);
+        $firstConnection->setCache($cachePool);
 
         self::assertSame(
             'shared-cache-token',
@@ -52,7 +52,7 @@ class ConnectionTest extends TestCase
             'client-id',
             'secret'
         );
-        $secondConnection->setCache($cachePool, 999);
+        $secondConnection->setCache($cachePool);
 
         self::assertSame(
             'shared-cache-token',
@@ -74,7 +74,7 @@ class ConnectionTest extends TestCase
             )
         );
         $thirdConnection->setClientHandler($mockHandler);
-        $thirdConnection->setCache($cachePool, 999);
+        $thirdConnection->setCache($cachePool);
 
         self::assertSame(
             'shared-cache-token',

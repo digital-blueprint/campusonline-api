@@ -17,13 +17,19 @@ class Connection implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
+    public const CACHE_SUBNAMESPACE = 'DbpCampusonlineApiPublicRestApiConnection';
+    public const DEFAULT_TOKEN_REFRESH_INTERVAL_SECS = self::DEFAULT_TOKEN_VALIDITY_SECS - self::REFRESH_TOKEN_SAFETY_MARGIN_SECS;
+
+    private const DEFAULT_TOKEN_VALIDITY_SECS = 300;
+    private const REFRESH_TOKEN_SAFETY_MARGIN_SECS = 30;
+
     private ?object $clientHandler = null;
 
     private ?string $token = null;
     private ?\DateTimeImmutable $requestNewTokenBefore = null;
 
     private ?CacheItemPoolInterface $cachePool = null;
-    private int $fallbackCacheTTL = 300;
+    private int $fallbackCacheTTL = self::DEFAULT_TOKEN_REFRESH_INTERVAL_SECS;
 
     public function __construct(
         private string $baseUrl,
@@ -42,7 +48,7 @@ class Connection implements LoggerAwareInterface
 
     public function setCache(
         ?CacheItemPoolInterface $cachePool,
-        int $fallbackTTL = 300
+        int $fallbackTTL = self::DEFAULT_TOKEN_REFRESH_INTERVAL_SECS
     ): void {
         $this->cachePool = $cachePool;
         $this->fallbackCacheTTL = $fallbackTTL;
@@ -158,23 +164,21 @@ class Connection implements LoggerAwareInterface
 
             $this->token = $token;
 
-            $expiresIn = (int) ($tokenData['expires_in'] ?? 0);
-            $getNewTokenInSecs = $expiresIn > 0
-                ? $expiresIn - 30
-                : $this->fallbackCacheTTL;
-            $getNewTokenInSecs = max(1, $getNewTokenInSecs);
-
-            try {
-                $this->requestNewTokenBefore = (new \DateTimeImmutable())
-                    ->add(new \DateInterval('PT'.$getNewTokenInSecs.'S'));
-            } catch (\Exception) {
-                throw new ApiException('failed to calculate token refresh time');
+            if (null === ($expiresIn = $tokenData['expires_in'] ?? null)) {
+                $getNewTokenInSecs = $this->fallbackCacheTTL;
+            } else {
+                $getNewTokenInSecs = max(0, (int) $expiresIn - self::REFRESH_TOKEN_SAFETY_MARGIN_SECS);
             }
 
-            if ($cacheItem !== null) {
-                $cacheItem->set($this->token);
-                $cacheItem->expiresAfter($getNewTokenInSecs);
-                $cachePool->save($cacheItem);
+            if ($getNewTokenInSecs > 0) {
+                $this->requestNewTokenBefore = (new \DateTimeImmutable())
+                    ->add(new \DateInterval('PT'.$getNewTokenInSecs.'S'));
+
+                if ($cacheItem !== null) {
+                    $cacheItem->set($this->token);
+                    $cacheItem->expiresAfter($getNewTokenInSecs);
+                    $cachePool->save($cacheItem);
+                }
             }
         } catch (GuzzleException $guzzleException) {
             throw ApiException::fromGuzzleException($guzzleException);
