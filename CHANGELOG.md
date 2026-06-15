@@ -1,4 +1,7 @@
 # Changelog
+## v0.3.45
+
+- PublicRestApi: cache and re-use client tokens until shortly before expiry
 
 ## Unreleased
 
