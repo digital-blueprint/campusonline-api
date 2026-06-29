@@ -19,6 +19,8 @@ class PersonClaimsResource extends Resource
     private const TITLE_PREFIX_ATTRIBUTE = 'titlePrefix';
     private const TITLE_SUFFIX_ATTRIBUTE = 'titleSuffix';
     private const GENDER_KEY_ATTRIBUTE = 'genderKey';
+
+    private const PERSON_TYPE_KEY_ATTRIBUTE = 'personTypeKey';
     private const PERSON_GROUPS_ATTRIBUTE = 'personGroups';
     private const ADDRESSES_ATTRIBUTE = 'addresses';
     private const COUNTRY_ATTRIBUTE = 'country';
@@ -101,6 +103,11 @@ class PersonClaimsResource extends Resource
     public function getGenderKey(): ?string
     {
         return $this->resourceData[self::GENDER_KEY_ATTRIBUTE] ?? null;
+    }
+
+    public function getPersonTypeKey(): ?string
+    {
+        return $this->resourceData[self::PERSON_TYPE_KEY_ATTRIBUTE] ?? null;
     }
 
     public function getPersonGroups(): ?array

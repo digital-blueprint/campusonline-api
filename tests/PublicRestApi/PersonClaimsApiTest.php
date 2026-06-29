@@ -111,6 +111,7 @@ class PersonClaimsApiTest extends TestCase
         $this->assertSame(null, $result->getTitlePrefix());
         $this->assertSame(null, $result->getTitleSuffix());
         $this->assertSame('W', $result->getGenderKey());
+        $this->assertSame('R', $result->getPersonTypeKey());
         $this->assertSame(['STUDENT', 'EMPLOYEE'], $result->getPersonGroups());
         $this->assertSame(2, $result->getNumAddresses());
         $this->assertSame('AT', $result->getAddressCountry(0));
@@ -157,6 +158,7 @@ class PersonClaimsApiTest extends TestCase
         $personClaimsResource = $resources[0];
         assert($personClaimsResource instanceof PersonClaimsResource);
         $this->assertSame('A3F8B2C9E1D74F6A', $personClaimsResource->getUid());
+        $this->assertSame('R', $personClaimsResource->getPersonTypeKey());
         $this->assertSame('xxxxxxxx==', $result->getNextCursor());
     }
 
@@ -171,5 +173,6 @@ class PersonClaimsApiTest extends TestCase
         $personClaimsResource = $resources[0];
         assert($personClaimsResource instanceof PersonClaimsResource);
         $this->assertSame('A3F8B2C9E1D74F6A', $personClaimsResource->getUid());
+        $this->assertSame('R', $personClaimsResource->getPersonTypeKey());
     }
 }
