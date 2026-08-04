@@ -2,8 +2,14 @@
 
 ## Unreleased
 
+## v0.3.48
+
 - Add support for guzzle 8, guzzle 7 is still supported
 - Add support for kevinrob/guzzle-cache-middleware 8
+
+## v0.3.47
+
+- add studies to public REST API
 
 ## v0.3.46
 
