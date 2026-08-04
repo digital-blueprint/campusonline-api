@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\LegacyWebService;
 
+use Dbp\CampusonlineApi\Helpers\GuzzleTools;
 use Dbp\CampusonlineApi\Rest\Tools;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -147,12 +148,11 @@ class Connection implements LoggerAwareInterface
     private static function createApiException(GuzzleException $e): ApiException
     {
         if ($e instanceof RequestException) {
-            $response = $e->getResponse();
-            if ($response === null) {
+            if (GuzzleTools::getResponseFromException($e) === null) {
                 return new ApiException('Unknown error');
             }
 
-            return new ApiException(self::hideToken($e->getMessage()), $e->getCode(), $e->getResponse() !== null);
+            return new ApiException(self::hideToken($e->getMessage()), $e->getCode(), true);
         }
 
         return new ApiException(self::hideToken($e->getMessage()), $e->getCode(), false);

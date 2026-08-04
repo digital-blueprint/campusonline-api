@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Add support for guzzle 8, guzzle 7 is still supported
+- Add support for kevinrob/guzzle-cache-middleware 8
+
 ## v0.3.46
 
 - Add `personTypeKey` to `PersonClaimsResource`
@@ -7,8 +12,6 @@
 ## v0.3.45
 
 - PublicRestApi: cache and re-use client tokens until shortly before expiry
-
-## Unreleased
 
 ## v0.3.44
 

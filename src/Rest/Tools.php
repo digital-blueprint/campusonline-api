@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\Rest;
 
 use Dbp\CampusonlineApi\Helpers\ApiException;
+use Dbp\CampusonlineApi\Helpers\GuzzleTools;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\MessageFormatter;
@@ -142,23 +143,20 @@ class Tools
 
     public static function createApiExceptionFromJsonResponse(GuzzleException $guzzleException): ApiException
     {
-        $response = null;
-        if ($guzzleException instanceof RequestException) {
-            $response = $guzzleException->getResponse();
-            if ($response !== null) {
-                $data = (string) $response->getBody();
-                $json = [];
-                try {
-                    $json = Tools::decodeJSON($data, true);
-                } catch (\Exception $exception) {
-                }
+        $response = GuzzleTools::getResponseFromException($guzzleException);
+        if ($response !== null) {
+            $data = (string) $response->getBody();
+            $json = [];
+            try {
+                $json = Tools::decodeJSON($data, true);
+            } catch (\Exception $exception) {
+            }
 
-                if (($json['type'] ?? null) === 'resources') {
-                    $coErrorDto = $json['resource'][0]['content']['coErrorDto'];
-                    $message = $coErrorDto['errorType'].'['.$coErrorDto['httpCode'].']: '.$coErrorDto['message'];
+            if (($json['type'] ?? null) === 'resources') {
+                $coErrorDto = $json['resource'][0]['content']['coErrorDto'];
+                $message = $coErrorDto['errorType'].'['.$coErrorDto['httpCode'].']: '.$coErrorDto['message'];
 
-                    return new ApiException($message, intval($coErrorDto['httpCode']), true);
-                }
+                return new ApiException($message, intval($coErrorDto['httpCode']), true);
             }
         }
 

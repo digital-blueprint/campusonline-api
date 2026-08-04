@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\Helpers;
 
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Exception\RequestException;
 
 class ApiException extends \RuntimeException
 {
@@ -15,7 +14,7 @@ class ApiException extends \RuntimeException
     public static function fromGuzzleException(GuzzleException $guzzleException): ApiException
     {
         return new ApiException($guzzleException->getMessage(), $guzzleException->getCode(),
-            $guzzleException instanceof RequestException && $guzzleException->getResponse() !== null);
+            GuzzleTools::getResponseFromException($guzzleException) !== null);
     }
 
     public function __construct(string $message = '', int $code = 0,
