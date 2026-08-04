@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v0.3.49
+
+- Make phpstan pass with older guzzle
+
 ## v0.3.48
 
 - Add support for guzzle 8, guzzle 7 is still supported
