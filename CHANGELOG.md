@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.3.50
+
 - Remove StudentApi and UCardApi
 - Replace Rest by DataServiceApi
 - Replace GenericApi by TableViewDataServiceApi
