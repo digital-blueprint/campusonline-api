@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Dbp\CampusonlineApi\Rest;
+namespace Dbp\CampusonlineApi\DataServiceApi;
 
 use Dbp\CampusonlineApi\Helpers\ApiException;
+use Dbp\CampusonlineApi\Helpers\Tools;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\HandlerStack;
@@ -15,20 +16,13 @@ class Connection implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    private $baseUrl;
-    private $clientId;
-    private $clientSecret;
-    private $clientHandler;
+    private ?object $clientHandler = null;
+    private ?string $token = null;
+    private array $dataServices = [];
 
-    private $token;
-    private $dataServices;
-
-    public function __construct(string $baseUrl, string $clientId, string $clientSecret)
+    public function __construct(
+        private readonly string $baseUrl, private readonly string $clientId, private readonly string $clientSecret)
     {
-        $this->baseUrl = $baseUrl;
-        $this->clientId = $clientId;
-        $this->clientSecret = $clientSecret;
-        $this->dataServices = [];
     }
 
     public function addDataServiceOverride(string $dataServiceId, string $overrideId): void
@@ -113,13 +107,8 @@ class Connection implements LoggerAwareInterface
         } catch (GuzzleException $guzzleException) {
             throw ApiException::fromGuzzleException($guzzleException);
         }
-        $data = $response->getBody()->getContents();
 
-        try {
-            $token = Tools::decodeJSON($data, true);
-        } catch (\JsonException $exception) {
-            throw new ApiException($exception->getMessage());
-        }
+        $token = Tools::decodeJSON($response->getBody()->getContents(), true);
         $this->token = $token['access_token'];
     }
 }

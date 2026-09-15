@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Dbp\CampusonlineApi\Tests\Rest;
+namespace Dbp\CampusonlineApi\Tests\DataServiceApi;
 
-use Dbp\CampusonlineApi\Rest\Tools;
+use Dbp\CampusonlineApi\Helpers\Tools;
 use PHPUnit\Framework\TestCase;
 
 class ToolsTest extends TestCase

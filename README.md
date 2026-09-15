@@ -17,7 +17,7 @@ composer require dbp/campusonline-api
 ```php
 <?php
 
-use Dbp\CampusonlineApi\Rest\Api;
+use Dbp\CampusonlineApi\DataServiceApi\Api;
 
 $api = new Api('https://qline.example.at/online/', 'client_id', 'client_secret');
 $ucard = $api->UCard();
@@ -29,7 +29,7 @@ $ucard->getCardsForIdentIdObfuscated('1234567890');
 ```php
 <?php
 
-use Dbp\CampusonlineApi\Rest\Api;
+use Dbp\CampusonlineApi\DataServiceApi\Api;
 
 $api = new Api('https://qline.example.at/online/', 'client_id', 'client_secret');
 $generic = $api->GenericApi('loc_apiMyExport');

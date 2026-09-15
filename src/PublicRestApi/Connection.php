@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\PublicRestApi;
 
 use Dbp\CampusonlineApi\Helpers\ApiException;
-use Dbp\CampusonlineApi\Rest\Tools;
+use Dbp\CampusonlineApi\Helpers\Tools;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\HandlerStack;

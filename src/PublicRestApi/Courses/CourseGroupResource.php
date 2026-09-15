@@ -15,6 +15,8 @@ class CourseGroupResource extends Resource
     private const EVENT_END_ATTRIBUTE = 'end';
     private const EVENT_STATUS_TYPE_ATTRIBUTE = 'statusType';
     private const EVENT_TYPE_ATTRIBUTE = 'eventType';
+    private const MIN_NUMBER_OF_PARTICIPANTS_ATTRIBUTE = 'minNumberOfParticipants';
+    private const MAX_NUMBER_OF_PARTICIPANTS_ATTRIBUTE = 'maxNumberOfParticipants';
 
     public function getUid(): ?string
     {
@@ -26,7 +28,12 @@ class CourseGroupResource extends Resource
         return $this->resourceData[self::COURSE_UID_ATTRIBUTE] ?? null;
     }
 
-    public function getName(string $languageTag = self::DEFAULT_LANGUAGE_TAG): ?string
+    public function getName(): ?array
+    {
+        return $this->resourceData[self::NAME_ATTRIBUTE][self::VALUE_ATTRIBUTE] ?? null;
+    }
+
+    public function getNameLocalized(string $languageTag = self::DEFAULT_LANGUAGE_TAG): ?string
     {
         return $this->resourceData[self::NAME_ATTRIBUTE][self::VALUE_ATTRIBUTE][$languageTag] ?? null;
     }
@@ -67,5 +74,15 @@ class CourseGroupResource extends Resource
     public function getEvent(int $eventIndex): array
     {
         return $this->resourceData[self::EVENTS_ATTRIBUTE][self::ITEMS_ATTRIBUTE][$eventIndex];
+    }
+
+    public function getMinNumberOfParticipants(): ?int
+    {
+        return $this->resourceData[self::MIN_NUMBER_OF_PARTICIPANTS_ATTRIBUTE] ?? null;
+    }
+
+    public function getMaxNumberOfParticipants(): ?int
+    {
+        return $this->resourceData[self::MAX_NUMBER_OF_PARTICIPANTS_ATTRIBUTE] ?? null;
     }
 }

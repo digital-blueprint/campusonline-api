@@ -2,10 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Dbp\CampusonlineApi\Rest;
+namespace Dbp\CampusonlineApi\Helpers;
 
-use Dbp\CampusonlineApi\Helpers\ApiException;
-use Dbp\CampusonlineApi\Helpers\GuzzleTools;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\MessageFormatter;
@@ -92,7 +90,7 @@ class Tools
     /**
      * Like json_decode but throws on invalid json data.
      *
-     * @throws \JsonException
+     * @throws ApiException
      */
     public static function decodeJSON(string $json, bool $assoc = false): mixed
     {

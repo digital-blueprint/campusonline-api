@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Remove StudentApi and UCardApi
+- Replace Rest by DataServiceApi
+- Replace GenericApi by TableViewDataServiceApi
+- Add PuQueryDataServiceApi which represents another custom data service API type of CO
+- PublicRestApi: add curriculum API
+- PublicRestApi: add min/max number of participants to CourseGroupResource
+
 ## v0.3.49
 
 - Make phpstan pass with older guzzle

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\CampusonlineApi\PublicRestApi;
 
-use Dbp\CampusonlineApi\Rest\Tools;
+use Dbp\CampusonlineApi\Helpers\Tools;
 
 class GetApisApi extends AbstractApi
 {

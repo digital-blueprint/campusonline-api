@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Dbp\CampusonlineApi\Rest;
+namespace Dbp\CampusonlineApi\DataServiceApi;
+
+use Dbp\CampusonlineApi\Helpers\Tools;
 
 /**
  * Helper class for buildings API filters.

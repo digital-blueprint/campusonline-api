@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\LegacyWebService;
 
 use Dbp\CampusonlineApi\Helpers\GuzzleTools;
-use Dbp\CampusonlineApi\Rest\Tools;
+use Dbp\CampusonlineApi\Helpers\Tools;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;

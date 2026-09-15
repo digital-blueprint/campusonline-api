@@ -6,7 +6,7 @@ namespace Dbp\CampusonlineApi\Tests\Helpers;
 
 use Dbp\CampusonlineApi\Helpers\ApiException;
 use Dbp\CampusonlineApi\Helpers\GuzzleTools;
-use Dbp\CampusonlineApi\Rest\Tools;
+use Dbp\CampusonlineApi\Helpers\Tools;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;

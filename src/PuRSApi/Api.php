@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Dbp\CampusonlineApi\PuRSApi;
 
 use Dbp\CampusonlineApi\Helpers\ApiException;
+use Dbp\CampusonlineApi\Helpers\Tools;
 use Dbp\CampusonlineApi\PublicRestApi\Connection;
-use Dbp\CampusonlineApi\Rest\Tools;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\Log\LoggerInterface;
 

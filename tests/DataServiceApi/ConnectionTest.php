@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Dbp\CampusonlineApi\Tests\Rest;
+namespace Dbp\CampusonlineApi\Tests\DataServiceApi;
 
+use Dbp\CampusonlineApi\DataServiceApi\Connection;
 use Dbp\CampusonlineApi\Helpers\ApiException;
-use Dbp\CampusonlineApi\Rest\Connection;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
@@ -24,13 +24,13 @@ class ConnectionTest extends TestCase
         $this->mockResponses([]);
     }
 
-    private function mockResponses(array $responses)
+    private function mockResponses(array $responses): void
     {
         $stack = HandlerStack::create(new MockHandler($responses));
         $this->conn->setClientHandler($stack);
     }
 
-    public function testFetchToken()
+    public function testFetchToken(): void
     {
         $this->mockResponses([
             new Response(200, ['Content-Type' => 'application/json'], '{"access_token": "foobar"}'),
@@ -39,7 +39,7 @@ class ConnectionTest extends TestCase
         $this->expectNotToPerformAssertions();
     }
 
-    public function testFetchTokenNoAuth()
+    public function testFetchTokenNoAuth(): void
     {
         $this->mockResponses([
             new Response(401, ['Content-Type' => 'application/json'],
